@@ -20,7 +20,7 @@ DMRGCN의 Multi-Relational Graph Convolution과 GP-Graph의 Group-based Processi
 
 import torch
 import torch.nn as nn
-from .dmrgcn import st_dmrgcn, social_dmrgcn  # DMRGCN 원본 모델들
+from .predictor import social_dmrgcn  # DMRGCN 메인 모델
 from .gpgraph_modules import GroupGenerator, GroupIntegrator, DensityGroupFeatureExtractor, generate_adjacency_matrix  # GP-Graph 모듈들
 
 
@@ -58,9 +58,8 @@ class SocialDMRGCN_GPGraph(nn.Module):
         
         # Base DMRGCN model
         self.dmrgcn = social_dmrgcn(
-            n_stgcn=n_stgcn, n_tpcnn=n_tpcnn, output_feat=output_feat,
-            kernel_size=kernel_size, seq_len=seq_len, pred_seq_len=pred_seq_len,
-            split=split, relation=relation
+            n_stgcn=n_stgcn, n_tpcnn=n_tpcnn, input_feat=2, output_feat=output_feat,
+            kernel_size=kernel_size, seq_len=seq_len, pred_seq_len=pred_seq_len
         )
         
         # GP-Graph modules
