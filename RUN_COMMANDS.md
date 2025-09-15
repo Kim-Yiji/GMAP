@@ -21,7 +21,23 @@ pip install einops  # 추가 패키지만 설치
 python demo_final.py
 ```
 
-### 3. 학습 실행
+## 🚀 **Data Caching (신기능!)**
+
+**첫 번째 실행**: 데이터를 처리하고 캐시 생성 (2-5분)  
+**이후 실행**: 캐시에서 바로 로딩 **(5-10배 빠름!)** ⚡
+
+```bash
+# 자동 캐싱 (기본 활성화)
+python train_unified.py --dataset eth --batch_size 8
+
+# 캐싱 비활성화 (첫 실행이나 디버깅 시)
+python train_unified.py --dataset eth --no-use_cache
+
+# 커스텀 캐시 디렉토리
+python train_unified.py --dataset eth --cache_dir ./my_cache
+```
+
+## 📈 학습 실행
 
 #### 🏃‍♂️ 기본 학습
 ```bash
@@ -125,6 +141,29 @@ python train_unified.py --batch_size 32 --tag "large_batch"
 python train_unified.py --batch_size 4 --tag "small_batch"
 ```
 
+## 💾 **Cache Management**
+
+### 캐시 상태 확인
+```bash
+# 캐시 크기 확인
+du -sh ./data_cache/*/
+
+# 캐시 파일 목록
+ls -la ./data_cache/*/
+```
+
+### 캐시 관리
+```bash
+# 전체 캐시 삭제 (첫 실행처럼 처리)
+rm -rf ./data_cache/
+
+# 특정 데이터셋 캐시만 삭제
+rm -rf ./data_cache/eth/
+
+# 캐시 디렉토리 크기 확인
+find ./data_cache -name "*.pkl" -exec ls -lh {} \;
+```
+
 ## 📊 결과 분석
 
 ### 체크포인트 확인
@@ -179,4 +218,25 @@ python train_unified.py \
 
 ---
 
-**💡 Tip**: 모든 명령어를 복사해서 터미널에 바로 붙여넣기하면 됩니다!
+## 💡 **Performance Tips**
+
+### 🚀 **First Run vs Cached Run**
+```
+📊 Typical Performance:
+   First Run:  2-5 minutes (data processing)
+   Cached Run: 10-30 seconds (5-10x faster!)
+   
+💾 Cache Storage: ~50-200MB per dataset
+📍 Cache Location: ./data_cache/{dataset}/
+```
+
+### ⚡ **Best Practices**
+1. **Keep Cache**: 캐시를 삭제하지 마세요 (다음 실행이 빨라집니다)
+2. **Consistent Parameters**: 같은 `obs_len`/`pred_len` 사용
+3. **Monitor Storage**: 가끔 캐시 디렉토리 크기 확인
+4. **Server Benefits**: 느린 스토리지에서 특히 유용
+
+---
+
+**💡 Tip**: 모든 명령어를 복사해서 터미널에 바로 붙여넣기하면 됩니다!  
+**🎉 Data Caching으로 이제 훨씬 빠르게 실험할 수 있습니다!** ⚡

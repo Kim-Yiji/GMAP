@@ -3,6 +3,8 @@
 
 import os
 import math
+import pickle
+import hashlib
 import torch
 import numpy as np
 from tqdm import tqdm
@@ -132,9 +134,10 @@ def read_file(_path, delim='\t'):
 
 
 class TrajectoryDataset(Dataset):
-    """Enhanced Trajectory Dataset for DMRGCN + GP-Graph"""
+    """Enhanced Trajectory Dataset for DMRGCN + GP-Graph with caching support"""
 
-    def __init__(self, data_dir, obs_len=8, pred_len=8, skip=1, threshold=0.002, min_ped=1, delim='\t'):
+    def __init__(self, data_dir, obs_len=8, pred_len=8, skip=1, threshold=0.002, min_ped=1, delim='\t', 
+                 use_cache=True, cache_dir='./data_cache'):
         """
         Args:
         - data_dir: Directory containing dataset files in the format
@@ -146,6 +149,8 @@ class TrajectoryDataset(Dataset):
         when using a linear predictor
         - min_ped: Minimum number of pedestrians that should be in a sequence
         - delim: Delimiter in the dataset files
+        - use_cache: Whether to use cached preprocessed data
+        - cache_dir: Directory to store cached data
         """
         super(TrajectoryDataset, self).__init__()
 
@@ -156,7 +161,95 @@ class TrajectoryDataset(Dataset):
         self.skip = skip
         self.seq_len = self.obs_len + self.pred_len
         self.delim = delim
+        self.use_cache = use_cache
+        self.cache_dir = cache_dir
+        
+        # Create cache directory if it doesn't exist
+        if self.use_cache:
+            os.makedirs(self.cache_dir, exist_ok=True)
+        
+        # Generate unique cache key based on data parameters
+        cache_key = self._generate_cache_key()
+        cache_path = os.path.join(self.cache_dir, f"{cache_key}.pkl")
+        
+        # Try to load from cache first
+        if self.use_cache and os.path.exists(cache_path):
+            print(f"🚀 Loading preprocessed data from cache: {cache_path}")
+            self._load_from_cache(cache_path)
+        else:
+            print(f"🔄 Processing data from scratch...")
+            self._process_data_from_scratch()
+            
+            # Save to cache
+            if self.use_cache:
+                print(f"💾 Saving preprocessed data to cache: {cache_path}")
+                self._save_to_cache(cache_path)
 
+    def _generate_cache_key(self):
+        """Generate unique cache key based on data directory and parameters"""
+        # Get data directory name and modification times of all files
+        data_dir_name = os.path.basename(os.path.normpath(self.data_dir))
+        
+        # Include all files and their modification times
+        all_files = sorted(os.listdir(self.data_dir))
+        file_info = []
+        for fname in all_files:
+            fpath = os.path.join(self.data_dir, fname)
+            if os.path.isfile(fpath):
+                mtime = os.path.getmtime(fpath)
+                file_info.append((fname, mtime))
+        
+        # Create hash from parameters and file info
+        params_str = f"{data_dir_name}_{self.obs_len}_{self.pred_len}_{self.skip}_{self.delim}"
+        files_str = str(file_info)
+        combined_str = params_str + files_str
+        
+        return hashlib.md5(combined_str.encode()).hexdigest()[:16]
+    
+    def _load_from_cache(self, cache_path):
+        """Load preprocessed data from cache"""
+        with open(cache_path, 'rb') as f:
+            cached_data = pickle.load(f)
+        
+        self.num_seq = cached_data['num_seq']
+        self.seq_list = cached_data['seq_list']
+        self.seq_list_rel = cached_data['seq_list_rel']
+        self.agent_ids_list = cached_data['agent_ids_list']
+        self.loss_mask_list = cached_data['loss_mask_list']
+        self.non_linear_ped = cached_data['non_linear_ped']
+        self.max_peds_in_frame = cached_data['max_peds_in_frame']
+        
+        # Precomputed graph data
+        self.V_obs = cached_data['V_obs']
+        self.A_obs = cached_data['A_obs']
+        self.V_pred = cached_data['V_pred']
+        self.A_pred = cached_data['A_pred']
+        
+        print(f"✅ Loaded {self.num_seq} sequences from cache")
+    
+    def _save_to_cache(self, cache_path):
+        """Save preprocessed data to cache"""
+        cached_data = {
+            'num_seq': self.num_seq,
+            'seq_list': self.seq_list,
+            'seq_list_rel': self.seq_list_rel,
+            'agent_ids_list': self.agent_ids_list,
+            'loss_mask_list': self.loss_mask_list,
+            'non_linear_ped': self.non_linear_ped,
+            'max_peds_in_frame': self.max_peds_in_frame,
+            'V_obs': self.V_obs,
+            'A_obs': self.A_obs,
+            'V_pred': self.V_pred,
+            'A_pred': self.A_pred
+        }
+        
+        with open(cache_path, 'wb') as f:
+            pickle.dump(cached_data, f)
+        
+        print(f"💾 Cached {self.num_seq} sequences to {cache_path}")
+    
+    def _process_data_from_scratch(self):
+        """Process data from scratch (original processing logic)"""
         all_files = sorted(os.listdir(self.data_dir))
         all_files = [os.path.join(self.data_dir, _path) for _path in all_files]
         num_peds_in_seq = []
@@ -166,15 +259,19 @@ class TrajectoryDataset(Dataset):
         loss_mask_list = []
         non_linear_ped = []
         
+        # Default threshold and min_ped for processing
+        threshold = 0.002
+        min_ped = 1
+        
         for path in all_files:
-            data = read_file(path, delim)
+            data = read_file(path, self.delim)
             frames = np.unique(data[:, 0]).tolist()
             frame_data = []
             for frame in frames:
                 frame_data.append(data[frame == data[:, 0], :])
-            num_sequences = int(math.ceil((len(frames) - self.seq_len + 1) / skip))
+            num_sequences = int(math.ceil((len(frames) - self.seq_len + 1) / self.skip))
 
-            for idx in range(0, num_sequences * self.skip + 1, skip):
+            for idx in range(0, num_sequences * self.skip + 1, self.skip):
                 curr_seq_data = np.concatenate(frame_data[idx:idx + self.seq_len], axis=0)
                 peds_in_curr_seq = np.unique(curr_seq_data[:, 1])
                 self.max_peds_in_frame = max(self.max_peds_in_frame, len(peds_in_curr_seq))
@@ -205,7 +302,7 @@ class TrajectoryDataset(Dataset):
                     curr_agent_ids[_idx] = ped_id  # Store agent ID
 
                     # Linear vs Non-Linear Trajectory
-                    _non_linear_ped.append(poly_fit(curr_ped_seq, pred_len, threshold))
+                    _non_linear_ped.append(poly_fit(curr_ped_seq, self.pred_len, threshold))
                     curr_loss_mask[_idx, pad_front:pad_end] = 1
                     num_peds_considered += 1
 
@@ -234,6 +331,12 @@ class TrajectoryDataset(Dataset):
         self.agent_ids = torch.from_numpy(agent_ids_list).type(torch.long)
         cum_start_idx = [0] + np.cumsum(num_peds_in_seq).tolist()
         self.seq_start_end = [(start, end) for start, end in zip(cum_start_idx, cum_start_idx[1:])]
+
+        # Store data for caching  
+        self.seq_list = seq_list
+        self.seq_list_rel = seq_list_rel
+        self.agent_ids_list = agent_ids_list
+        self.loss_mask_list = loss_mask_list
 
         # Convert Trajectories to Enhanced Graphs
         self.V_obs = []

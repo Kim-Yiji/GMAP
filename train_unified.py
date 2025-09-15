@@ -74,6 +74,10 @@ def parse_args():
     parser.add_argument('--pred_len', type=int, default=12, help='Prediction length')
     parser.add_argument('--skip', type=int, default=1, help='Frame skip')
     parser.add_argument('--min_ped', type=int, default=1, help='Min pedestrians per sequence')
+    parser.add_argument('--use_cache', action='store_true', default=True, 
+                       help='Use cached preprocessed data')
+    parser.add_argument('--cache_dir', default='./data_cache', 
+                       help='Directory for data cache')
     
     # Training parameters
     parser.add_argument('--batch_size', type=int, default=16, help='Effective batch size')
@@ -148,7 +152,9 @@ def setup_data_loaders(args):
         pred_len=args.pred_len,
         skip=args.skip,
         min_ped=args.min_ped,
-        delim='tab'
+        delim='tab',
+        use_cache=args.use_cache,
+        cache_dir=f'{args.cache_dir}/{args.dataset}'
     )
     
     val_dataset = TrajectoryDataset(
@@ -157,7 +163,9 @@ def setup_data_loaders(args):
         pred_len=args.pred_len,
         skip=args.skip,
         min_ped=args.min_ped,
-        delim='tab'
+        delim='tab',
+        use_cache=args.use_cache,
+        cache_dir=f'{args.cache_dir}/{args.dataset}'
     )
     
     # Use custom collate function for proper batching
