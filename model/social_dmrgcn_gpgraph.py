@@ -118,8 +118,11 @@ class SocialDMRGCN_GPGraph(nn.Module):
         """
         batch, _, seq_len, num_ped = v_obs.shape
         
-        # Get absolute positions for feature extraction
-        v_abs = v_obs.permute(0, 2, 3, 1)  # (batch, seq_len, num_ped, 2)
+        # Get absolute-like positions by cumulative sum of relative velocities
+        # v_obs: (batch, 2, seq_len, num_ped) → positions approx: (batch, 2, seq_len, num_ped)
+        v_abs_chw = torch.cumsum(v_obs, dim=2)
+        # For feature extractor: (batch, seq_len, num_ped, 2)
+        v_abs = v_abs_chw.permute(0, 2, 3, 1)
         
         # Extract additional features
         additional_features = []
@@ -153,18 +156,20 @@ class SocialDMRGCN_GPGraph(nn.Module):
                 v_orig = v_pred_base
                 v_stack.append(v_orig)
             
-            # Group generation
-            v_rel = v_obs.permute(0, 2, 3, 1)  # (batch, seq_len, num_ped, 2)
-            v_rel, group_indices = self.group_gen(v_rel, v_abs, hard=True)
+            # Group generation expects (batch, 2, seq_len, num_ped)
+            v_rel = v_obs  # (batch, 2, seq_len, num_ped)
+            v_rel, group_indices = self.group_gen(v_rel, v_abs_chw, hard=True)
             
             # Inter-group processing
             if self.group_type[1]:
                 v_e = self.group_gen.ped_group_pool(v_rel, group_indices)
                 v_e = v_e.permute(0, 3, 1, 2)  # (batch, 2, seq_len, num_groups)
                 
-                # Create adjacency matrix for groups
+                # Create adjacency matrix for groups → (batch, seq_len, num_groups, num_groups)
                 A_e = generate_adjacency_matrix(v_e)
-                v_e_pred, _ = self.dmrgcn(v_e, A_e.unsqueeze(0).unsqueeze(0))
+                # Duplicate for two relations expected by DMRGCN → (batch, 2, seq_len, G, G)
+                A_e = torch.stack([A_e, A_e], dim=1)
+                v_e_pred, _ = self.dmrgcn(v_e, A_e)
                 
                 # Unpool back to individual level
                 v_e_pred = v_e_pred.permute(0, 2, 3, 1)  # (batch, seq_len, num_groups, 2)
@@ -175,9 +180,14 @@ class SocialDMRGCN_GPGraph(nn.Module):
             # Intra-group processing
             if self.group_type[2]:
                 v_i = v_rel.permute(0, 3, 1, 2)  # (batch, 2, seq_len, num_ped)
-                mask = self.group_gen.ped_group_mask(group_indices)
-                A_i = generate_adjacency_matrix(v_i) * mask
-                v_i_pred, _ = self.dmrgcn(v_i, A_i.unsqueeze(0).unsqueeze(0))
+                mask = self.group_gen.ped_group_mask(group_indices)  # (N, N)
+                A_i_base = generate_adjacency_matrix(v_i)  # (batch, seq_len, N, N)
+                # Broadcast mask to (batch, seq_len, N, N)
+                mask_bt = mask.unsqueeze(0).unsqueeze(0).to(A_i_base.dtype)
+                A_i = A_i_base * mask_bt
+                # Duplicate for relations
+                A_i = torch.stack([A_i, A_i], dim=1)  # (batch, 2, seq_len, N, N)
+                v_i_pred, _ = self.dmrgcn(v_i, A_i)
                 v_stack.append(v_i_pred)
             
             # Group integration

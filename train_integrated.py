@@ -122,10 +122,11 @@ def train(epoch):
 
         V_obs, A_obs, V_tr, A_tr = [tensor.cuda() for tensor in batch[-4:]]
 
-        # Try augmentation to generate a batch.
-        aug = True
+        # 통합 모델에서 GP-Graph 그룹핑은 배치=1을 가정하므로 배치 증강 비활성화
+        # 필요시 아래에서 batch=1로 유지
+        aug = False
         if aug:
-            V_obs, A_obs, V_tr, A_tr = data_sampler(V_obs, A_obs, V_tr, A_tr, batch=4)
+            V_obs, A_obs, V_tr, A_tr = data_sampler(V_obs, A_obs, V_tr, A_tr, batch=1)
 
         V_obs_ = V_obs.permute(0, 3, 1, 2)
         V_pred, group_indices = model(V_obs_, A_obs)
