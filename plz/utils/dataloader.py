@@ -1,6 +1,8 @@
 import os
 import math
 import torch
+import pickle
+import hashlib
 try:
     import numpy as np
 except ImportError:
@@ -133,7 +135,7 @@ class TrajectoryDataset(Dataset):
     """Enhanced trajectory dataset with velocity and acceleration features"""
 
     def __init__(self, data_dir, obs_len=8, pred_len=12, skip=1, threshold=0.002, 
-                 min_ped=1, delim='\t', include_velocity=True, include_acceleration=True):
+                 min_ped=1, delim='\t', include_velocity=True, include_acceleration=True, use_cache=True):
         """
         Args:
             data_dir: Directory containing dataset files
@@ -145,6 +147,7 @@ class TrajectoryDataset(Dataset):
             delim: File delimiter
             include_velocity: Include velocity features
             include_acceleration: Include acceleration features
+            use_cache: Use cached processed data if available
         """
         super(TrajectoryDataset, self).__init__()
 
@@ -157,7 +160,19 @@ class TrajectoryDataset(Dataset):
         self.delim = delim
         self.include_velocity = include_velocity
         self.include_acceleration = include_acceleration
+        self.use_cache = use_cache
 
+        # Generate cache filename based on parameters
+        cache_params = f"{data_dir}_{obs_len}_{pred_len}_{skip}_{threshold}_{min_ped}_{include_velocity}_{include_acceleration}"
+        cache_hash = hashlib.md5(cache_params.encode()).hexdigest()
+        self.cache_file = os.path.join(os.path.dirname(data_dir), f"cache_{os.path.basename(data_dir)}_{cache_hash}.pkl")
+
+        # Try to load from cache first
+        if self.use_cache and self._load_cache():
+            print(f"✅ Loaded cached dataset from {self.cache_file}")
+            return
+
+        print(f"🔄 Processing dataset from scratch...")
         all_files = sorted(os.listdir(self.data_dir))
         all_files = [os.path.join(self.data_dir, _path) for _path in all_files]
         
@@ -270,6 +285,10 @@ class TrajectoryDataset(Dataset):
             
             pbar.update(1)
         pbar.close()
+        
+        # Save processed data to cache
+        if self.use_cache:
+            self._save_cache()
 
     def __len__(self):
         return self.num_seq
@@ -285,6 +304,64 @@ class TrajectoryDataset(Dataset):
             self.V_pred[index], self.A_pred[index]
         ]
         return out
+    
+    def _load_cache(self):
+        """Load dataset from cache file"""
+        if not os.path.exists(self.cache_file):
+            return False
+        
+        try:
+            with open(self.cache_file, 'rb') as f:
+                cache_data = pickle.load(f)
+            
+            # Restore all data attributes
+            self.obs_traj = cache_data['obs_traj']
+            self.pred_traj = cache_data['pred_traj']
+            self.obs_traj_rel = cache_data['obs_traj_rel']
+            self.pred_traj_rel = cache_data['pred_traj_rel']
+            self.non_linear_ped = cache_data['non_linear_ped']
+            self.loss_mask = cache_data['loss_mask']
+            self.V_obs = cache_data['V_obs']
+            self.A_obs = cache_data['A_obs']
+            self.V_pred = cache_data['V_pred']
+            self.A_pred = cache_data['A_pred']
+            self.seq_start_end = cache_data['seq_start_end']
+            self.num_seq = cache_data['num_seq']
+            self.max_peds_in_frame = cache_data['max_peds_in_frame']
+            
+            return True
+        except Exception as e:
+            print(f"⚠️ Failed to load cache: {e}")
+            return False
+    
+    def _save_cache(self):
+        """Save dataset to cache file"""
+        try:
+            cache_data = {
+                'obs_traj': self.obs_traj,
+                'pred_traj': self.pred_traj,
+                'obs_traj_rel': self.obs_traj_rel,
+                'pred_traj_rel': self.pred_traj_rel,
+                'non_linear_ped': self.non_linear_ped,
+                'loss_mask': self.loss_mask,
+                'V_obs': self.V_obs,
+                'A_obs': self.A_obs,
+                'V_pred': self.V_pred,
+                'A_pred': self.A_pred,
+                'seq_start_end': self.seq_start_end,
+                'num_seq': self.num_seq,
+                'max_peds_in_frame': self.max_peds_in_frame
+            }
+            
+            # Create cache directory if it doesn't exist
+            os.makedirs(os.path.dirname(self.cache_file), exist_ok=True)
+            
+            with open(self.cache_file, 'wb') as f:
+                pickle.dump(cache_data, f)
+            
+            print(f"💾 Saved dataset cache to {self.cache_file}")
+        except Exception as e:
+            print(f"⚠️ Failed to save cache: {e}")
 
 
 def data_sampler(V_obs, A_obs, V_tr, A_tr, batch=4, augment=True):

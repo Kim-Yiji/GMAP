@@ -14,9 +14,9 @@ def clip_adjacency_matrix(A, min=-1e10, max=1e10):
 
 
 def get_disentangled_adjacency_matrix(A, split=[]):
-    """Returns the list of clipped Adjacency matrix split by list values."""
+    """Returns the tensor of clipped Adjacency matrix split by list values."""
     if len(split) == 0:
-        return [A]
+        return A.unsqueeze(1)  # Add dimension to match expected output
 
     split.sort()
     split = split + [1e10]
@@ -100,41 +100,31 @@ class MultiRelationalGCN(nn.Module):
         self.out_channels = out_channels
         
         # Separate convolutions for different relations
-        self.position_conv = nn.Conv2d(in_channels, out_channels, kernel_size=(t_kernel_size, 1), 
-                                       padding=(t_padding, 0), stride=(t_stride, 1), 
-                                       dilation=(t_dilation, 1), bias=bias)
-        self.velocity_conv = nn.Conv2d(in_channels, out_channels, kernel_size=(t_kernel_size, 1), 
-                                       padding=(t_padding, 0), stride=(t_stride, 1), 
-                                       dilation=(t_dilation, 1), bias=bias)
-        self.acceleration_conv = nn.Conv2d(in_channels, out_channels, kernel_size=(t_kernel_size, 1), 
-                                           padding=(t_padding, 0), stride=(t_stride, 1), 
-                                           dilation=(t_dilation, 1), bias=bias)
-        
-        # Fusion layer
-        self.fusion = nn.Conv2d(out_channels * relation, out_channels, kernel_size=1, bias=bias)
+        # Single convolution layer for all relations (following original DMRGCN)
+        self.conv = nn.Conv2d(in_channels, out_channels * relation, kernel_size=(t_kernel_size, 1),
+                             padding=(t_padding, 0), stride=(t_stride, 1), 
+                             dilation=(t_dilation, 1), bias=bias)
 
     def forward(self, x, A):
         # A should have shape [batch, relation, time, vertices, vertices]
-        assert A.size(0) == x.size(0)
-        assert A.size(1) == self.relation
-        assert A.size(-1) == self.kernel_size
+        # x should have shape [batch, channels, time, vertices]
+        # Following original DMRGCN convention
+        assert A.size(0) == x.size(0)  # batch
+        assert A.size(1) == self.relation  # relations
+        assert A.size(2) == self.kernel_size  # time dimension should match kernel_size
 
-        # Apply different convolutions for different relations
-        x_pos = self.position_conv(x)
-        x_vel = self.velocity_conv(x)
-        x_acc = self.acceleration_conv(x)
-
-        # Apply graph convolution for each relation
-        x_pos = torch.einsum('nctv,ntwv->nctw', x_pos, 
-                             normalized_laplacian_tilde_matrix(drop_edge(A[:, 0], 0.8, self.training)))
-        x_vel = torch.einsum('nctv,ntwv->nctw', x_vel, 
-                             normalized_laplacian_tilde_matrix(drop_edge(A[:, 1], 0.8, self.training)))
-        x_acc = torch.einsum('nctv,ntwv->nctw', x_acc, 
-                             normalized_laplacian_tilde_matrix(drop_edge(A[:, 2], 0.8, self.training)))
-
-        # Fuse all relations
-        x_fused = torch.cat([x_pos, x_vel, x_acc], dim=1)
-        x_out = self.fusion(x_fused)
+        # Apply convolution (following original DMRGCN)
+        x = self.conv(x)
+        
+        # Reshape to separate relations
+        x = x.view(x.size(0), self.relation, self.out_channels, x.size(-2), x.size(-1))
+        
+        # Apply graph convolution using original DMRGCN approach
+        # A: [batch, relation, time, vertices, vertices]
+        # x: [batch, relation, out_channels, time, vertices]
+        x_out = torch.einsum('nrtwv,nrctv->nctw', 
+                           normalized_laplacian_tilde_matrix(drop_edge(A, 0.8, self.training)), 
+                           x)
 
         return x_out.contiguous(), A
 
@@ -156,8 +146,10 @@ class EnhancedSTDMRGCN(nn.Module):
         # Enhanced GCNs for multiple relations
         self.gcns = nn.ModuleList()
         for r in range(self.relation):
+            # For empty split lists, use 1 relation; otherwise use split length
+            rel_count = max(1, len(split[r])) if r < len(split) else 2
             self.gcns.append(MultiRelationalGCN(in_channels, out_channels, kernel_size[1], 
-                                                relation=len(split[r]) if r < len(split) else 2))
+                                                relation=rel_count))
 
         # Temporal convolution
         self.tcn = nn.Sequential(
@@ -188,7 +180,7 @@ class EnhancedSTDMRGCN(nn.Module):
             if r < len(self.split):
                 A_ = get_disentangled_adjacency_matrix(A_r[r].squeeze(dim=1), self.split[r])
             else:
-                A_ = A_r[r]
+                A_ = A_r[r].squeeze(dim=1)
             
             x_a, _ = self.gcns[r](x, A_)
 
@@ -253,15 +245,19 @@ class EnhancedDMRGCN(nn.Module):
             self.st_gcns.append(EnhancedSTDMRGCN(64, 64, [kernel_size, seq_len], 
                                                  split=[[], [1.0], [1.5]], relation=3))
 
-        # Temporal prediction CNN
+        # Channel projection from 64 to seq_len for TPCNN compatibility
+        self.channel_projection = nn.Conv2d(64, seq_len, 1)
+        
+        # Temporal prediction CNN (following original DMRGCN)
         self.tpcnns = nn.ModuleList()
+        # First layer: from seq_len to pred_seq_len
         self.tpcnns.append(nn.Conv2d(seq_len, pred_seq_len, kernel_size))
         
         for j in range(1, self.n_tpcnn):
             self.tpcnns.append(nn.Conv2d(pred_seq_len, pred_seq_len, kernel_size))
             
         # Output layer for enhanced features
-        self.output_layer = nn.Conv2d(64, output_feat, 1)
+        self.output_layer = nn.Conv2d(pred_seq_len, output_feat, 1)
         
     def forward(self, v, a):
         """
@@ -279,11 +275,19 @@ class EnhancedDMRGCN(nn.Module):
         for k in range(self.n_stgcn):
             v, a_enhanced = self.st_gcns[k](v, a_enhanced)
 
-        # Apply temporal prediction layers
-        v = v.view(v.shape[0], v.shape[1], v.shape[2], v.shape[3])
+        # Project 64 channels back to seq_len for TPCNN
+        # v shape: [batch, 64, time, vertices] -> [batch, seq_len, time, vertices]
+        v = self.channel_projection(v)
+
+        # NCTV -> NTCV (following original DMRGCN)
+        v = v.permute(0, 2, 1, 3)
         
+        # Apply temporal prediction layers  
         for k in range(self.n_tpcnn):
             v = F.prelu(self.tpcnns[k](v))
+
+        # NTCV -> NCTV (following original DMRGCN)
+        v = v.permute(0, 2, 1, 3)
 
         # Generate output
         v = self.output_layer(v)
