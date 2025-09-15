@@ -11,7 +11,7 @@ import numpy as np
 sys.path.insert(0, os.path.abspath('.'))
 
 from utils.shapes import set_shape_validation, validate_model_io, log_shape
-from models.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
+from model.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -204,8 +204,6 @@ def demo_edge_cases():
     print("\\n🧪 Edge Cases Demo")
     print("-" * 30)
     
-    model = demo_shape_enforcement()
-    
     test_cases = [
         {
             'name': 'Single Agent',
@@ -230,6 +228,17 @@ def demo_edge_cases():
         T_pred = case['T_pred']
         
         try:
+            # 각 테스트마다 적절한 T_pred로 새 모델 생성
+            from model.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
+            model = DMRGCN_GPGraph_Model(
+                d_in=d_in,
+                d_h=32,  # 작은 차원으로 빠른 테스트
+                d_gp_in=32,
+                T_pred=T_pred,  # 각 테스트에 맞는 예측 길이
+                dmrgcn_hidden_dims=[16, 32],
+                use_simple_head=True
+            )
+            
             X = torch.randn(B, T_obs, N, d_in)
             A_obs = torch.randn(B, T_obs, N, N)
             M_obs = torch.ones(B, T_obs, N)
@@ -246,6 +255,8 @@ def demo_edge_cases():
                 
         except Exception as e:
             print(f"   ❌ Failed with error: {e}")
+            import traceback
+            traceback.print_exc()
 
 def main():
     """Run complete demonstration"""

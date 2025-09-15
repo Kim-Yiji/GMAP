@@ -16,7 +16,7 @@ from utils.shapes import (
 )
 from adapters.dmrgcn_adapter import DMRGCNEncoderAdapter
 from adapters.gpgraph_head import GPGraphHead, SimpleRegressionHead
-from models.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
+from model.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
 
 # Setup logging for tests
 logging.basicConfig(level=logging.DEBUG)

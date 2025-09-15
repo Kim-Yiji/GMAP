@@ -57,7 +57,7 @@ def test_simple_model():
     print("🧪 Testing simple unified model...")
     
     try:
-        from models.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
+        from model.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
         
         # Create simple model
         model = DMRGCN_GPGraph_Model(
@@ -101,7 +101,7 @@ def test_loss_computation():
     print("🧪 Testing loss computation...")
     
     try:
-        from models.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
+        from model.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
         
         model = DMRGCN_GPGraph_Model(
             d_in=2, d_h=32, T_pred=8, 

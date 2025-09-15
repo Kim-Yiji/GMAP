@@ -13,7 +13,7 @@ from torch.utils.tensorboard import SummaryWriter
 import logging
 
 # Import unified model and utilities
-from models.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
+from model.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
 from datasets.dataloader import TrajectoryDataset, collate_fn
 from utils.shapes import set_shape_validation, validate_model_io, log_shape
 
