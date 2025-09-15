@@ -250,23 +250,24 @@ def convert_batch_to_unified_format(batch, device, args):
     if args.use_multimodal and args.d_in >= 4:
         # Use both positions and velocities
         X_obs = torch.cat([
-            obs_traj.unsqueeze(0).permute(0, 1, 2, 3),      # positions
-            obs_traj_rel.unsqueeze(0).permute(0, 1, 2, 3)   # velocities
+            obs_traj.unsqueeze(0),      # [1, T_obs, N, 2] positions
+            obs_traj_rel.unsqueeze(0)   # [1, T_obs, N, 2] velocities
         ], dim=-1)  # [B, T_obs, N, 4]
     else:
         # Use relative displacements only
-        X_obs = obs_traj_rel.unsqueeze(0).permute(0, 1, 2, 3)  # [B, T_obs, N, 2]
+        X_obs = obs_traj_rel.unsqueeze(0)  # [B, T_obs, N, 2]
     
     # Construct adjacency A_obs: [B, T_obs, N, N]
-    # Use distance adjacency from the pre-computed adjacency stack
-    A_obs_unified = A_obs[:, 1, :, :, :].permute(0, 2, 3, 1)  # [B, T_obs, N, N]
+    # Input: A_obs [B, R, T, N, N] = [1, 2, 8, N, N]
+    # Select distance relation (relation index 1) and permute to [B, T, N, N]
+    A_obs_unified = A_obs[:, 1, :, :, :].permute(0, 1, 2, 3)  # [B, T_obs, N, N]
     
     # Construct masks
-    M_obs = loss_mask[:T_obs].unsqueeze(0).permute(0, 1, 2)  # [B, T_obs, N]
-    M_pred = loss_mask[T_obs:].unsqueeze(0).permute(0, 1, 2)  # [B, T_pred, N]
+    M_obs = loss_mask[:T_obs].unsqueeze(0)  # [B, T_obs, N]
+    M_pred = loss_mask[T_obs:].unsqueeze(0)  # [B, T_pred, N]
     
     # Construct target deltas: [B, T_pred, N, 2]
-    delta_Y_true = pred_traj_rel.unsqueeze(0).permute(0, 1, 2, 3)  # [B, T_pred, N, 2]
+    delta_Y_true = pred_traj_rel.unsqueeze(0)  # [B, T_pred, N, 2]
     
     return X_obs, A_obs_unified, M_obs, delta_Y_true, M_pred
 
