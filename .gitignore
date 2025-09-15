@@ -215,3 +215,16 @@ cython_debug/
 .pypirc
 
 session.session
+
+# 🔹 Model checkpoints and training artifacts
+checkpoints_unified/
+data_cache/
+test_results_comprehensive/
+*.pth
+*.pkl
+
+# 🔹 Test and analysis scripts (temporary)
+comprehensive_test.py
+detailed_analysis.py
+final_test.py
+simple_test.py

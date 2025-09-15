@@ -11,7 +11,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 
 # Import our integrated model and dataset
-from model.dmrgcn_gpgraph import DMRGCNGPGraph
+from model.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
 from datasets.dataloader import TrajectoryDataset, collate_fn
 
 
