@@ -58,23 +58,31 @@ class GroupAssignment(nn.Module):
         n_ped = v.size(-1)
         device = v.device
         
+        # Handle edge case: single agent
+        if n_ped == 1:
+            return torch.tensor([0], dtype=torch.long, device=device)
+        
         # Create mask for upper triangular matrix
         mask = torch.ones_like(dist_mat).mul(1e4).triu()
         
         # Find pairs closer than threshold
-        close_pairs = torch.nonzero(
-            dist_mat.tril(diagonal=-1).add(mask).le(self.th), 
-            as_tuple=True
-        )
+        close_condition = dist_mat.tril(diagonal=-1).add(mask).le(self.th)
+        close_pairs = torch.nonzero(close_condition, as_tuple=True)
         
         # Initialize group indices
         indices_raw = torch.arange(n_ped, dtype=torch.long, device=device)
         
-        # Union-find like grouping
-        for r, c in zip(close_pairs[0], close_pairs[1]):
-            # Merge groups
-            mask_merge = indices_raw == indices_raw[r]
-            indices_raw[mask_merge] = indices_raw[c]
+        # Union-find like grouping - fix aliasing issue
+        if len(close_pairs[0]) > 0:  # Only process if there are close pairs
+            for r, c in zip(close_pairs[0], close_pairs[1]):
+                # Boundary check to prevent index errors
+                if r.item() < n_ped and c.item() < n_ped:
+                    # Merge groups - clone to avoid aliasing
+                    r_val = indices_raw[r].clone()  # Store value to avoid aliasing
+                    mask_merge = indices_raw == r_val
+                    c_val = indices_raw[c].clone()  # Store value to avoid aliasing
+                    indices_raw = indices_raw.clone()  # Clone entire tensor to break aliasing
+                    indices_raw[mask_merge] = c_val
         
         # Compress indices to contiguous range
         indices_unique = indices_raw.unique()
