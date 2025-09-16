@@ -121,12 +121,39 @@ class GroupGenerator(nn.Module):
         return v, indices
 
     def forward(self, v, v_abs, tau=0.1, hard=True):
-        B, N, D = v.shape  # B: batch size, N: num agents, D: feature dim
-        out = []
-        for b in range(B):
-            out.append(self._process_single(v[b], v_abs[b]))
-        # 결과를 다시 배치 차원으로 합침
-        return torch.stack(out, dim=0)
+        """
+        v: (batch, 2, seq_len, num_ped)
+        v_abs: (batch, 2, seq_len, num_ped)
+        """
+        assert v.dim() == 4 and v_abs.dim() == 4
+        assert v.size(0) == 1, "GroupGenerator currently assumes batch size 1."
+        n_ped = v.size(-1)
+
+        # Measure similarity between pedestrian pairs
+        if self.d_type == 'euclidean':
+            temp = v_abs.unsqueeze(dim=-1).repeat_interleave(repeats=n_ped, dim=-1)
+            dist_mat = (temp - temp.transpose(-2, -1)).norm(p=2, dim=1)
+        elif self.d_type == 'learned_l2norm':
+            temp = self.group_cnn(v_abs).unsqueeze(dim=-1).repeat_interleave(repeats=n_ped, dim=-1)
+            dist_mat = (temp - temp.transpose(-2, -1)).norm(p=2, dim=1)
+        elif self.d_type == 'learned':
+            temp = v_abs.unsqueeze(dim=-1).repeat_interleave(repeats=n_ped, dim=-1)
+            temp = (temp - temp.transpose(-1, -2)).reshape(temp.size(0), -1, n_ped, n_ped)
+            temp = self.group_cnn(temp).exp()
+            dist_mat = torch.stack([temp, temp.transpose(-1, -2)], dim=-1).mean(dim=-1)  # symmetric
+        elif self.d_type == 'estimate_th':
+            temp = v_abs.unsqueeze(dim=-1).repeat_interleave(repeats=n_ped, dim=-1)
+            temp = (temp - temp.transpose(-2, -1))
+            dist_mat = temp.norm(p=2, dim=1)
+            self.th = self.group_cnn(temp.reshape(1, -1, n_ped, n_ped)).mean().exp()
+        else:
+            raise NotImplementedError
+
+        # Aggregate over time and batch (batch is 1)
+        dist_mat = dist_mat.squeeze(dim=0).mean(dim=0)  # (num_ped, num_ped)
+        indices = self.find_group_indices(v.squeeze(0), dist_mat)
+        v = self.group_backprop_trick_threshold(v.squeeze(0), dist_mat.unsqueeze(0), tau=tau, hard=hard).unsqueeze(0)
+        return v, indices
 
     @staticmethod
     def ped_group_pool(v, indices):
