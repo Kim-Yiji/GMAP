@@ -209,6 +209,9 @@ python train_unified.py \
     --tag "resumed_training"
 ```
 
+### test
+python test_simple.py ./server_exp-hotel/hotel_best.pth
+
 ## 📋 추천 실행 순서
 
 1. **빠른 검증**: `python demo_final.py`
