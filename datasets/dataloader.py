@@ -134,6 +134,33 @@ def read_file(_path, delim='\t'):
 
 
 class TrajectoryDataset(Dataset):
+    def export_framewise_positions(self, output_csv_path):
+        """
+        Export all frames' pedestrian positions and agent IDs to a CSV file for overlay visualization.
+        Each row: frame_idx, agent_id, x, y
+        """
+        import csv
+        # obs_traj: (total_N, 2, obs_len), agent_ids: (total_N,)
+        # seq_start_end: list of (start, end) indices for each sequence
+        with open(output_csv_path, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['seq_idx', 'frame_idx', 'agent_id', 'x', 'y', 'phase'])
+            for seq_idx, (start, end) in enumerate(self.seq_start_end):
+                # Observation phase
+                for t in range(self.obs_len):
+                    for n in range(start, end):
+                        agent_id = self.agent_ids[n].item()
+                        x = self.obs_traj[n, 0, t].item()
+                        y = self.obs_traj[n, 1, t].item()
+                        writer.writerow([seq_idx, t, agent_id, x, y, 'obs'])
+                # Prediction phase
+                for t in range(self.pred_len):
+                    for n in range(start, end):
+                        agent_id = self.agent_ids[n].item()
+                        x = self.pred_traj[n, 0, t].item()
+                        y = self.pred_traj[n, 1, t].item()
+                        writer.writerow([seq_idx, t, agent_id, x, y, 'pred'])
+
     """Enhanced Trajectory Dataset for DMRGCN + GP-Graph with caching support"""
 
     def __init__(self, data_dir, obs_len=8, pred_len=8, skip=1, threshold=0.002, min_ped=1, delim='\t', 
