@@ -1,14 +1,13 @@
 # Enhanced Dataloader for DMRGCN + GP-Graph integration
-# Based on Social-GAN dataloader with additional features for group-aware modeling
+# Based on Social-GAN dataloader with advanced caching system
 
 import os
 import math
-import pickle
-import hashlib
 import torch
 import numpy as np
 from tqdm import tqdm
 from torch.utils.data import Dataset
+from .cache_manager import CacheManager
 
 
 def anorm(p1, p2):
@@ -63,68 +62,28 @@ def build_pairwise_displacement_matrix(seq_rel):
     return disp_matrix
 
 
-def seq_to_graph(seq, seq_rel, agent_ids=None):
-    """Convert trajectory sequences to graph representation
-    
-    Args:
-        seq: (N, 2, T) - absolute positions  
-        seq_rel: (N, 2, T) - relative displacements
-        agent_ids: (N,) - agent IDs for tracking
-    
-    Returns:
-        V: (T, N, 2) - node features (relative displacements)
-        A: (2, T, N, N) - adjacency matrices [displacement, distance]
-        agent_ids: (N,) - preserved agent IDs
-    """
-    assert seq.shape == seq_rel.shape
-    
-    num_nodes = seq.shape[0]
-    seq_len = seq.shape[2]
-    
-    # Node features: relative displacements
-    V = torch.zeros((seq_len, num_nodes, 2), dtype=torch.float)
-    for t in range(seq_len):
-        for n in range(num_nodes):
-            V[t, n, :] = seq_rel[n, :, t]
-    
-    # Adjacency matrices
-    A_dist = build_pairwise_distance_matrix(seq)
-    A_disp = build_pairwise_displacement_matrix(seq_rel)
-    
-    # Stack: [displacement, distance]
-    A = torch.stack([A_disp, A_dist], dim=0)
-    
-    # Preserve agent IDs if provided
-    if agent_ids is None:
-        agent_ids = torch.arange(num_nodes, dtype=torch.long)
-    
-    return V, A, agent_ids
-
-
 def poly_fit(traj, traj_len, threshold):
-    """
-    Input:
-    - traj: Numpy array of shape (2, traj_len)
-    - traj_len: Len of trajectory
-    - threshold: Minimum error to be considered for non linear traj
-    Output:
-    - int: 1 -> Non Linear 0-> Linear
-    """
-    t = np.linspace(0, traj_len - 1, traj_len)
-    res_x = np.polyfit(t, traj[0, -traj_len:], 2, full=True)[1]
-    res_y = np.polyfit(t, traj[1, -traj_len:], 2, full=True)[1]
-    if res_x + res_y >= threshold:
-        return 1.0
-    else:
-        return 0.0
+    """Check if trajectory is linear using polynomial fitting"""
+    if len(traj) < 2:
+        return 0
+    
+    # Fit polynomial of degree 1 (linear)
+    x = np.arange(len(traj))
+    y = traj
+    
+    # Calculate linear fit
+    coeffs = np.polyfit(x, y, 1)
+    poly = np.poly1d(coeffs)
+    
+    # Calculate error
+    error = np.sum((y - poly(x)) ** 2)
+    
+    return 1 if error > threshold else 0
 
 
 def read_file(_path, delim='\t'):
+    """Read trajectory data from file"""
     data = []
-    if delim == 'tab':
-        delim = '\t'
-    elif delim == 'space':
-        delim = ' '
     with open(_path, 'r') as f:
         for line in f:
             line = line.strip().split(delim)
@@ -133,28 +92,47 @@ def read_file(_path, delim='\t'):
     return np.asarray(data)
 
 
+def seq_to_graph(seq, seq_rel, agent_ids):
+    """Convert sequence to graph representation"""
+    # Build distance and displacement matrices
+    dist_matrix = build_pairwise_distance_matrix(seq)
+    disp_matrix = build_pairwise_displacement_matrix(seq_rel)
+    
+    # Create adjacency matrix based on distance threshold
+    threshold = 2.0  # meters
+    adj_matrix = (dist_matrix < threshold).float()
+    
+    # Remove self-loops
+    for t in range(adj_matrix.shape[0]):
+        adj_matrix[t].fill_diagonal_(0)
+    
+    # Stack matrices: [distance, displacement, adjacency]
+    V = torch.stack([seq, seq_rel], dim=0)  # (2, T, N, 2)
+    A = torch.stack([dist_matrix, disp_matrix, adj_matrix], dim=0)  # (3, T, N, N)
+    
+    return V, A, agent_ids
+
+
 class TrajectoryDataset(Dataset):
-    """Enhanced Trajectory Dataset for DMRGCN + GP-Graph with caching support"""
+    """Enhanced Trajectory Dataset with advanced caching system"""
 
     def __init__(self, data_dir, obs_len=8, pred_len=8, skip=1, threshold=0.002, min_ped=1, delim='\t', 
-                 use_cache=True, cache_dir='./data_cache'):
+                 use_cache=True, cache_dir='./data_cache', force_rebuild=False):
         """
         Args:
-        - data_dir: Directory containing dataset files in the format
-        <frame_id> <ped_id> <x> <y>
+        - data_dir: Directory containing dataset files
         - obs_len: Number of time-steps in input trajectories
         - pred_len: Number of time-steps in output trajectories
         - skip: Number of frames to skip while making the dataset
         - threshold: Minimum error to be considered for non linear traj
-        when using a linear predictor
         - min_ped: Minimum number of pedestrians that should be in a sequence
         - delim: Delimiter in the dataset files
         - use_cache: Whether to use cached preprocessed data
         - cache_dir: Directory to store cached data
+        - force_rebuild: Force rebuild cache even if valid cache exists
         """
         super(TrajectoryDataset, self).__init__()
 
-        self.max_peds_in_frame = 0
         self.data_dir = data_dir
         self.obs_len = obs_len
         self.pred_len = pred_len
@@ -162,159 +140,90 @@ class TrajectoryDataset(Dataset):
         self.seq_len = self.obs_len + self.pred_len
         self.delim = delim
         self.use_cache = use_cache
-        self.cache_dir = cache_dir
+        self.force_rebuild = force_rebuild
         
-        # Create cache directory if it doesn't exist
-        if self.use_cache:
-            os.makedirs(self.cache_dir, exist_ok=True)
+        # Initialize cache manager
+        self.cache_manager = CacheManager(cache_dir)
         
-        # Generate unique cache key based on data parameters
-        cache_key = self._generate_cache_key()
-        cache_path = os.path.join(self.cache_dir, f"{cache_key}.pkl")
-        
-        # Try to load from cache first
-        if self.use_cache and os.path.exists(cache_path):
-            print(f"🚀 Loading preprocessed data from cache: {cache_path}")
-            self._load_from_cache(cache_path)
-        else:
-            print(f"🔄 Processing data from scratch...")
-            self._process_data_from_scratch()
-            
-            # Save to cache
-            if self.use_cache:
-                print(f"💾 Saving preprocessed data to cache: {cache_path}")
-                self._save_to_cache(cache_path)
-
-    def _generate_cache_key(self):
-        """Generate unique cache key based on data directory and parameters"""
-        # Get data directory name and modification times of all files
-        data_dir_name = os.path.basename(os.path.normpath(self.data_dir))
-        
-        # Include all files and their modification times
-        all_files = sorted(os.listdir(self.data_dir))
-        file_info = []
-        for fname in all_files:
-            fpath = os.path.join(self.data_dir, fname)
-            if os.path.isfile(fpath):
-                mtime = os.path.getmtime(fpath)
-                file_info.append((fname, mtime))
-        
-        # Create hash from parameters and file info
-        params_str = f"{data_dir_name}_{self.obs_len}_{self.pred_len}_{self.skip}_{self.delim}"
-        files_str = str(file_info)
-        combined_str = params_str + files_str
-        
-        return hashlib.md5(combined_str.encode()).hexdigest()[:16]
-    
-    def _load_from_cache(self, cache_path):
-        """Load preprocessed data from cache"""
-        with open(cache_path, 'rb') as f:
-            cached_data = pickle.load(f)
-        
-        self.num_seq = cached_data['num_seq']
-        self.seq_list = cached_data['seq_list']
-        self.seq_list_rel = cached_data['seq_list_rel']
-        self.agent_ids_list = cached_data['agent_ids_list']
-        self.loss_mask_list = cached_data['loss_mask_list']
-        self.non_linear_ped = cached_data['non_linear_ped']
-        self.max_peds_in_frame = cached_data['max_peds_in_frame']
-        
-        # Handle backward compatibility for num_peds_in_seq
-        if 'num_peds_in_seq' in cached_data:
-            self.num_peds_in_seq = cached_data['num_peds_in_seq']
-        else:
-            # Reconstruct num_peds_in_seq from existing data
-            print("⚠️  Reconstructing num_peds_in_seq from cached data...")
-            self.num_peds_in_seq = []
-            current_idx = 0
-            for i in range(self.num_seq):
-                # Find the number of pedestrians in this sequence
-                seq_end = current_idx
-                while seq_end < len(self.agent_ids_list) and self.agent_ids_list[seq_end] != 0:
-                    seq_end += 1
-                num_peds = seq_end - current_idx
-                self.num_peds_in_seq.append(num_peds)
-                current_idx = seq_end
-        
-        # Precomputed graph data
-        self.V_obs = cached_data['V_obs']
-        self.A_obs = cached_data['A_obs']
-        self.V_pred = cached_data['V_pred']
-        self.A_pred = cached_data['A_pred']
-        
-        # Handle backward compatibility for agent_ids_per_seq
-        if 'agent_ids_per_seq' in cached_data:
-            self.agent_ids_per_seq = cached_data['agent_ids_per_seq']
-        else:
-            # Reconstruct agent_ids_per_seq from existing data
-            print("⚠️  Reconstructing agent_ids_per_seq from cached data...")
-            self.agent_ids_per_seq = []
-            current_idx = 0
-            for i in range(self.num_seq):
-                start_idx = current_idx
-                end_idx = current_idx + self.num_peds_in_seq[i]
-                seq_agent_ids = self.agent_ids_list[start_idx:end_idx]
-                self.agent_ids_per_seq.append(seq_agent_ids)
-                current_idx = end_idx
-        
-        # Convert numpy matrix to torch tensor (same as in _process_data_from_scratch)
-        self.obs_traj = torch.from_numpy(self.seq_list[:, :, :self.obs_len]).type(torch.float)
-        self.pred_traj = torch.from_numpy(self.seq_list[:, :, self.obs_len:]).type(torch.float)
-        self.obs_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, :self.obs_len]).type(torch.float)
-        self.pred_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, self.obs_len:]).type(torch.float)
-        self.loss_mask = torch.from_numpy(self.loss_mask_list).type(torch.float)
-        
-        # Handle non_linear_ped type conversion
-        if isinstance(self.non_linear_ped, np.ndarray):
-            self.non_linear_ped = torch.from_numpy(self.non_linear_ped).type(torch.float)
-        else:
-            self.non_linear_ped = self.non_linear_ped.type(torch.float)
-            
-        self.agent_ids = torch.from_numpy(self.agent_ids_list).type(torch.long)
-        
-        # Reconstruct seq_start_end from cached data
-        cum_start_idx = [0] + np.cumsum(self.num_peds_in_seq).tolist()
-        self.seq_start_end = [(start, end) for start, end in zip(cum_start_idx, cum_start_idx[1:])]
-        
-        print(f"✅ Loaded {self.num_seq} sequences from cache")
-    
-    def _save_to_cache(self, cache_path):
-        """Save preprocessed data to cache"""
-        cached_data = {
-            'num_seq': self.num_seq,
-            'seq_list': self.seq_list,
-            'seq_list_rel': self.seq_list_rel,
-            'agent_ids_list': self.agent_ids_list,
-            'loss_mask_list': self.loss_mask_list,
-            'non_linear_ped': self.non_linear_ped,
-            'max_peds_in_frame': self.max_peds_in_frame,
-            'num_peds_in_seq': self.num_peds_in_seq,
-            'V_obs': self.V_obs,
-            'A_obs': self.A_obs,
-            'V_pred': self.V_pred,
-            'A_pred': self.A_pred,
-            'agent_ids_per_seq': self.agent_ids_per_seq
+        # Data parameters for cache key generation
+        self.data_params = {
+            'obs_len': obs_len,
+            'pred_len': pred_len,
+            'skip': skip,
+            'delim': delim,
+            'threshold': threshold,
+            'min_ped': min_ped
         }
         
-        with open(cache_path, 'wb') as f:
-            pickle.dump(cached_data, f)
+        # Generate cache key and path
+        cache_key = self.cache_manager.generate_cache_key(data_dir, self.data_params)
+        cache_path = self.cache_manager.get_cache_path(cache_key)
         
-        print(f"💾 Cached {self.num_seq} sequences to {cache_path}")
+        # Try to load from cache or process from scratch
+        if self.use_cache and not force_rebuild:
+            is_valid, reason = self.cache_manager.is_cache_valid(cache_path, data_dir, self.data_params)
+            
+            if is_valid:
+                print(f"🚀 Loading preprocessed data from cache: {cache_path}")
+                cached_data = self.cache_manager.load_cache(cache_path)
+                
+                if cached_data is not None:
+                    # Normalize data types and convert to tensors
+                    normalized_data = self.cache_manager.normalize_data_types(cached_data)
+                    processed_data = self.cache_manager.convert_to_tensors(normalized_data, obs_len, pred_len)
+                    
+                    # Set attributes
+                    self._set_attributes_from_data(processed_data)
+                    return
+                else:
+                    print("⚠️  Cache loading failed, processing from scratch...")
+            else:
+                print(f"⚠️  Cache invalid ({reason}), processing from scratch...")
+        
+        # Process data from scratch
+        print(f"🔄 Processing data from scratch...")
+        self._process_data_from_scratch(threshold, min_ped)
+        
+        # Save to cache
+        if self.use_cache:
+            print(f"💾 Saving preprocessed data to cache...")
+            self._save_to_cache(cache_path)
     
-    def _process_data_from_scratch(self):
-        """Process data from scratch (original processing logic)"""
+    def _set_attributes_from_data(self, data):
+        """Set dataset attributes from processed data"""
+        self.num_seq = data['num_seq']
+        self.max_peds_in_frame = data['max_peds_in_frame']
+        
+        # Trajectory data
+        self.obs_traj = data['obs_traj']
+        self.pred_traj = data['pred_traj']
+        self.obs_traj_rel = data['obs_traj_rel']
+        self.pred_traj_rel = data['pred_traj_rel']
+        self.loss_mask = data['loss_mask']
+        self.non_linear_ped = data['non_linear_ped']
+        self.agent_ids = data['agent_ids']
+        self.seq_start_end = data['seq_start_end']
+        
+        # Graph data
+        self.V_obs = data['V_obs']
+        self.A_obs = data['A_obs']
+        self.V_pred = data['V_pred']
+        self.A_pred = data['A_pred']
+        self.agent_ids_per_seq = data['agent_ids_per_seq']
+    
+    def _process_data_from_scratch(self, threshold=0.002, min_ped=1):
+        """Process data from scratch"""
         all_files = sorted(os.listdir(self.data_dir))
         all_files = [os.path.join(self.data_dir, _path) for _path in all_files]
+        
         num_peds_in_seq = []
         seq_list = []
         seq_list_rel = []
-        agent_ids_list = []  # Track agent IDs
+        agent_ids_list = []
         loss_mask_list = []
         non_linear_ped = []
         
-        # Default threshold and min_ped for processing
-        threshold = 0.002
-        min_ped = 1
+        self.max_peds_in_frame = 0
         
         for path in all_files:
             data = read_file(path, self.delim)
@@ -322,6 +231,7 @@ class TrajectoryDataset(Dataset):
             frame_data = []
             for frame in frames:
                 frame_data.append(data[frame == data[:, 0], :])
+            
             num_sequences = int(math.ceil((len(frames) - self.seq_len + 1) / self.skip))
 
             for idx in range(0, num_sequences * self.skip + 1, self.skip):
@@ -336,15 +246,18 @@ class TrajectoryDataset(Dataset):
 
                 num_peds_considered = 0
                 _non_linear_ped = []
+                
                 for ped_idx, ped_id in enumerate(peds_in_curr_seq):
                     curr_ped_seq = curr_seq_data[curr_seq_data[:, 1] == ped_id, :]
                     curr_ped_seq = np.around(curr_ped_seq, decimals=4)
                     pad_front = frames.index(curr_ped_seq[0, 0]) - idx
                     pad_end = frames.index(curr_ped_seq[-1, 0]) - idx + 1
+                    
                     if pad_end - pad_front != self.seq_len:
                         continue
+                    
                     curr_ped_seq = np.transpose(curr_ped_seq[:, 2:])
-
+                    
                     # Make coordinates relative
                     rel_curr_ped_seq = np.zeros(curr_ped_seq.shape)
                     rel_curr_ped_seq[:, 1:] = curr_ped_seq[:, 1:] - curr_ped_seq[:, :-1]
@@ -352,7 +265,7 @@ class TrajectoryDataset(Dataset):
 
                     curr_seq[_idx, :, pad_front:pad_end] = curr_ped_seq
                     curr_seq_rel[_idx, :, pad_front:pad_end] = rel_curr_ped_seq
-                    curr_agent_ids[_idx] = ped_id  # Store agent ID
+                    curr_agent_ids[_idx] = ped_id
 
                     # Linear vs Non-Linear Trajectory
                     _non_linear_ped.append(poly_fit(curr_ped_seq, self.pred_len, threshold))
@@ -374,7 +287,7 @@ class TrajectoryDataset(Dataset):
         agent_ids_list = np.concatenate(agent_ids_list, axis=0)
         non_linear_ped = np.asarray(non_linear_ped)
 
-        # Convert numpy matrix to torch tensor
+        # Convert to tensors
         self.obs_traj = torch.from_numpy(seq_list[:, :, :self.obs_len]).type(torch.float)
         self.pred_traj = torch.from_numpy(seq_list[:, :, self.obs_len:]).type(torch.float)
         self.obs_traj_rel = torch.from_numpy(seq_list_rel[:, :, :self.obs_len]).type(torch.float)
@@ -382,15 +295,10 @@ class TrajectoryDataset(Dataset):
         self.loss_mask = torch.from_numpy(loss_mask_list).type(torch.float)
         self.non_linear_ped = torch.from_numpy(non_linear_ped).type(torch.float)
         self.agent_ids = torch.from_numpy(agent_ids_list).type(torch.long)
+        
+        # Create sequence start/end indices
         cum_start_idx = [0] + np.cumsum(num_peds_in_seq).tolist()
         self.seq_start_end = [(start, end) for start, end in zip(cum_start_idx, cum_start_idx[1:])]
-
-        # Store data for caching  
-        self.seq_list = seq_list
-        self.seq_list_rel = seq_list_rel
-        self.agent_ids_list = agent_ids_list
-        self.loss_mask_list = loss_mask_list
-        self.num_peds_in_seq = num_peds_in_seq
 
         # Convert Trajectories to Enhanced Graphs
         self.V_obs = []
@@ -400,8 +308,7 @@ class TrajectoryDataset(Dataset):
         self.agent_ids_per_seq = []
 
         pbar = tqdm(total=len(self.seq_start_end))
-        pbar.set_description(
-            'Processing {0} dataset {1}'.format(self.data_dir.split('/')[-3], self.data_dir.split('/')[-2]))
+        pbar.set_description(f'Processing {self.data_dir.split("/")[-3]} dataset {self.data_dir.split("/")[-2]}')
 
         for ss in range(len(self.seq_start_end)):
             start, end = self.seq_start_end[ss]
@@ -428,6 +335,27 @@ class TrajectoryDataset(Dataset):
             
             pbar.update(1)
         pbar.close()
+    
+    def _save_to_cache(self, cache_path):
+        """Save processed data to cache"""
+        # Prepare data for caching (convert tensors to numpy for storage)
+        cache_data = {
+            'num_seq': self.num_seq,
+            'max_peds_in_frame': self.max_peds_in_frame,
+            'seq_list': self.obs_traj.numpy() if hasattr(self.obs_traj, 'numpy') else self.obs_traj,
+            'seq_list_rel': self.obs_traj_rel.numpy() if hasattr(self.obs_traj_rel, 'numpy') else self.obs_traj_rel,
+            'agent_ids_list': self.agent_ids.numpy() if hasattr(self.agent_ids, 'numpy') else self.agent_ids,
+            'loss_mask_list': self.loss_mask.numpy() if hasattr(self.loss_mask, 'numpy') else self.loss_mask,
+            'non_linear_ped': self.non_linear_ped.numpy() if hasattr(self.non_linear_ped, 'numpy') else self.non_linear_ped,
+            'num_peds_in_seq': [end - start for start, end in self.seq_start_end],
+            'V_obs': self.V_obs,
+            'A_obs': self.A_obs,
+            'V_pred': self.V_pred,
+            'A_pred': self.A_pred,
+            'agent_ids_per_seq': self.agent_ids_per_seq
+        }
+        
+        self.cache_manager.save_cache(cache_path, cache_data, self.data_params)
 
     def __len__(self):
         return self.num_seq
@@ -441,15 +369,13 @@ class TrajectoryDataset(Dataset):
             self.non_linear_ped[start:end], self.loss_mask[start:end, :],
             self.V_obs[index], self.A_obs[index],
             self.V_pred[index], self.A_pred[index],
-            self.agent_ids_per_seq[index]  # Add agent IDs
+            self.agent_ids_per_seq[index]
         ]
         return out
 
 
 def collate_fn(batch):
-    """Custom collate function to handle variable-sized sequences
-    while preserving agent IDs and enhanced graph information
-    """
+    """Custom collate function to handle variable-sized sequences"""
     # Unpack batch
     (obs_traj, pred_traj, obs_traj_rel, pred_traj_rel, non_linear_ped, 
      loss_mask, V_obs, A_obs, V_pred, A_pred, agent_ids) = zip(*batch)

@@ -78,6 +78,10 @@ def parse_args():
                        help='Use cached preprocessed data')
     parser.add_argument('--cache_dir', default='./data_cache', 
                        help='Directory for data cache')
+    parser.add_argument('--force_cache_rebuild', action='store_true', default=False,
+                       help='Force rebuild cache even if valid cache exists')
+    parser.add_argument('--clear_cache', action='store_true', default=False,
+                       help='Clear all cache files before training')
     
     # Training parameters
     parser.add_argument('--batch_size', type=int, default=16, help='Effective batch size')
@@ -146,6 +150,13 @@ def setup_data_loaders(args):
     """Setup data loaders with unified format"""
     dataset_path = f'./copy_dmrgcn/datasets/{args.dataset}/'
     
+    # Clear cache if requested
+    if args.clear_cache:
+        from datasets.cache_manager import CacheManager
+        cache_manager = CacheManager(f'{args.cache_dir}/{args.dataset}')
+        cache_manager.clear_all_cache()
+        print("🗑️  All cache files cleared")
+    
     train_dataset = TrajectoryDataset(
         dataset_path + 'train/',
         obs_len=args.obs_len,
@@ -154,7 +165,8 @@ def setup_data_loaders(args):
         min_ped=args.min_ped,
         delim='tab',
         use_cache=args.use_cache,
-        cache_dir=f'{args.cache_dir}/{args.dataset}'
+        cache_dir=f'{args.cache_dir}/{args.dataset}',
+        force_rebuild=args.force_cache_rebuild
     )
     
     val_dataset = TrajectoryDataset(
@@ -165,7 +177,8 @@ def setup_data_loaders(args):
         min_ped=args.min_ped,
         delim='tab',
         use_cache=args.use_cache,
-        cache_dir=f'{args.cache_dir}/{args.dataset}'
+        cache_dir=f'{args.cache_dir}/{args.dataset}',
+        force_rebuild=args.force_cache_rebuild
     )
     
     # Use custom collate function for proper batching
