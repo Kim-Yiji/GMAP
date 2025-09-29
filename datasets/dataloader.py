@@ -218,6 +218,17 @@ class TrajectoryDataset(Dataset):
         self.loss_mask_list = cached_data['loss_mask_list']
         self.non_linear_ped = cached_data['non_linear_ped']
         self.max_peds_in_frame = cached_data['max_peds_in_frame']
+        # Restore seq_start_end for indexing; reconstruct if absent (backward compatibility)
+        if 'seq_start_end' in cached_data:
+            self.seq_start_end = cached_data['seq_start_end']
+        else:
+            # Reconstruct from V_obs list lengths (each element is shape [T, N, 2])
+            V_obs_cached = cached_data.get('V_obs', [])
+            if not V_obs_cached:
+                raise KeyError("Cache missing 'seq_start_end' and 'V_obs'; cannot reconstruct indices")
+            num_peds_in_seq = [int(v.shape[1]) for v in V_obs_cached]
+            cum_start_idx = [0] + np.cumsum(num_peds_in_seq).tolist()
+            self.seq_start_end = [(start, end) for start, end in zip(cum_start_idx, cum_start_idx[1:])]
         
         # Precomputed graph data
         self.V_obs = cached_data['V_obs']
@@ -225,6 +236,25 @@ class TrajectoryDataset(Dataset):
         self.V_pred = cached_data['V_pred']
         self.A_pred = cached_data['A_pred']
         
+        # Rebuild tensor fields used by __getitem__ (to mirror _process_data_from_scratch)
+        # cached seq_list shapes: (total_peds, 2, seq_len)
+        self.seq_len = self.obs_len + self.pred_len
+        self.obs_traj = torch.from_numpy(self.seq_list[:, :, :self.obs_len]).type(torch.float)
+        self.pred_traj = torch.from_numpy(self.seq_list[:, :, self.obs_len:]).type(torch.float)
+        self.obs_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, :self.obs_len]).type(torch.float)
+        self.pred_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, self.obs_len:]).type(torch.float)
+        self.loss_mask = torch.from_numpy(self.loss_mask_list).type(torch.float)
+        self.non_linear_ped = torch.from_numpy(self.non_linear_ped.numpy() if isinstance(self.non_linear_ped, torch.Tensor) else self.non_linear_ped).type(torch.float)
+        self.agent_ids = torch.from_numpy(self.agent_ids_list).type(torch.long)
+
+        # Rebuild per-sequence agent id lists if missing in cache
+        if 'agent_ids_per_seq' in cached_data:
+            self.agent_ids_per_seq = cached_data['agent_ids_per_seq']
+        else:
+            self.agent_ids_per_seq = []
+            for (start, end) in self.seq_start_end:
+                self.agent_ids_per_seq.append(self.agent_ids[start:end])
+
         print(f"✅ Loaded {self.num_seq} sequences from cache")
     
     def _save_to_cache(self, cache_path):
@@ -237,6 +267,7 @@ class TrajectoryDataset(Dataset):
             'loss_mask_list': self.loss_mask_list,
             'non_linear_ped': self.non_linear_ped,
             'max_peds_in_frame': self.max_peds_in_frame,
+            'seq_start_end': self.seq_start_end,
             'V_obs': self.V_obs,
             'A_obs': self.A_obs,
             'V_pred': self.V_pred,

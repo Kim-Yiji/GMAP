@@ -23,6 +23,9 @@ except ImportError:
         if pattern == 'b 1 n n -> b t n n':
             t = axes_lengths['t']
             return tensor.expand(-1, t, -1, -1)
+        elif pattern == 'b 1 n1 n2 -> b t n1 n2':
+            t = axes_lengths['t']
+            return tensor.expand(-1, t, -1, -1)
         else:
             raise NotImplementedError(f"Unsupported repeat pattern: {pattern}")
 
