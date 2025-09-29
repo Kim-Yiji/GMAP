@@ -7,12 +7,14 @@ import argparse
 import torch
 import torch.nn as nn
 import numpy as np
+import logging
+from datetime import datetime
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 # Import our integrated model and dataset
-from model.dmrgcn_gpgraph import DMRGCNGPGraph
+from model.dmrgcn_gpgraph import DMRGCN_GPGraph_Model
 from datasets.dataloader import TrajectoryDataset, collate_fn
 
 # Avoid contiguous problems
@@ -103,21 +105,21 @@ def setup_model(args):
         'inter': args.enable_inter
     }
     
-    model = DMRGCNGPGraph(
-        obs_len=args.obs_len,
-        pred_len=args.pred_len,
-        input_dim=args.input_dim,
-        hidden_dims=args.hidden_dims,
-        kernel_size=tuple(args.kernel_size),
-        dropout=args.dropout,
+    model = DMRGCN_GPGraph_Model(
+        d_in=args.input_dim,
+        d_h=args.hidden_dims[-1],
+        d_gp_in=args.hidden_dims[-1],
+        T_pred=args.pred_len,
+        output_dim=2,
+        dmrgcn_hidden_dims=args.hidden_dims,
+        dmrgcn_kernel_size=tuple(args.kernel_size),
+        dmrgcn_dropout=args.dropout,
         group_type=args.group_type,
         group_threshold=args.group_th,
         mix_type=args.mix_type,
         enable_paths=enable_paths,
         distance_scales=args.distance_scales,
-        share_backbone=args.share_backbone,
-        use_mdn=args.use_mdn,
-        st_estimator=args.st_estimator
+        share_backbone=args.share_backbone
     )
     
     return model
@@ -212,8 +214,11 @@ def train_epoch(model, train_loader, optimizer, device, args):
         if batch_idx % args.batch_size == 0:
             optimizer.zero_grad()
         
+        # Create observation mask
+        M_obs = loss_mask[:8].t().unsqueeze(0)  # [1, N, T]
+        
         # Forward pass
-        predictions, group_indices = model(V_obs, A_obs)
+        predictions, group_indices = model(V_obs, A_obs, M_obs)
         
         # Compute loss
         # Convert predictions and targets to proper format
@@ -269,8 +274,11 @@ def validate_epoch(model, val_loader, device, args):
             pred_traj = pred_traj.to(device).float()
             loss_mask = loss_mask.to(device).float()
             
+            # Create observation mask
+            M_obs = loss_mask[:8].t().unsqueeze(0)  # [1, N, T]
+            
             # Forward pass
-            predictions, group_indices = model(V_obs, A_obs)
+            predictions, group_indices = model(V_obs, A_obs, M_obs)
             
             # Compute loss
             B, _, pred_len, N = predictions.shape
@@ -300,9 +308,21 @@ def main():
     checkpoint_dir = os.path.join(args.checkpoint_dir, f'{args.tag}-{args.dataset}')
     os.makedirs(checkpoint_dir, exist_ok=True)
     
+    # Setup logging
+    log_file = os.path.join(checkpoint_dir, f'training_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log')
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s [%(levelname)s] %(message)s',
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler()
+        ]
+    )
+    
     # Save arguments
     with open(os.path.join(checkpoint_dir, 'args.pkl'), 'wb') as f:
         pickle.dump(args, f)
+    logging.info(f'Arguments saved to {os.path.join(checkpoint_dir, "args.pkl")}')
     
     # Setup model
     model = setup_model(args)
@@ -357,12 +377,16 @@ def main():
         writer.add_scalar('Loss/Val', val_loss, epoch)
         writer.add_scalar('LR', optimizer.param_groups[0]['lr'], epoch)
         
-        print(f'Train Loss: {train_loss:.6f}, Val Loss: {val_loss:.6f}')
+        # Log metrics
+        logging.info(f'Epoch {epoch}/{args.num_epochs}')
+        logging.info(f'Train Loss: {train_loss:.6f}, Val Loss: {val_loss:.6f}')
+        logging.info(f'Learning Rate: {optimizer.param_groups[0]["lr"]:.6f}')
         
         # Save checkpoint
         is_best = val_loss < best_val_loss
         if is_best:
             best_val_loss = val_loss
+            logging.info(f'New best validation loss: {val_loss:.6f}')
         
         if (epoch + 1) % args.save_interval == 0 or is_best:
             checkpoint = {

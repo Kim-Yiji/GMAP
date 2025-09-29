@@ -23,6 +23,9 @@ except ImportError:
         if pattern == 'b 1 n n -> b t n n':
             t = axes_lengths['t']
             return tensor.expand(-1, t, -1, -1)
+        elif pattern == 'b 1 n1 n2 -> b t n1 n2':
+            t = axes_lengths['t']
+            return tensor.expand(-1, t, -1, -1)
         else:
             raise NotImplementedError(f"Unsupported repeat pattern: {pattern}")
 
@@ -272,9 +275,17 @@ class GPGraphHead(nn.Module):
             pos_for_grouping = H_for_grouping
         
         # Perform group assignment
-        _, group_indices, _ = self.group_assignment(
+        group_assignment_result = self.group_assignment(
             H_for_grouping, pos_for_grouping, hard=True
         )
+        
+        # Handle different return formats
+        if len(group_assignment_result) == 2:
+            _, group_indices = group_assignment_result
+        elif len(group_assignment_result) == 3:
+            _, group_indices, _ = group_assignment_result
+        else:
+            group_indices = group_assignment_result[1]
         group_indices = group_indices.squeeze(0) if group_indices.dim() == 2 else group_indices[0]
         
         log_shape("group_assignment", H_agg=H_agg, group_indices=group_indices)

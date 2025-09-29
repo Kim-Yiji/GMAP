@@ -199,6 +199,10 @@ class TrajectoryDataset(Dataset):
         cache_key = self._generate_cache_key()
         cache_path = os.path.join(self.cache_dir, f"{cache_key}.pkl")
         
+        # Store parameters
+        self.threshold = threshold
+        self.min_ped = min_ped
+        
         # Try to load from cache first
         if self.use_cache and os.path.exists(cache_path):
             print(f"🚀 Loading preprocessed data from cache: {cache_path}")
@@ -252,6 +256,25 @@ class TrajectoryDataset(Dataset):
         self.V_pred = cached_data['V_pred']
         self.A_pred = cached_data['A_pred']
         
+        # Reconstruct seq_start_end and other tensor attributes from cached data
+        self.obs_traj = torch.from_numpy(self.seq_list[:, :, :self.obs_len]).type(torch.float)
+        self.pred_traj = torch.from_numpy(self.seq_list[:, :, self.obs_len:]).type(torch.float)
+        self.obs_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, :self.obs_len]).type(torch.float)
+        self.pred_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, self.obs_len:]).type(torch.float)
+        self.loss_mask = torch.from_numpy(self.loss_mask_list).type(torch.float)
+        self.agent_ids = torch.from_numpy(self.agent_ids_list).type(torch.long)
+        
+        # Reconstruct seq_start_end and agent_ids_per_seq
+        num_peds_in_seq = [len(seq) for seq in self.V_obs]
+        cum_start_idx = [0] + np.cumsum(num_peds_in_seq).tolist()
+        self.seq_start_end = [(start, end) for start, end in zip(cum_start_idx, cum_start_idx[1:])]
+        
+        # Reconstruct agent_ids_per_seq
+        self.agent_ids_per_seq = []
+        for start, end in self.seq_start_end:
+            seq_agent_ids = self.agent_ids[start:end]
+            self.agent_ids_per_seq.append(seq_agent_ids)
+        
         print(f"✅ Loaded {self.num_seq} sequences from cache")
     
     def _save_to_cache(self, cache_path):
@@ -286,9 +309,7 @@ class TrajectoryDataset(Dataset):
         loss_mask_list = []
         non_linear_ped = []
         
-        # Default threshold and min_ped for processing
-        threshold = 0.002
-        min_ped = 1
+        # Begin data processing
         
         for path in all_files:
             data = read_file(path, self.delim)
@@ -329,11 +350,11 @@ class TrajectoryDataset(Dataset):
                     curr_agent_ids[_idx] = ped_id  # Store agent ID
 
                     # Linear vs Non-Linear Trajectory
-                    _non_linear_ped.append(poly_fit(curr_ped_seq, self.pred_len, threshold))
+                    _non_linear_ped.append(poly_fit(curr_ped_seq, self.pred_len, self.threshold))
                     curr_loss_mask[_idx, pad_front:pad_end] = 1
                     num_peds_considered += 1
 
-                if num_peds_considered > min_ped:
+                if num_peds_considered > self.min_ped:
                     non_linear_ped += _non_linear_ped
                     num_peds_in_seq.append(num_peds_considered)
                     loss_mask_list.append(curr_loss_mask[:num_peds_considered])

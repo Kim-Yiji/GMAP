@@ -186,7 +186,15 @@ class GroupAssignment(nn.Module):
         # Expand distance matrix for output
         dist_mat_full = dist_mat.unsqueeze(0).unsqueeze(1).expand(B, T, -1, -1)  # (B, T, N, N)
         
-        return v_grouped, group_indices, dist_mat_full
+        # Save group assignment data
+        result_dict = {
+            'grouped_features': v_grouped.cpu().numpy(),
+            'group_indices': group_indices.cpu().numpy(),
+            'distance_matrix': dist_mat_full.cpu().numpy(),
+            'timestamp': torch.tensor([v_abs.size(2)]).numpy(),  # Save temporal context
+        }
+        
+        return v_grouped, group_indices, dist_mat_full, result_dict
 
 
 class GroupIntegration(nn.Module):
