@@ -248,7 +248,13 @@ class TrajectoryDataset(Dataset):
         self.obs_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, :self.obs_len]).type(torch.float)
         self.pred_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, self.obs_len:]).type(torch.float)
         self.loss_mask = torch.from_numpy(self.loss_mask_list).type(torch.float)
-        self.non_linear_ped = torch.from_numpy(self.non_linear_ped).type(torch.float)
+        
+        # Handle non_linear_ped type conversion
+        if isinstance(self.non_linear_ped, np.ndarray):
+            self.non_linear_ped = torch.from_numpy(self.non_linear_ped).type(torch.float)
+        else:
+            self.non_linear_ped = self.non_linear_ped.type(torch.float)
+            
         self.agent_ids = torch.from_numpy(self.agent_ids_list).type(torch.long)
         
         # Reconstruct seq_start_end from cached data
