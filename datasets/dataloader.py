@@ -242,6 +242,21 @@ class TrajectoryDataset(Dataset):
         self.V_pred = cached_data['V_pred']
         self.A_pred = cached_data['A_pred']
         
+        # Handle backward compatibility for agent_ids_per_seq
+        if 'agent_ids_per_seq' in cached_data:
+            self.agent_ids_per_seq = cached_data['agent_ids_per_seq']
+        else:
+            # Reconstruct agent_ids_per_seq from existing data
+            print("⚠️  Reconstructing agent_ids_per_seq from cached data...")
+            self.agent_ids_per_seq = []
+            current_idx = 0
+            for i in range(self.num_seq):
+                start_idx = current_idx
+                end_idx = current_idx + self.num_peds_in_seq[i]
+                seq_agent_ids = self.agent_ids_list[start_idx:end_idx]
+                self.agent_ids_per_seq.append(seq_agent_ids)
+                current_idx = end_idx
+        
         # Convert numpy matrix to torch tensor (same as in _process_data_from_scratch)
         self.obs_traj = torch.from_numpy(self.seq_list[:, :, :self.obs_len]).type(torch.float)
         self.pred_traj = torch.from_numpy(self.seq_list[:, :, self.obs_len:]).type(torch.float)
@@ -277,7 +292,8 @@ class TrajectoryDataset(Dataset):
             'V_obs': self.V_obs,
             'A_obs': self.A_obs,
             'V_pred': self.V_pred,
-            'A_pred': self.A_pred
+            'A_pred': self.A_pred,
+            'agent_ids_per_seq': self.agent_ids_per_seq
         }
         
         with open(cache_path, 'wb') as f:
