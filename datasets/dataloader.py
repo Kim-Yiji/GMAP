@@ -218,12 +218,26 @@ class TrajectoryDataset(Dataset):
         self.loss_mask_list = cached_data['loss_mask_list']
         self.non_linear_ped = cached_data['non_linear_ped']
         self.max_peds_in_frame = cached_data['max_peds_in_frame']
+        self.num_peds_in_seq = cached_data['num_peds_in_seq']
         
         # Precomputed graph data
         self.V_obs = cached_data['V_obs']
         self.A_obs = cached_data['A_obs']
         self.V_pred = cached_data['V_pred']
         self.A_pred = cached_data['A_pred']
+        
+        # Convert numpy matrix to torch tensor (same as in _process_data_from_scratch)
+        self.obs_traj = torch.from_numpy(self.seq_list[:, :, :self.obs_len]).type(torch.float)
+        self.pred_traj = torch.from_numpy(self.seq_list[:, :, self.obs_len:]).type(torch.float)
+        self.obs_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, :self.obs_len]).type(torch.float)
+        self.pred_traj_rel = torch.from_numpy(self.seq_list_rel[:, :, self.obs_len:]).type(torch.float)
+        self.loss_mask = torch.from_numpy(self.loss_mask_list).type(torch.float)
+        self.non_linear_ped = torch.from_numpy(self.non_linear_ped).type(torch.float)
+        self.agent_ids = torch.from_numpy(self.agent_ids_list).type(torch.long)
+        
+        # Reconstruct seq_start_end from cached data
+        cum_start_idx = [0] + np.cumsum(self.num_peds_in_seq).tolist()
+        self.seq_start_end = [(start, end) for start, end in zip(cum_start_idx, cum_start_idx[1:])]
         
         print(f"✅ Loaded {self.num_seq} sequences from cache")
     
@@ -237,6 +251,7 @@ class TrajectoryDataset(Dataset):
             'loss_mask_list': self.loss_mask_list,
             'non_linear_ped': self.non_linear_ped,
             'max_peds_in_frame': self.max_peds_in_frame,
+            'num_peds_in_seq': self.num_peds_in_seq,
             'V_obs': self.V_obs,
             'A_obs': self.A_obs,
             'V_pred': self.V_pred,
@@ -337,6 +352,7 @@ class TrajectoryDataset(Dataset):
         self.seq_list_rel = seq_list_rel
         self.agent_ids_list = agent_ids_list
         self.loss_mask_list = loss_mask_list
+        self.num_peds_in_seq = num_peds_in_seq
 
         # Convert Trajectories to Enhanced Graphs
         self.V_obs = []
