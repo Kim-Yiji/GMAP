@@ -225,6 +225,36 @@ class TrajectoryDataset(Dataset):
         self.V_pred = cached_data['V_pred']
         self.A_pred = cached_data['A_pred']
         
+        # Convert cached data to proper format
+        seq_list = self.seq_list
+        seq_list_rel = self.seq_list_rel
+        loss_mask_list = self.loss_mask_list
+        agent_ids_list = self.agent_ids_list
+        
+        # Convert numpy matrix to torch tensor
+        self.obs_traj = torch.from_numpy(seq_list[:, :, :self.obs_len]).type(torch.float)
+        self.pred_traj = torch.from_numpy(seq_list[:, :, self.obs_len:]).type(torch.float)
+        self.obs_traj_rel = torch.from_numpy(seq_list_rel[:, :, :self.obs_len]).type(torch.float)
+        self.pred_traj_rel = torch.from_numpy(seq_list_rel[:, :, self.obs_len:]).type(torch.float)
+        self.loss_mask = torch.from_numpy(loss_mask_list).type(torch.float)
+        # non_linear_ped might already be a tensor from cache
+        if isinstance(self.non_linear_ped, np.ndarray):
+            self.non_linear_ped = torch.from_numpy(self.non_linear_ped).type(torch.float)
+        else:
+            self.non_linear_ped = self.non_linear_ped.type(torch.float)
+        self.agent_ids = torch.from_numpy(agent_ids_list).type(torch.long)
+        
+        # Calculate seq_start_end from the data
+        num_peds_in_seq = [seq.shape[0] for seq in self.V_obs]
+        cum_start_idx = [0] + np.cumsum(num_peds_in_seq).tolist()
+        self.seq_start_end = [(start, end) for start, end in zip(cum_start_idx, cum_start_idx[1:])]
+        
+        # Set agent_ids_per_seq
+        self.agent_ids_per_seq = []
+        for ss in range(len(self.seq_start_end)):
+            start, end = self.seq_start_end[ss]
+            self.agent_ids_per_seq.append(self.agent_ids[start:end])
+        
         print(f"✅ Loaded {self.num_seq} sequences from cache")
     
     def _save_to_cache(self, cache_path):
