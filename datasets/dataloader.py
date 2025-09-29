@@ -218,7 +218,23 @@ class TrajectoryDataset(Dataset):
         self.loss_mask_list = cached_data['loss_mask_list']
         self.non_linear_ped = cached_data['non_linear_ped']
         self.max_peds_in_frame = cached_data['max_peds_in_frame']
-        self.num_peds_in_seq = cached_data['num_peds_in_seq']
+        
+        # Handle backward compatibility for num_peds_in_seq
+        if 'num_peds_in_seq' in cached_data:
+            self.num_peds_in_seq = cached_data['num_peds_in_seq']
+        else:
+            # Reconstruct num_peds_in_seq from existing data
+            print("⚠️  Reconstructing num_peds_in_seq from cached data...")
+            self.num_peds_in_seq = []
+            current_idx = 0
+            for i in range(self.num_seq):
+                # Find the number of pedestrians in this sequence
+                seq_end = current_idx
+                while seq_end < len(self.agent_ids_list) and self.agent_ids_list[seq_end] != 0:
+                    seq_end += 1
+                num_peds = seq_end - current_idx
+                self.num_peds_in_seq.append(num_peds)
+                current_idx = seq_end
         
         # Precomputed graph data
         self.V_obs = cached_data['V_obs']
