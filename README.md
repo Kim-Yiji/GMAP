@@ -22,7 +22,7 @@ GMAP은 **그룹 인식 기반의 다중 관계형 그래프 신경망**을 사�
 ```bash
 git clone https://github.com/Kim-Yiji/GMAP.git
 cd GMAP
-git checkout CYisSMART
+git checkout github-upload
 pip install -r requirements.txt
 ```
 
