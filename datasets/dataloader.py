@@ -226,6 +226,57 @@ class TrajectoryDataset(Dataset):
         self.A_pred = cached_data['A_pred']
         
         print(f"✅ Loaded {self.num_seq} sequences from cache")
+
+        # Reconstruct tensors used by __getitem__ (match _process_data_from_scratch output)
+        # seq_list shapes: [sum_N, 2, T_total]
+        import torch
+        import numpy as np
+        seq_list = self.seq_list
+        seq_list_rel = self.seq_list_rel
+        loss_mask_list = self.loss_mask_list
+        agent_ids_list = self.agent_ids_list
+
+        T_obs = self.obs_len
+        T_pred = self.pred_len
+
+        # Helper: safe to tensor
+        def to_float_tensor(x):
+            if isinstance(x, np.ndarray):
+                return torch.from_numpy(x).type(torch.float)
+            elif isinstance(x, torch.Tensor):
+                return x.type(torch.float)
+            else:
+                raise TypeError(f"Unsupported type: {type(x)}")
+
+        def to_long_tensor(x):
+            if isinstance(x, np.ndarray):
+                return torch.from_numpy(x).type(torch.long)
+            elif isinstance(x, torch.Tensor):
+                return x.type(torch.long)
+            else:
+                raise TypeError(f"Unsupported type: {type(x)}")
+
+        self.obs_traj = to_float_tensor(seq_list[:, :, :T_obs])
+        self.pred_traj = to_float_tensor(seq_list[:, :, T_obs:])
+        self.obs_traj_rel = to_float_tensor(seq_list_rel[:, :, :T_obs])
+        self.pred_traj_rel = to_float_tensor(seq_list_rel[:, :, T_obs:])
+        self.loss_mask = to_float_tensor(loss_mask_list)
+        self.non_linear_ped = to_float_tensor(self.non_linear_ped)
+        self.agent_ids = to_long_tensor(agent_ids_list)
+
+        # Reconstruct seq_start_end from per-sequence V_obs entries
+        # Each V_obs[i] has shape (T_obs, N_i, 2) → derive N_i
+        cum = [0]
+        for v in self.V_obs:
+            # v shape: (T, N, 2)
+            n_i = int(v.shape[1]) if hasattr(v, 'shape') else int(v.size(1))
+            cum.append(cum[-1] + n_i)
+        self.seq_start_end = [(s, e) for s, e in zip(cum[:-1], cum[1:])]
+
+        # Reconstruct per-sequence agent id tensors expected by __getitem__
+        self.agent_ids_per_seq = []
+        for (s, e) in self.seq_start_end:
+            self.agent_ids_per_seq.append(self.agent_ids[s:e].clone())
     
     def _save_to_cache(self, cache_path):
         """Save preprocessed data to cache"""

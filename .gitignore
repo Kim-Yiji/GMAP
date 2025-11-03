@@ -219,6 +219,8 @@ session.session
 # 🔹 Model checkpoints and training artifacts
 checkpoints_unified/
 data_cache/
+test_outputs/
+test_outputs_eth_best/
 test_results_comprehensive/
 *.pth
 *.pkl
@@ -228,3 +230,7 @@ comprehensive_test.py
 detailed_analysis.py
 final_test.py
 simple_test.py
+
+# 🔹 Legacy and external code
+copy_dmrgcn/
+model_legacy/
