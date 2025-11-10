@@ -153,6 +153,27 @@ Examples:
              'Use this if nodes appear misaligned with people after transformation.'
     )
     parser.add_argument(
+        '--offset-x',
+        type=float,
+        default=None,
+        help='Manual X offset adjustment (negative = shift left, positive = shift right). '
+             'Default: -100 (calibrated value).'
+    )
+    parser.add_argument(
+        '--offset-y',
+        type=float,
+        default=None,
+        help='Manual Y offset adjustment (negative = shift up, positive = shift down). '
+             'Default: 100 (calibrated value).'
+    )
+    parser.add_argument(
+        '--homography',
+        type=str,
+        default=None,
+        help='Path to homography file (H_SDD.txt). If provided, will use homography-based '
+             'coordinate transformation instead of standard transformation.'
+    )
+    parser.add_argument(
         '--verify-alignment',
         action='store_true',
         help='Verify video-annotation alignment before processing'
@@ -284,7 +305,9 @@ Examples:
             draw_graph=not args.no_graph,
             draw_edges=not args.no_edges,
             draw_nodes=not args.no_nodes,
-            apply_coordinate_transform=not args.no_coord_transform
+            apply_coordinate_transform=not args.no_coord_transform,
+            offset_x=args.offset_x,
+            offset_y=args.offset_y
         )
         
         # Note about obstacles

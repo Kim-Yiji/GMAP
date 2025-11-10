@@ -1,0 +1,3215 @@
+{
+  "video_path": "sdd_bookstore/bookstore_vid/video0/video.mp4",
+  "annotation_path": "sdd_bookstore/test/bookstore_video0_test.txt",
+  "target_id": 212,
+  "video_properties": {
+    "frame_count": 13335,
+    "fps": 29.97,
+    "width": 1416,
+    "height": 1080
+  },
+  "processing_settings": {
+    "weights": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "max_distance": 100.0,
+    "max_vel_diff": 10.0,
+    "start_frame": 5000,
+    "end_frame": 5010
+  },
+  "frames": [
+    {
+      "frame_id": 5000,
+      "target_id": 212,
+      "target_position": [
+        20.674125925499997,
+        21.960260035999998
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.8833229815229421,
+          "position": [
+            14.857728381,
+            38.545631252
+          ],
+          "features": {
+            "f1_distance": 0.824243060231413,
+            "f2_velocity_diff": 0.002693441706017119,
+            "f3_heading_alignment": 0.7852232874772744,
+            "f4_class_interaction": 0.4121215301157065
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.862276459416024,
+          "position": [
+            5.7204173869999995,
+            36.050147157
+          ],
+          "features": {
+            "f1_distance": 0.7945399508086963,
+            "f2_velocity_diff": 0.004877995076873578,
+            "f3_heading_alignment": 0.6376396698268412,
+            "f4_class_interaction": 0.39726997540434816
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.8873805106603527,
+          "position": [
+            7.4288641905,
+            29.0819877225
+          ],
+          "features": {
+            "f1_distance": 0.8496151724177882,
+            "f2_velocity_diff": 0.00461304485601729,
+            "f3_heading_alignment": 0.7852232874772744,
+            "f4_class_interaction": 0.4248075862088941
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.87886935095331,
+          "position": [
+            31.423903565499998,
+            9.636407813
+          ],
+          "features": {
+            "f1_distance": 0.8364655837678852,
+            "f2_velocity_diff": 0.012291457456017263,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.4182327918839426
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.8552949006569993,
+          "position": [
+            49.372193018,
+            28.832439313
+          ],
+          "features": {
+            "f1_distance": 0.7049057942180397,
+            "f2_velocity_diff": 0.00461304485601729,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.35245289710901984
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.7870748473007231,
+          "position": [
+            52.328381869,
+            27.661481391499997
+          ],
+          "features": {
+            "f1_distance": 0.6783642053065277,
+            "f2_velocity_diff": 0.00461304485601729,
+            "f3_heading_alignment": 0.2852232874772743,
+            "f4_class_interaction": 0.3391821026532639
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.874357630976143,
+          "position": [
+            14.3778275935,
+            39.4862367955
+          ],
+          "features": {
+            "f1_distance": 0.8137734621327883,
+            "f2_velocity_diff": 0.00461304485601729,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.40688673106639417
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.8661747000784255,
+          "position": [
+            25.530721895,
+            32.134156731
+          ],
+          "features": {
+            "f1_distance": 0.8872637155253484,
+            "f2_velocity_diff": 0.0014325422196008423,
+            "f3_heading_alignment": 0.5352232874772744,
+            "f4_class_interaction": 0.4436318577626742
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.885372265452922,
+          "position": [
+            23.399962398499998,
+            37.969750307
+          ],
+          "features": {
+            "f1_distance": 0.8376011197037428,
+            "f2_velocity_diff": 0.002693441706017119,
+            "f3_heading_alignment": 0.7852232874772744,
+            "f4_class_interaction": 0.4188005598518714
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.8800721486596372,
+          "position": [
+            24.551724288499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8440302654071886,
+            "f2_velocity_diff": 0.012291457456017263,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.4220151327035943
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.842063058047921,
+          "position": [
+            15.951902176499999,
+            15.951902176499999
+          ],
+          "features": {
+            "f1_distance": 0.9235802634763538,
+            "f2_velocity_diff": 0.003065367743982683,
+            "f3_heading_alignment": 0.2852232874772743,
+            "f4_class_interaction": 0.4617901317381769
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.8549998721392992,
+          "position": [
+            49.372193018,
+            29.485104383999996
+          ],
+          "features": {
+            "f1_distance": 0.7033179585301363,
+            "f2_velocity_diff": 0.00461304485601729,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.3516589792650682
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.8759007463699022,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8231875639847167,
+            "f2_velocity_diff": 0.00461304485601729,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.41159378199235835
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.87547322353185,
+          "position": [
+            13.3796339555,
+            38.353670937
+          ],
+          "features": {
+            "f1_distance": 0.8205693632432243,
+            "f2_velocity_diff": 0.00461304485601729,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.41028468162161214
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.8671878925374652,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9175468436616049,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.45877342183080244
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8717783054067663,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7931374866145315,
+            "f2_velocity_diff": 0.012291457456017263,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.39656874330726577
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8696039195640045,
+          "position": [
+            36.779596354,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7828215256011866,
+            "f2_velocity_diff": 0.00845225115601692,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.3914107628005933
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8560190464660047,
+          "position": [
+            49.257016828999994,
+            26.951228225999998
+          ],
+          "features": {
+            "f1_distance": 0.7098463483126614,
+            "f2_velocity_diff": 0.003065367743982683,
+            "f3_heading_alignment": 0.7147767125227256,
+            "f4_class_interaction": 0.3549231741563307
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.860316788751687,
+          "position": [
+            38.3728669685,
+            28.2373623365
+          ],
+          "features": {
+            "f1_distance": 0.8122109034586632,
+            "f2_velocity_diff": 0.001550997715717073,
+            "f3_heading_alignment": 0.5980562456662757,
+            "f4_class_interaction": 0.4061054517293316
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.9067350595375172,
+          "position": [
+            34.7640130465,
+            27.219972666999997
+          ],
+          "features": {
+            "f1_distance": 0.8496040239756321,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.42480201198781603
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5001,
+      "target_id": 212,
+      "target_position": [
+        20.674125925499997,
+        21.960260035999998
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.8164001387431272,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.8244776138386027,
+            "f2_velocity_diff": 0.005429457618208461,
+            "f3_heading_alignment": 0.25000000000001465,
+            "f4_class_interaction": 0.41223880691930137
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.7947984222911739,
+          "position": [
+            5.566849135,
+            36.126931283
+          ],
+          "features": {
+            "f1_distance": 0.7928951023646817,
+            "f2_velocity_diff": 0.01716945253289084,
+            "f3_heading_alignment": 0.14758361765043326,
+            "f4_class_interaction": 0.3964475511823409
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.9067364737065263,
+          "position": [
+            7.4288641905,
+            29.0819877225
+          ],
+          "features": {
+            "f1_distance": 0.8496151724177882,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4248075862088941
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.8198661706751313,
+          "position": [
+            31.3471194395,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.836388089550294,
+            "f2_velocity_diff": 0.010858915236416546,
+            "f3_heading_alignment": 0.25000000000000366,
+            "f4_class_interaction": 0.418194044775147
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.8268289304363516,
+          "position": [
+            49.372193018,
+            28.774851218499997
+          ],
+          "features": {
+            "f1_distance": 0.7050393741818685,
+            "f2_velocity_diff": 0.005758809450000157,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.35251968709093423
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.7362092481292403,
+          "position": [
+            52.251597743,
+            27.661481391499997
+          ],
+          "features": {
+            "f1_distance": 0.6791198586186089,
+            "f2_velocity_diff": 0.007678412599999973,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.33955992930930445
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.8140336470249957,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.814004322384157,
+            "f2_velocity_diff": 0.005429457618208461,
+            "f3_heading_alignment": 0.25000000000001465,
+            "f4_class_interaction": 0.4070021611920785
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7943440282771326,
+          "position": [
+            25.338761579999996,
+            32.134156731
+          ],
+          "features": {
+            "f1_distance": 0.8880772589016135,
+            "f2_velocity_diff": 0.019196031500000287,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.44403862945080674
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.8257106229209428,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "features": {
+            "f1_distance": 0.8386750848536988,
+            "f2_velocity_diff": 0.01229145745601754,
+            "f3_heading_alignment": 0.2852232874772802,
+            "f4_class_interaction": 0.4193375424268494
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.7807473886773019,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8441252691939005,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.42206263459695026
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.802346905179425,
+          "position": [
+            15.779137893,
+            15.951902176499999
+          ],
+          "features": {
+            "f1_distance": 0.9225007922581568,
+            "f2_velocity_diff": 0.01727642834999994,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.4612503961290784
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.787698725682923,
+          "position": [
+            49.333800954999994,
+            29.446712320999996
+          ],
+          "features": {
+            "f1_distance": 0.7037865734622877,
+            "f2_velocity_diff": 0.005429457618208461,
+            "f3_heading_alignment": 0.24999999999998535,
+            "f4_class_interaction": 0.35189328673114384
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.9033296967456282,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8231875639847167,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41159378199235835
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.8500788083839055,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8209200585515705,
+            "f2_velocity_diff": 0.0038392062999996314,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.41046002927578523
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.915003690872712,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9175468436616049,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.45877342183080244
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8993213108814065,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7931374866145315,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.39656874330726577
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.7646776913207768,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7831060796375816,
+            "f2_velocity_diff": 0.003839206300000342,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.3915530398187908
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8611279295148353,
+          "position": [
+            49.333800954999994,
+            26.874444099999998
+          ],
+          "features": {
+            "f1_distance": 0.7092206716749938,
+            "f2_velocity_diff": 0.010858915236416421,
+            "f3_heading_alignment": 0.75,
+            "f4_class_interaction": 0.3546103358374969
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7748396246248581,
+          "position": [
+            38.2192987165,
+            28.2373623365
+          ],
+          "features": {
+            "f1_distance": 0.8136575460188985,
+            "f2_velocity_diff": 0.015356825199999946,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.40682877300944925
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.8555048718267987,
+          "position": [
+            34.7640130465,
+            27.181580603999997
+          ],
+          "features": {
+            "f1_distance": 0.8497378598727072,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.4248689299363536
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5002,
+      "target_id": 212,
+      "target_position": [
+        20.674125925499997,
+        21.960260035999998
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.9034985456175052,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.8244776138386027,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41223880691930137
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.8038462483714599,
+          "position": [
+            5.413280883,
+            36.242107472
+          ],
+          "features": {
+            "f1_distance": 0.7909869483509758,
+            "f2_velocity_diff": 0.019196031500000217,
+            "f3_heading_alignment": 0.20483276469913725,
+            "f4_class_interaction": 0.3954934741754879
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.856108234988022,
+          "position": [
+            7.4288641905,
+            29.177967879999997
+          ],
+          "features": {
+            "f1_distance": 0.8491582733624432,
+            "f2_velocity_diff": 0.00959801574999979,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.4245791366812216
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.905045048406681,
+          "position": [
+            31.3471194395,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.836388089550294,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.418194044775147
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.8867091943518479,
+          "position": [
+            49.372193018,
+            28.774851218499997
+          ],
+          "features": {
+            "f1_distance": 0.7050393741818685,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.35251968709093423
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.7364292999908694,
+          "position": [
+            52.174813617,
+            27.661481391499997
+          ],
+          "features": {
+            "f1_distance": 0.6798754539274083,
+            "f2_velocity_diff": 0.007678412599999973,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.33993772696370417
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.9021201035967101,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.814004322384157,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4070021611920785
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7935376807258187,
+          "position": [
+            25.2043893595,
+            32.134156731
+          ],
+          "features": {
+            "f1_distance": 0.8886305873491427,
+            "f2_velocity_diff": 0.013437222049999776,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.44431529367457134
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.9053394504939094,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "features": {
+            "f1_distance": 0.8386750848536988,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4193375424268494
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.9060377532191806,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8441252691939005,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.42206263459695026
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.8018090487521792,
+          "position": [
+            15.625569640999998,
+            15.951902176499999
+          ],
+          "features": {
+            "f1_distance": 0.9215217961943701,
+            "f2_velocity_diff": 0.015356825200000123,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.46076089809718507
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.8265908790449212,
+          "position": [
+            49.333800954999994,
+            29.389124226499998
+          ],
+          "features": {
+            "f1_distance": 0.7039315964245021,
+            "f2_velocity_diff": 0.005758809449999802,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.35196579821225105
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.9033296967456282,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8231875639847167,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41159378199235835
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.903032273621285,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8209200585515705,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41046002927578523
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.915003690872712,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9175468436616049,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.45877342183080244
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8993213108814065,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7931374866145315,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.39656874330726577
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8979506983769728,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7831060796375816,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3915530398187908
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8883151721974932,
+          "position": [
+            49.448977144,
+            26.874444099999998
+          ],
+          "features": {
+            "f1_distance": 0.7080854118647575,
+            "f2_velocity_diff": 0.011517618900000314,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.35404270593237874
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.8001151289789007,
+          "position": [
+            38.0657304645,
+            28.3141464625
+          ],
+          "features": {
+            "f1_distance": 0.8148406682984013,
+            "f2_velocity_diff": 0.01716945253289084,
+            "f3_heading_alignment": 0.14758361765043326,
+            "f4_class_interaction": 0.40742033414920065
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.9067520352197567,
+          "position": [
+            34.7640130465,
+            27.181580603999997
+          ],
+          "features": {
+            "f1_distance": 0.8497378598727072,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4248689299363536
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5003,
+      "target_id": 212,
+      "target_position": [
+        20.7125179885,
+        22.037044161999997
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.8691855630467928,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.8250723251086517,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.41253616255432585
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.8493658233365258,
+          "position": [
+            5.298104693999999,
+            36.318891598
+          ],
+          "features": {
+            "f1_distance": 0.789863067644253,
+            "f2_velocity_diff": 0.005257728905288828,
+            "f3_heading_alignment": 0.5395834241605526,
+            "f4_class_interaction": 0.3949315338221265
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.8732436122392124,
+          "position": [
+            7.4288641905,
+            29.177967879999997
+          ],
+          "features": {
+            "f1_distance": 0.8491861247194361,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.42459306235971805
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.8336357708464509,
+          "position": [
+            31.3087273765,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.8363034285318448,
+            "f2_velocity_diff": 0.004745519966445594,
+            "f3_heading_alignment": 0.35241638234955497,
+            "f4_class_interaction": 0.4181517142659224
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.846284618721938,
+          "position": [
+            49.448977144,
+            28.774851218499997
+          ],
+          "features": {
+            "f1_distance": 0.7048420543630343,
+            "f2_velocity_diff": 0.0009063136664456073,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.35242102718151713
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.7987198684482207,
+          "position": [
+            52.136421553999995,
+            27.661481391499997
+          ],
+          "features": {
+            "f1_distance": 0.6807671681292119,
+            "f2_velocity_diff": 0.004745519966445238,
+            "f3_heading_alignment": 0.35241638234955497,
+            "f4_class_interaction": 0.34038358406460595
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.8673881383570586,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.8145944562527349,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.4072972281263674
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.8447945357039273,
+          "position": [
+            25.0508211075,
+            32.134156731
+          ],
+          "features": {
+            "f1_distance": 0.8901034321812629,
+            "f2_velocity_diff": 0.006772098933554366,
+            "f3_heading_alignment": 0.35241638234955497,
+            "f4_class_interaction": 0.44505171609063143
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.8716258668203769,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "features": {
+            "f1_distance": 0.8394953467585401,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.41974767337927005
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.8725409227752539,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8449639078789167,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.42248195393945837
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.8509651196991505,
+          "position": [
+            15.433609326,
+            15.951902176499999
+          ],
+          "features": {
+            "f1_distance": 0.919442052129717,
+            "f2_velocity_diff": 0.010611305233554353,
+            "f3_heading_alignment": 0.35241638234955497,
+            "f4_class_interaction": 0.4597210260648585
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.8472134901411934,
+          "position": [
+            49.333800954999994,
+            29.389124226499998
+          ],
+          "features": {
+            "f1_distance": 0.7044951912534618,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.3522475956267309
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.8689599977135586,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8237507401234822,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.4118753700617411
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.86856886976933,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8214636973665053,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.41073184868325263
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.8842947610685987,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9183841265228772,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.4591920632614386
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8637857083794261,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7939513680466798,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.3969756840233399
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8620030733837539,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7839060520922647,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.39195302604613236
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8266183110601476,
+          "position": [
+            49.52576127,
+            26.836052036999998
+          ],
+          "features": {
+            "f1_distance": 0.7078983969603698,
+            "f2_velocity_diff": 1.5959455978986625e-16,
+            "f3_heading_alignment": 0.5000000000000119,
+            "f4_class_interaction": 0.3539491984801849
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.8406139213571999,
+          "position": [
+            37.9121622125,
+            28.352538525499998
+          ],
+          "features": {
+            "f1_distance": 0.8167752116967857,
+            "f2_velocity_diff": 0.0072447268269911266,
+            "f3_heading_alignment": 0.43039551272692433,
+            "f4_class_interaction": 0.40838760584839284
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.8734389704409914,
+          "position": [
+            34.7640130465,
+            27.181580603999997
+          ],
+          "features": {
+            "f1_distance": 0.8503635176275303,
+            "f2_velocity_diff": 0.00858472626644558,
+            "f3_heading_alignment": 0.647583617650445,
+            "f4_class_interaction": 0.42518175881376513
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5004,
+      "target_id": 212,
+      "target_position": [
+        20.7509100515,
+        22.037044161999997
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.9038933724783237,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.8249426119287271,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41247130596436354
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.8091319592591019,
+          "position": [
+            5.182928505,
+            36.434067787
+          ],
+          "features": {
+            "f1_distance": 0.7879536987611024,
+            "f2_velocity_diff": 0.012449166554624394,
+            "f3_heading_alignment": 0.249999999999995,
+            "f4_class_interaction": 0.3939768493805512
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.8554926208890397,
+          "position": [
+            7.4288641905,
+            29.2739480375
+          ],
+          "features": {
+            "f1_distance": 0.8483920570597259,
+            "f2_velocity_diff": 0.005758809450000157,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.42419602852986293
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.7781985548847575,
+          "position": [
+            31.2703353135,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.8367994088390753,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.41839970441953767
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.887120800159021,
+          "position": [
+            49.448977144,
+            28.774851218499997
+          ],
+          "features": {
+            "f1_distance": 0.7052158249199505,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.35260791245997525
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.7357355886712789,
+          "position": [
+            52.11722552249999,
+            27.661481391499997
+          ],
+          "features": {
+            "f1_distance": 0.6813340243491817,
+            "f2_velocity_diff": 0.0019196031499998157,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.34066701217459083
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.9025190139032115,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.8144621380851996,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4072310690425998
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7937677699308903,
+          "position": [
+            24.8972528555,
+            32.134156731
+          ],
+          "features": {
+            "f1_distance": 0.8908469694056366,
+            "f2_velocity_diff": 0.01151761889999996,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.4454234847028183
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.9057809598339421,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "features": {
+            "f1_distance": 0.839557345508146,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.419778672754073
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.906482706690123,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8450575815494688,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4225287907747344
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.8003965381513242,
+          "position": [
+            15.280041074,
+            15.951902176499999
+          ],
+          "features": {
+            "f1_distance": 0.9181713006625019,
+            "f2_velocity_diff": 0.01151761889999996,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.4590856503312509
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.8866271688045807,
+          "position": [
+            49.372193018,
+            29.389124226499998
+          ],
+          "features": {
+            "f1_distance": 0.7044951912534618,
+            "f2_velocity_diff": 3.552713678800501e-16,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3522475956267309
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.9037186980609603,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8236031971386113,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41180159856930565
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.9034184145976756,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8213056697535082,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4106528348767541
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.9154096067950197,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9184744745590697,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.45923723727953486
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8998153211339691,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7942233771981648,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3971116885990824
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8984504966214188,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7841906701494705,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.39209533507473526
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8881181076228576,
+          "position": [
+            49.679329521999996,
+            26.836052036999998
+          ],
+          "features": {
+            "f1_distance": 0.7067622245266625,
+            "f2_velocity_diff": 0.01151761889999996,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.35338111226333124
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7887875184403955,
+          "position": [
+            37.758593960499994,
+            28.390930588499998
+          ],
+          "features": {
+            "f1_distance": 0.8184419694231846,
+            "f2_velocity_diff": 0.011990246793437413,
+            "f3_heading_alignment": 0.07797913037736581,
+            "f4_class_interaction": 0.4092209847115923
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.9071096540974913,
+          "position": [
+            34.8407971725,
+            27.181580603999997
+          ],
+          "features": {
+            "f1_distance": 0.8500029419336541,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.42500147096682706
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5005,
+      "target_id": 212,
+      "target_position": [
+        20.7509100515,
+        22.037044161999997
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.9035593425289037,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.8249426119287271,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41247130596436354
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.8046821738871892,
+          "position": [
+            5.067752316,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7864564224341709,
+            "f2_velocity_diff": 0.014992579880156953,
+            "f3_heading_alignment": 0.22114206162369843,
+            "f4_class_interaction": 0.39322821121708545
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.8552210449922232,
+          "position": [
+            7.4288641905,
+            29.3123401005
+          ],
+          "features": {
+            "f1_distance": 0.8482084202218905,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.42410421011094523
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.9050980574072782,
+          "position": [
+            31.2703353135,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.8367994088390753,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41839970441953767
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.8873926731704215,
+          "position": [
+            49.52576127,
+            28.774851218499997
+          ],
+          "features": {
+            "f1_distance": 0.704468257783122,
+            "f2_velocity_diff": 0.007678412599999973,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.352234128891561
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.7370734991208795,
+          "position": [
+            52.04044139649999,
+            27.661481391499997
+          ],
+          "features": {
+            "f1_distance": 0.6820897821808298,
+            "f2_velocity_diff": 0.007678412599999973,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.3410448910904149
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.9021807241471166,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.8144621380851996,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4072310690425998
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.8222562306312509,
+          "position": [
+            24.743684603499997,
+            32.2301368885
+          ],
+          "features": {
+            "f1_distance": 0.8905279086003532,
+            "f2_velocity_diff": 0.018109499898136754,
+            "f3_heading_alignment": 0.17780768448935202,
+            "f4_class_interaction": 0.4452639543001766
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.9054528041862104,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "features": {
+            "f1_distance": 0.839557345508146,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.419778672754073
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.9061567419355736,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8450575815494688,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4225287907747344
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.8007617139303729,
+          "position": [
+            15.126472821999998,
+            15.951902176499999
+          ],
+          "features": {
+            "f1_distance": 0.9171367107023378,
+            "f2_velocity_diff": 0.015356825200000123,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.4585683553511689
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.8866271688045807,
+          "position": [
+            49.372193018,
+            29.389124226499998
+          ],
+          "features": {
+            "f1_distance": 0.7044951912534618,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3522475956267309
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.9033841259021699,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8236031971386113,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41180159856930565
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.9030829108747759,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8213056697535082,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4106528348767541
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.9151118438786942,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9184744745590697,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.45923723727953486
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8994686938437523,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7942233771981648,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3971116885990824
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8980996819596033,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7841906701494705,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.39209533507473526
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8876227668624357,
+          "position": [
+            49.756113647999996,
+            26.836052036999998
+          ],
+          "features": {
+            "f1_distance": 0.7060047088372454,
+            "f2_velocity_diff": 0.007678412599999973,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3530023544186227
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7930869836811426,
+          "position": [
+            37.6434177715,
+            28.429322651499998
+          ],
+          "features": {
+            "f1_distance": 0.8193849282707604,
+            "f2_velocity_diff": 0.01214063631526732,
+            "f3_heading_alignment": 0.10241638234956962,
+            "f4_class_interaction": 0.4096924641353802
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.9067856499211789,
+          "position": [
+            34.8407971725,
+            27.181580603999997
+          ],
+          "features": {
+            "f1_distance": 0.8500029419336541,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.42500147096682706
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5006,
+      "target_id": 212,
+      "target_position": [
+        20.7893021145,
+        22.1330243195
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.8664614732360739,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.8257141990281668,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.4128570995140834
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.8509440790405943,
+          "position": [
+            4.914184064,
+            36.626028102
+          ],
+          "features": {
+            "f1_distance": 0.7850426712677909,
+            "f2_velocity_diff": 0.007772120571091864,
+            "f3_heading_alignment": 0.5566887428985132,
+            "f4_class_interaction": 0.39252133563389546
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.8963766604970443,
+          "position": [
+            7.4288641905,
+            29.3507321635
+          ],
+          "features": {
+            "f1_distance": 0.848145922661788,
+            "f2_velocity_diff": 0.006498173027044679,
+            "f3_heading_alignment": 0.8788810584091586,
+            "f4_class_interaction": 0.424072961330894
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.8375639656251714,
+          "position": [
+            31.2319432505,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.8365560777022801,
+            "f2_velocity_diff": 0.006498173027044679,
+            "f3_heading_alignment": 0.37888105840915864,
+            "f4_class_interaction": 0.41827803885114007
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.8440986365963079,
+          "position": [
+            49.52576127,
+            28.774851218499997
+          ],
+          "features": {
+            "f1_distance": 0.7050596756372571,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.35252983781862857
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.8037502747882375,
+          "position": [
+            52.0020493335,
+            27.661481391499997
+          ],
+          "features": {
+            "f1_distance": 0.6830142863543944,
+            "f2_velocity_diff": 0.006498173027045034,
+            "f3_heading_alignment": 0.37888105840915864,
+            "f4_class_interaction": 0.3415071431771972
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.864631134613038,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.8152288483323652,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.4076144241661826
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.848395110829432,
+          "position": [
+            24.590116351499997,
+            32.2301368885
+          ],
+          "features": {
+            "f1_distance": 0.892112154950041,
+            "f2_velocity_diff": 0.00501944587295528,
+            "f3_heading_alignment": 0.37888105840915864,
+            "f4_class_interaction": 0.4460560774750205
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.8690181795959634,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "features": {
+            "f1_distance": 0.8405661241552652,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.4202830620776326
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.8699570485827723,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8460818191085361,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.42304090955426804
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.8532137523029225,
+          "position": [
+            14.934512506999999,
+            15.951902176499999
+          ],
+          "features": {
+            "f1_distance": 0.9148619754194549,
+            "f2_velocity_diff": 0.008858652172955266,
+            "f3_heading_alignment": 0.37888105840915864,
+            "f4_class_interaction": 0.45743098770972745
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.76712459113946,
+          "position": [
+            49.333800954999994,
+            29.3507321635
+          ],
+          "features": {
+            "f1_distance": 0.7055711086566665,
+            "f2_velocity_diff": 0.004907921708836204,
+            "f3_heading_alignment": 0.1288810584091733,
+            "f4_class_interaction": 0.35278555432833325
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.8662227065937865,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8243395291612635,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.41216976458063176
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.865819021513804,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8220200728472071,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.41101003642360356
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.8819161591470949,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9194971900285441,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.45974859501427207
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8610711494569008,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7951725869655208,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.3975862934827604
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8592573179496498,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7851192255441559,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.39255961277207796
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8226367651140465,
+          "position": [
+            49.871289837,
+            26.778463942499997
+          ],
+          "features": {
+            "f1_distance": 0.7054932735602497,
+            "f2_velocity_diff": 0.0025397100726238632,
+            "f3_heading_alignment": 0.4735353239404081,
+            "f4_class_interaction": 0.35274663678012486
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.8576893174727562,
+          "position": [
+            37.4898495195,
+            28.525302809
+          ],
+          "features": {
+            "f1_distance": 0.8211789979018189,
+            "f2_velocity_diff": 0.00777212057109179,
+            "f3_heading_alignment": 0.5566887428985139,
+            "f4_class_interaction": 0.41058949895090946
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.8707371799695537,
+          "position": [
+            34.8407971725,
+            27.181580603999997
+          ],
+          "features": {
+            "f1_distance": 0.8506907792791206,
+            "f2_velocity_diff": 0.010337379327044666,
+            "f3_heading_alignment": 0.6211189415908414,
+            "f4_class_interaction": 0.4253453896395603
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5007,
+      "target_id": 212,
+      "target_position": [
+        20.8276941775,
+        22.1330243195
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.9039766972602311,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.825582318338888,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.412791159169444
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.7917609774559892,
+          "position": [
+            4.760615811999999,
+            36.702812228
+          ],
+          "features": {
+            "f1_distance": 0.7831060796375816,
+            "f2_velocity_diff": 0.013330246232890933,
+            "f3_heading_alignment": 0.14758361765043249,
+            "f4_class_interaction": 0.3915530398187908
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.8546364557061593,
+          "position": [
+            7.4288641905,
+            29.389124226499998
+          ],
+          "features": {
+            "f1_distance": 0.8476255825668575,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.42381279128342875
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.7782622868820522,
+          "position": [
+            31.1935511875,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.8370455907263883,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.41852279536319414
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.8261064165077494,
+          "position": [
+            49.52576127,
+            28.736459155499997
+          ],
+          "features": {
+            "f1_distance": 0.7055200505163501,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.35276002525817507
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.7360727567200066,
+          "position": [
+            51.96365727049999,
+            27.661481391499997
+          ],
+          "features": {
+            "f1_distance": 0.683770331036823,
+            "f2_velocity_diff": 3.552713678800501e-16,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.3418851655184115
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.902602430986699,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.815094481909054,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.407547240954527
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7942403966991469,
+          "position": [
+            24.436548099499998,
+            32.2301368885
+          ],
+          "features": {
+            "f1_distance": 0.8927733667126527,
+            "f2_velocity_diff": 0.01151761889999996,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.44638668335632636
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.9059177604297346,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "features": {
+            "f1_distance": 0.8406266897648604,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4203133448824302
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.9066246039601881,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8461742571470547,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.42308712857352737
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.8130011585263712,
+          "position": [
+            14.8001402865,
+            15.990294239499999
+          ],
+          "features": {
+            "f1_distance": 0.9139392431217073,
+            "f2_velocity_diff": 0.010135715575808998,
+            "f3_heading_alignment": 0.08858553278290482,
+            "f4_class_interaction": 0.45696962156085363
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.871148909700358,
+          "position": [
+            49.372193018,
+            29.369928194999996
+          ],
+          "features": {
+            "f1_distance": 0.7055239921897656,
+            "f2_velocity_diff": 0.00045315683322296255,
+            "f3_heading_alignment": 0.8524163823495903,
+            "f4_class_interaction": 0.3527619960948828
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.9037952344020962,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8241898152887995,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41209490764439977
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.903490927722676,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8218598968403872,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4109299484201936
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.9155385218726544,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9195851227167079,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.45979256135835395
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8999803600463588,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7954447789165684,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3977223894582842
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8986164382633786,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7854040789317572,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3927020394658786
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.876865656915544,
+          "position": [
+            49.986466025999995,
+            26.740071879499997
+          ],
+          "features": {
+            "f1_distance": 0.7047951790818826,
+            "f2_velocity_diff": 0.008301430015267335,
+            "f3_heading_alignment": 0.8975836176504305,
+            "f4_class_interaction": 0.3523975895409413
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7766020366907249,
+          "position": [
+            37.3362812675,
+            28.525302809
+          ],
+          "features": {
+            "f1_distance": 0.8229704341090339,
+            "f2_velocity_diff": 0.01151761889999996,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.41148521705451696
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.9072421662062029,
+          "position": [
+            34.8407971725,
+            27.181580603999997
+          ],
+          "features": {
+            "f1_distance": 0.8510520305253401,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.42552601526267003
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5008,
+      "target_id": 212,
+      "target_position": [
+        20.8276941775,
+        22.1330243195
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.9036429260433834,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.825582318338888,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.412791159169444
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.8209325146385595,
+          "position": [
+            4.6838316859999996,
+            36.8371844485
+          ],
+          "features": {
+            "f1_distance": 0.7816341095217172,
+            "f2_velocity_diff": 0.015476335369745594,
+            "f3_heading_alignment": 0.33475065946143023,
+            "f4_class_interaction": 0.3908170547608586
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.8940861010387737,
+          "position": [
+            7.505648316499999,
+            29.427516289499998
+          ],
+          "features": {
+            "f1_distance": 0.8481163211457592,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.8524163823495667,
+            "f4_class_interaction": 0.4240581605728796
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.9051297715607869,
+          "position": [
+            31.1935511875,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.8370455907263883,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41852279536319414
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.8874381501710752,
+          "position": [
+            49.602545396,
+            28.736459155499997
+          ],
+          "features": {
+            "f1_distance": 0.7047717130286955,
+            "f2_velocity_diff": 0.007678412599999973,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.35238585651434773
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.7654610326672333,
+          "position": [
+            51.886873144499994,
+            27.699873454499997
+          ],
+          "features": {
+            "f1_distance": 0.6844588129267457,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.14758361765043326,
+            "f4_class_interaction": 0.34222940646337285
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.9022643993654242,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.815094481909054,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.407547240954527
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7949910890489355,
+          "position": [
+            24.2829798475,
+            32.2301368885
+          ],
+          "features": {
+            "f1_distance": 0.8932804229335756,
+            "f2_velocity_diff": 0.015356825199999946,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.4466402114667878
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.8538781951646379,
+          "position": [
+            23.323178272499998,
+            37.8353780865
+          ],
+          "features": {
+            "f1_distance": 0.8410058634123834,
+            "f2_velocity_diff": 0.0038392062999996314,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.4205029317061917
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.9062990826786518,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8461742571470547,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.42308712857352737
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.8002842866567217,
+          "position": [
+            14.608179971499998,
+            15.990294239499999
+          ],
+          "features": {
+            "f1_distance": 0.9125840461961475,
+            "f2_velocity_diff": 0.01919603150000011,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.45629202309807376
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.8867821980058006,
+          "position": [
+            49.372193018,
+            29.369928194999996
+          ],
+          "features": {
+            "f1_distance": 0.7055239921897656,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3527619960948828
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.9034608997918914,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8241898152887995,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41209490764439977
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.9031556488922643,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8218598968403872,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4109299484201936
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.9152411707278343,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9195851227167079,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.45979256135835395
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8996342400802253,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7954447789165684,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3977223894582842
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8982661319541565,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7854040789317572,
+            "f2_velocity_diff": 0.0,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3927020394658786
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8771053505054506,
+          "position": [
+            50.101642215,
+            26.701679816499997
+          ],
+          "features": {
+            "f1_distance": 0.703716918007032,
+            "f2_velocity_diff": 0.012140636315267996,
+            "f3_heading_alignment": 0.8975836176504361,
+            "f4_class_interaction": 0.351858459003516
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.8072115236734666,
+          "position": [
+            37.1827130155,
+            28.621282966499997
+          ],
+          "features": {
+            "f1_distance": 0.8240499669048894,
+            "f2_velocity_diff": 0.018109499898136264,
+            "f3_heading_alignment": 0.17780768448935003,
+            "f4_class_interaction": 0.4120249834524447
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.9074737737868156,
+          "position": [
+            34.9175812985,
+            27.181580603999997
+          ],
+          "features": {
+            "f1_distance": 0.8503294151677472,
+            "f2_velocity_diff": 0.007678412599999973,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4251647075838736
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5009,
+      "target_id": 212,
+      "target_position": [
+        20.8660862405,
+        22.2098084455
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.8693726245751577,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.8261697858643576,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.4130848929321788
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.8427590082716403,
+          "position": [
+            4.530263434,
+            36.9139685745
+          ],
+          "features": {
+            "f1_distance": 0.7802111395305398,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.3901055697652699
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.8935045664400191,
+          "position": [
+            7.505648316499999,
+            29.485104383999996
+          ],
+          "features": {
+            "f1_distance": 0.8478713595295705,
+            "f2_velocity_diff": 0.0028259168164456185,
+            "f3_heading_alignment": 0.8524163823495667,
+            "f4_class_interaction": 0.42393567976478524
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.8337677369649916,
+          "position": [
+            31.1551591245,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.8369379887170376,
+            "f2_velocity_diff": 0.004745519966445434,
+            "f3_heading_alignment": 0.35241638234956674,
+            "f4_class_interaction": 0.4184689943585188
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.8473729695978696,
+          "position": [
+            49.602545396,
+            28.736459155499997
+          ],
+          "features": {
+            "f1_distance": 0.7053169067818679,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.35265845339093393
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.8366478597415155,
+          "position": [
+            51.8484810815,
+            27.738265517499997
+          ],
+          "features": {
+            "f1_distance": 0.6852822490420074,
+            "f2_velocity_diff": 0.0031552686482374617,
+            "f3_heading_alignment": 0.6024163823495814,
+            "f4_class_interaction": 0.3426411245210037
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.8675749303195905,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.8156777103760177,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.40783885518800883
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.8555755298323072,
+          "position": [
+            24.1294115955,
+            32.268528951499995
+          ],
+          "features": {
+            "f1_distance": 0.8942516427596103,
+            "f2_velocity_diff": 0.007244726826991203,
+            "f3_heading_alignment": 0.4303955127269291,
+            "f4_class_interaction": 0.44712582137980517
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.8342752676061058,
+          "position": [
+            23.2463941465,
+            37.8353780865
+          ],
+          "features": {
+            "f1_distance": 0.841941690400945,
+            "f2_velocity_diff": 0.0009063136664454477,
+            "f3_heading_alignment": 0.35241638234956674,
+            "f4_class_interaction": 0.4209708452004725
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.8728821283648261,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8470116030809293,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.42350580154046463
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.8487975641711331,
+          "position": [
+            14.454611719499999,
+            15.990294239499999
+          ],
+          "features": {
+            "f1_distance": 0.9106751084567868,
+            "f2_velocity_diff": 0.006772098933554525,
+            "f3_heading_alignment": 0.35241638234956674,
+            "f4_class_interaction": 0.4553375542283934
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.7702538896821622,
+          "position": [
+            49.372193018,
+            29.3123401005
+          ],
+          "features": {
+            "f1_distance": 0.7062238812427892,
+            "f2_velocity_diff": 0.0028259168164456185,
+            "f3_heading_alignment": 0.14758361765043326,
+            "f4_class_interaction": 0.3531119406213946
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.8691297741592818,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8247452785319273,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.4123726392659636
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.8687283663878139,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8223956234945575,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.41119781174727876
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.8846068181056539,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.9204197727255039,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.46020988636275195
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.8641923767238653,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7962584724964571,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.39812923624822855
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8624125307344032,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.7862036874906326,
+            "f2_velocity_diff": 0.00858472626644542,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.3931018437453163
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8460137401159052,
+          "position": [
+            50.178426341,
+            26.701679816499997
+          ],
+          "features": {
+            "f1_distance": 0.7034548616852756,
+            "f2_velocity_diff": 0.0009063136664454477,
+            "f3_heading_alignment": 0.6475836176504333,
+            "f4_class_interaction": 0.3517274308426378
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.8560737990296637,
+          "position": [
+            37.067536826499996,
+            28.698067092499997
+          ],
+          "features": {
+            "f1_distance": 0.8254765054896706,
+            "f2_velocity_diff": 0.00525772890528921,
+            "f3_heading_alignment": 0.5395834241605609,
+            "f4_class_interaction": 0.4127382527448353
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.8067366557495783,
+          "position": [
+            34.9175812985,
+            27.143188540999997
+          ],
+          "features": {
+            "f1_distance": 0.8510762770638358,
+            "f2_velocity_diff": 0.004745519966445434,
+            "f3_heading_alignment": 0.14758361765043326,
+            "f4_class_interaction": 0.4255381385319179
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5010,
+      "target_id": 212,
+      "target_position": [
+        20.9044783035,
+        22.2098084455
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.9040357347631753,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "features": {
+            "f1_distance": 0.8260358652414603,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41301793262073017
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.8108514328889259,
+          "position": [
+            4.415087245,
+            37.048340794999994
+          ],
+          "features": {
+            "f1_distance": 0.7781707729429466,
+            "f2_velocity_diff": 0.01385866028178434,
+            "f3_heading_alignment": 0.27443725197219415,
+            "f4_class_interaction": 0.3890853864714733
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.8550273676859447,
+          "position": [
+            7.505648316499999,
+            29.56188851
+          ],
+          "features": {
+            "f1_distance": 0.8471661927794283,
+            "f2_velocity_diff": 0.003839206300000342,
+            "f3_heading_alignment": 0.5,
+            "f4_class_interaction": 0.42358309638971414
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.9054761844370736,
+          "position": [
+            31.1551591245,
+            9.559623686999998
+          ],
+          "features": {
+            "f1_distance": 0.837179966921081,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4185899834605405
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.8870797398336145,
+          "position": [
+            49.679329521999996,
+            28.736459155499997
+          ],
+          "features": {
+            "f1_distance": 0.7049425086297326,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3524712543148663
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.736733070134552,
+          "position": [
+            51.810089018499994,
+            27.738265517499997
+          ],
+          "features": {
+            "f1_distance": 0.6860381215395619,
+            "f2_velocity_diff": 3.552713678800501e-16,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.34301906076978095
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.9026613512794657,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "features": {
+            "f1_distance": 0.8155414188379277,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4077707094189639
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.8071599500424884,
+          "position": [
+            23.9758433435,
+            32.3069210145
+          ],
+          "features": {
+            "f1_distance": 0.8944609240897041,
+            "f2_velocity_diff": 0.011990246793436809,
+            "f3_heading_alignment": 0.07797913037737625,
+            "f4_class_interaction": 0.44723046204485206
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.9060930650924344,
+          "position": [
+            23.2463941465,
+            37.8353780865
+          ],
+          "features": {
+            "f1_distance": 0.841999051768214,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.420999525884107
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.9067424320582562,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "features": {
+            "f1_distance": 0.8471026752117921,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.42355133760589603
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.7982590563701205,
+          "position": [
+            14.3010434675,
+            15.990294239499999
+          ],
+          "features": {
+            "f1_distance": 0.9092874272264676,
+            "f2_velocity_diff": 0.01151761889999996,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.4546437136132338
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.8594569018431224,
+          "position": [
+            49.410585080999994,
+            29.3507321635
+          ],
+          "features": {
+            "f1_distance": 0.7061308258499157,
+            "f2_velocity_diff": 0.0015902513182079725,
+            "f3_heading_alignment": 0.7499999999999853,
+            "f4_class_interaction": 0.35306541292495786
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.9038478766676356,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8245935377189537,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.41229676885947686
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.903539774772351,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "features": {
+            "f1_distance": 0.8222334507887056,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4111167253943528
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.9156451607943262,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "features": {
+            "f1_distance": 0.920505017589488,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.460252508794744
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.9001268852078032,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "features": {
+            "f1_distance": 0.7965306682770793,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.39826533413853965
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.8987645509767009,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "features": {
+            "f1_distance": 0.786488607022511,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3932443035112555
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.8872903439722165,
+          "position": [
+            50.312798561499996,
+            26.701679816499997
+          ],
+          "features": {
+            "f1_distance": 0.7025060994220718,
+            "f2_velocity_diff": 0.00959801574999979,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.3512530497110359
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7769586891429024,
+          "position": [
+            36.9523606375,
+            28.698067092499997
+          ],
+          "features": {
+            "f1_distance": 0.8269011762962326,
+            "f2_velocity_diff": 0.007678412599999618,
+            "f3_heading_alignment": 0.0,
+            "f4_class_interaction": 0.4134505881481163
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.9072909346865417,
+          "position": [
+            34.9175812985,
+            27.143188540999997
+          ],
+          "features": {
+            "f1_distance": 0.8514384657069154,
+            "f2_velocity_diff": 0.0038392062999999866,
+            "f3_heading_alignment": 1.0,
+            "f4_class_interaction": 0.4257192328534577
+          }
+        }
+      ]
+    }
+  ]
+}

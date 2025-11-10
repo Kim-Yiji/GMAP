@@ -29,7 +29,8 @@ def calculate_coordinate_transform(
     video_width: int,
     video_height: int,
     margin_ratio: float = 0.1,
-    preserve_position: bool = False
+    preserve_position: bool = False,
+    manual_offset: Optional[Tuple[float, float]] = None
 ) -> Tuple[float, float, float, float]:
     """
     Calculate transformation parameters to map annotation coordinates to video pixel coordinates.
@@ -43,6 +44,7 @@ def calculate_coordinate_transform(
         video_height: Video height in pixels
         margin_ratio: Ratio of margins to leave on each side (default: 0.1 = 10%)
         preserve_position: If True, preserve upper-left position instead of centering (default: False)
+        manual_offset: Optional manual (offset_x, offset_y) for calibration (default: None)
     
     Returns:
         Tuple of (scale_x, scale_y, offset_x, offset_y) transformation parameters
@@ -81,7 +83,10 @@ def calculate_coordinate_transform(
     # Use uniform scaling (maintain aspect ratio) to avoid distortion
     scale = min(scale_x, scale_y)
     
-    if preserve_position:
+    if manual_offset is not None:
+        # Use manually specified offset (for calibration)
+        offset_x, offset_y = manual_offset
+    elif preserve_position:
         # Preserve upper-left position: map (min_x, min_y) to margin position
         margin_pixels_x = video_width * margin_ratio
         margin_pixels_y = video_height * margin_ratio
@@ -261,20 +266,21 @@ def draw_target_marker(
     x = int(round(pixel_x))
     y = int(round(pixel_y))
     
-    # Draw a larger, more prominent circle for the target (bright cyan/magenta)
-    # Outer black outline for contrast
-    cv2.circle(frame_copy, (x, y), 20, (0, 0, 0), 4)  # Black outline
-    # Outer ring
-    cv2.circle(frame_copy, (x, y), 18, (255, 255, 0), 4)  # Cyan outer ring (thicker)
-    # Inner filled circle
-    cv2.circle(frame_copy, (x, y), 14, (255, 0, 255), -1)  # Magenta filled (larger)
-    # Center dot
-    cv2.circle(frame_copy, (x, y), 6, (255, 255, 255), -1)  # White center dot
+    # Draw a smaller, less intrusive circle for the target (bright cyan/magenta)
+    # Reduced sizes to not obscure the person
+    # Outer black outline for contrast (smaller)
+    cv2.circle(frame_copy, (x, y), 10, (0, 0, 0), 2)  # Black outline (reduced from radius 20, thickness 4)
+    # Outer ring (smaller)
+    cv2.circle(frame_copy, (x, y), 9, (255, 255, 0), 2)  # Cyan outer ring (reduced from radius 18, thickness 4)
+    # Inner filled circle (smaller)
+    cv2.circle(frame_copy, (x, y), 7, (255, 0, 255), -1)  # Magenta filled (reduced from radius 14)
+    # Center dot (smaller)
+    cv2.circle(frame_copy, (x, y), 3, (255, 255, 255), -1)  # White center dot (reduced from radius 6)
     
-    # Draw "TARGET" label with ID
+    # Draw "TARGET" label with ID (smaller font)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    font_scale = 0.7 * scale
-    thickness = 2
+    font_scale = 0.4 * scale  # Smaller font (reduced from 0.7)
+    thickness = 1  # Thinner text (reduced from 2)
     label_text = f"TARGET ID:{target_id}"
     
     (text_width, text_height), baseline = cv2.getTextSize(
@@ -282,17 +288,17 @@ def draw_target_marker(
     )
     
     label_x = x - text_width // 2
-    label_y = y - 25
+    label_y = y - 15  # Closer to the circle (reduced from 25)
     
     # Ensure label stays within frame bounds
     frame_height, frame_width = frame.shape[:2]
     if label_x < 0:
         label_x = 5
     if label_y - text_height < 0:
-        label_y = y + 30
+        label_y = y + 15  # Adjusted for smaller marker (reduced from 30)
     
-    # Draw background for label (semi-transparent effect with multiple rectangles)
-    padding = 4
+    # Draw background for label (smaller padding)
+    padding = 2  # Reduced padding (from 4)
     cv2.rectangle(
         frame_copy,
         (label_x - padding, label_y - text_height - padding),
@@ -305,7 +311,7 @@ def draw_target_marker(
         (label_x - padding - 1, label_y - text_height - padding - 1),
         (label_x + text_width + padding + 1, label_y + baseline + padding + 1),
         (255, 255, 0),  # Cyan border
-        2
+        1  # Thinner border (reduced from 2)
     )
     
     # Draw label
@@ -686,7 +692,9 @@ def process_video_with_threat_scores(
     draw_graph: bool = True,
     draw_edges: bool = True,
     draw_nodes: bool = True,
-    apply_coordinate_transform: bool = True
+    apply_coordinate_transform: bool = True,
+    offset_x: Optional[float] = None,
+    offset_y: Optional[float] = None
 ) -> Dict:
     """
     Process video and overlay threat scores on each frame with graph visualization.
@@ -763,42 +771,117 @@ def process_video_with_threat_scores(
     coord_transform = None
     if apply_coordinate_transform:
         print("Calculating coordinate transformation...")
-        print("  NOTE: Transformation preserves relative positions (not centered)")
-        print("  If objects still appear misaligned, try --no-coord-transform")
-        print("  to use annotations as pixel coordinates directly.")
         
-        # Try different approaches to find the best alignment
-        # Since SDD doesn't have homography, we need to approximate
-        # Option 1: Preserve position (keep objects in upper-left region)
-        # Option 2: Try centering (might work if objects are actually centered)
-        # For now, use preserve_position but we may need manual calibration
+        # Try to use homography file if available
+        homography_path = None
+        scene_name = None
+        video_number = 0
         
-        # TODO: If alignment is still wrong, we need manual calibration:
-        # 1. Identify where objects actually appear in the video
-        # 2. Calculate scale and offset from reference points
-        # 3. Or use --no-coord-transform if annotations are already pixels
+        # Try to detect scene name from annotation path
+        import os
+        annotation_dir = os.path.dirname(os.path.abspath(annotation_path))
+        annotation_filename = os.path.basename(annotation_path)
         
-        coord_transform = calculate_coordinate_transform(
-            annotation_path, width, height, preserve_position=True
-        )
+        # Common scene names in SDD
+        scene_names = ['bookstore', 'deathCircle', 'gates', 'hyang', 'nexus', 'quad', 'coupa', 'little']
+        for scene in scene_names:
+            if scene.lower() in annotation_dir.lower() or scene.lower() in annotation_filename.lower():
+                scene_name = scene.lower()
+                # Try to extract video number from filename (e.g., "bookstore_video0_test.txt")
+                import re
+                video_match = re.search(r'video(\d+)', annotation_filename, re.IGNORECASE)
+                if video_match:
+                    video_number = int(video_match.group(1))
+                break
         
-        # Alternative: Try centering if preserve_position doesn't work
-        # Uncomment below to try centering instead:
-        # coord_transform = calculate_coordinate_transform(
-        #     annotation_path, width, height, preserve_position=False
-        # )
-        scale_x, scale_y, offset_x, offset_y = coord_transform
-        print(f"  Transformation: scale=({scale_x:.2f}, {scale_y:.2f}), offset=({offset_x:.2f}, {offset_y:.2f})")
+        # Look for homography file in common locations
+        homography_candidates = [
+            'H_SDD.txt',
+            os.path.join(os.path.dirname(annotation_path), '..', '..', 'H_SDD.txt'),
+            os.path.join(os.path.dirname(annotation_path), 'H_SDD.txt'),
+        ]
+        for candidate in homography_candidates:
+            if os.path.exists(candidate):
+                homography_path = candidate
+                break
         
-        # Verify transformation with target position
-        if target_id and target_id in target_positions:
-            test_frame = min(target_positions.keys())
-            test_pos = target_positions[test_frame]
-            transformed_pos = transform_coordinates(test_pos[0], test_pos[1], scale_x, scale_y, offset_x, offset_y)
-            raw_pos = (int(test_pos[0]), int(test_pos[1]))
-            print(f"  Example: Target at annotation ({test_pos[0]:.1f}, {test_pos[1]:.1f})")
-            print(f"    -> Raw pixel (no transform): {raw_pos}")
-            print(f"    -> Transformed pixel: ({transformed_pos[0]:.1f}, {transformed_pos[1]:.1f})")
+        # Use homography if available and scene name detected
+        if homography_path and scene_name:
+            try:
+                from .homography_parser import calculate_transform_from_homography
+                from .data_parser import load_annotations
+                import numpy as np
+                
+                print(f"  Using homography file: {homography_path}")
+                print(f"  Scene: {scene_name}, Video: {video_number}")
+                
+                # Get annotation coordinate ranges
+                annotations = load_annotations(annotation_path)
+                x_coords = annotations[:, 2].astype(float)
+                y_coords = annotations[:, 3].astype(float)
+                
+                coord_transform = calculate_transform_from_homography(
+                    homography_path, scene_name, video_number,
+                    width, height,
+                    x_coords.min(), x_coords.max(),
+                    y_coords.min(), y_coords.max()
+                )
+                
+                scale_x, scale_y, offset_x_val, offset_y_val = coord_transform
+                
+                # Apply manual offset adjustments if provided
+                if offset_x is not None:
+                    offset_x_val += offset_x
+                if offset_y is not None:
+                    offset_y_val += offset_y
+                
+                coord_transform = (scale_x, scale_y, offset_x_val, offset_y_val)
+                
+                print(f"  Homography-based transformation: scale=({scale_x:.2f}, {scale_y:.2f}), offset=({offset_x_val:.2f}, {offset_y_val:.2f})")
+            except Exception as e:
+                print(f"  Warning: Could not use homography file: {e}")
+                print("  Falling back to standard transformation...")
+                homography_path = None
+        
+        # Fall back to standard transformation if homography not available
+        if not homography_path or not scene_name:
+            print("  NOTE: Using standard transformation (no homography file found)")
+            print("  If objects appear misaligned, try --no-coord-transform")
+            print("  to use annotations as pixel coordinates directly.")
+            
+            # Calculate base transformation (scale is correct since movements match)
+            # Then apply offset adjustment to fix alignment
+            base_transform = calculate_coordinate_transform(
+                annotation_path, width, height, preserve_position=True
+            )
+            base_scale_x, base_scale_y, base_offset_x, base_offset_y = base_transform
+            
+            # Apply offset adjustment (calibrated to fix alignment gap)
+            # Negative X = shift left, Positive Y = shift down
+            offset_adjustment_x = offset_x if offset_x is not None else -90  # Default: shift left 90px
+            offset_adjustment_y = offset_y if offset_y is not None else 100   # Default: shift down 100px
+            
+            adjusted_offset_x = base_offset_x + offset_adjustment_x
+            adjusted_offset_y = base_offset_y + offset_adjustment_y
+            
+            coord_transform = (base_scale_x, base_scale_y, adjusted_offset_x, adjusted_offset_y)
+            
+            print(f"  Applied offset adjustment: ({offset_adjustment_x}, {offset_adjustment_y})")
+            scale_x, scale_y, offset_x_val, offset_y_val = coord_transform
+            print(f"  Transformation: scale=({scale_x:.2f}, {scale_y:.2f}), offset=({offset_x_val:.2f}, {offset_y_val:.2f})")
+        
+        # Verify transformation with target position (if using homography, coord_transform is already set)
+        if coord_transform:
+            scale_x, scale_y, offset_x_val, offset_y_val = coord_transform
+            
+            if target_id and target_id in target_positions:
+                test_frame = min(target_positions.keys())
+                test_pos = target_positions[test_frame]
+                transformed_pos = transform_coordinates(test_pos[0], test_pos[1], scale_x, scale_y, offset_x_val, offset_y_val)
+                raw_pos = (int(test_pos[0]), int(test_pos[1]))
+                print(f"  Example: Target at annotation ({test_pos[0]:.1f}, {test_pos[1]:.1f})")
+                print(f"    -> Transformed pixel: ({transformed_pos[0]:.1f}, {transformed_pos[1]:.1f})")
+                print(f"    -> Raw pixel (no transform): {raw_pos}")
     else:
         print("Using annotation coordinates directly as pixel coordinates (no transformation)")
     
