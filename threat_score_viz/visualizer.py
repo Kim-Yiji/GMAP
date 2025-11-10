@@ -243,15 +243,16 @@ def draw_target_marker(
     """
     frame_copy = frame.copy()
     
-    # Transform coordinates if transformation is provided
+    # Transform coordinates if transformation is provided (with proper rounding for alignment)
     if coord_transform:
         scale_x, scale_y, offset_x, offset_y = coord_transform
         pixel_x, pixel_y = transform_coordinates(target_position[0], target_position[1], scale_x, scale_y, offset_x, offset_y)
     else:
         pixel_x, pixel_y = target_position[0], target_position[1]
     
-    x = int(pixel_x)
-    y = int(pixel_y)
+    # Round to nearest integer for precise pixel alignment
+    x = int(round(pixel_x))
+    y = int(round(pixel_y))
     
     # Draw a larger, more prominent circle for the target (bright cyan/magenta)
     # Outer black outline for contrast
@@ -320,26 +321,26 @@ def draw_graph_edge(
     target_position: Tuple[float, float],
     obstacle_position: Tuple[float, float],
     threat_score: float,
-    alpha: float = 0.6,
+    alpha: float = 0.4,
     coord_transform: Optional[Tuple[float, float, float, float]] = None
 ) -> np.ndarray:
     """
-    Draw an edge (line) between target and obstacle representing threat score.
+    Draw a translucent edge (line) between target and obstacle representing threat score.
     
     Args:
         frame: Video frame (BGR format)
         target_position: (x, y) position of target in annotation coordinates
         obstacle_position: (x, y) position of obstacle in annotation coordinates
         threat_score: Threat score value [0, 1] (determines line thickness and color)
-        alpha: Transparency factor (0-1, higher = more opaque)
+        alpha: Transparency factor (0-1, lower = more transparent, default: 0.4)
         coord_transform: Optional (scale_x, scale_y, offset_x, offset_y) transformation
     
     Returns:
-        Frame with edge drawn
+        Frame with translucent edge drawn
     """
     frame_copy = frame.copy()
     
-    # Transform coordinates if transformation is provided
+    # Transform coordinates if transformation is provided (with proper rounding)
     if coord_transform:
         scale_x, scale_y, offset_x, offset_y = coord_transform
         target_x, target_y = transform_coordinates(target_position[0], target_position[1], scale_x, scale_y, offset_x, offset_y)
@@ -348,44 +349,34 @@ def draw_graph_edge(
         target_x, target_y = target_position[0], target_position[1]
         obstacle_x, obstacle_y = obstacle_position[0], obstacle_position[1]
     
-    target_x = int(target_x)
-    target_y = int(target_y)
-    obstacle_x = int(obstacle_x)
-    obstacle_y = int(obstacle_y)
+    # Round to nearest integer for precise pixel alignment
+    target_x = int(round(target_x))
+    target_y = int(round(target_y))
+    obstacle_x = int(round(obstacle_x))
+    obstacle_y = int(round(obstacle_y))
     
-    # Determine line thickness based on threat score (2-8 pixels for better visibility)
-    # Higher threat = thicker line
-    thickness = max(2, int(2 + threat_score * 6))
+    # Make edges thinner: 1-3 pixels based on threat score
+    thickness = max(1, int(1 + threat_score * 2))
     
-    # Determine line color based on threat score (brighter colors for visibility)
-    # High threat (>= 0.7): Bright Red
+    # Determine line color based on threat score
+    # High threat (>= 0.7): Red
     # Medium threat (0.4-0.7): Orange/Yellow
     # Low threat (< 0.4): Green
     if threat_score >= 0.7:
-        color = (0, 0, 255)  # Bright Red in BGR
+        color = (0, 0, 255)  # Red in BGR
     elif threat_score >= 0.4:
-        # Interpolate between yellow and red
         ratio = (threat_score - 0.4) / 0.3
         color = (0, int(255 * (1 - ratio)), 255)  # Yellow to Orange
     else:
-        # Interpolate between green and yellow
         ratio = threat_score / 0.4
         color = (0, 255, int(255 * ratio))  # Green to Yellow
     
-    # Draw a thicker outline first for better visibility
-    outline_thickness = thickness + 2
-    cv2.line(
-        frame_copy,
-        (target_x, target_y),
-        (obstacle_x, obstacle_y),
-        (0, 0, 0),  # Black outline
-        outline_thickness,
-        cv2.LINE_AA
-    )
+    # Create overlay for alpha blending
+    overlay = frame_copy.copy()
     
-    # Draw the main edge line
+    # Draw the edge line on overlay
     cv2.line(
-        frame_copy,
+        overlay,
         (target_x, target_y),
         (obstacle_x, obstacle_y),
         color,
@@ -393,46 +384,43 @@ def draw_graph_edge(
         cv2.LINE_AA
     )
     
-    # Draw threat score along the edge (midpoint)
-    mid_x = (target_x + obstacle_x) // 2
-    mid_y = (target_y + obstacle_y) // 2
+    # Blend overlay with original frame using alpha
+    cv2.addWeighted(overlay, alpha, frame_copy, 1 - alpha, 0, frame_copy)
     
-    # Draw score text if line is long enough (lowered threshold for visibility)
+    # Draw threat score text (smaller, optional - only for longer edges)
     distance = np.sqrt((target_x - obstacle_x)**2 + (target_y - obstacle_y)**2)
-    if distance > 20:  # Lowered threshold to show more scores
+    if distance > 50:  # Only show score for longer edges to avoid clutter
         score_text = f"{threat_score:.2f}"
         font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 0.5  # Slightly larger
-        text_thickness = 2  # Thicker text
+        font_scale = 0.4  # Smaller font
+        text_thickness = 1  # Thinner text
         (text_width, text_height), baseline = cv2.getTextSize(
             score_text, font, font_scale, text_thickness
         )
         
-        # Draw background for score text (larger padding)
-        padding = 4
+        mid_x = (target_x + obstacle_x) // 2
+        mid_y = (target_y + obstacle_y) // 2
+        
+        # Draw semi-transparent background for score text
+        padding = 2
+        overlay_text = frame_copy.copy()
         cv2.rectangle(
-            frame_copy,
+            overlay_text,
             (mid_x - text_width // 2 - padding, mid_y - text_height - padding),
             (mid_x + text_width // 2 + padding, mid_y + baseline + padding),
-            (255, 255, 255),  # White background for better contrast
+            (255, 255, 255),  # White background
             -1
         )
-        cv2.rectangle(
-            frame_copy,
-            (mid_x - text_width // 2 - padding, mid_y - text_height - padding),
-            (mid_x + text_width // 2 + padding, mid_y + baseline + padding),
-            (0, 0, 0),  # Black border
-            2
-        )
+        cv2.addWeighted(overlay_text, 0.7, frame_copy, 0.3, 0, frame_copy)
         
-        # Draw score text
+        # Draw score text (opaque for readability)
         cv2.putText(
             frame_copy,
             score_text,
             (mid_x - text_width // 2, mid_y),
             font,
             font_scale,
-            color,
+            (0, 0, 0),  # Black text
             text_thickness,
             cv2.LINE_AA
         )
@@ -446,64 +434,73 @@ def draw_obstacle_node(
     obstacle_id: int,
     threat_score: float,
     scale: float = 1.0,
-    coord_transform: Optional[Tuple[float, float, float, float]] = None
+    coord_transform: Optional[Tuple[float, float, float, float]] = None,
+    alpha: float = 0.5
 ) -> np.ndarray:
     """
-    Draw a node (circle) for an obstacle with its ID.
+    Draw a translucent node (circle) for an obstacle with its ID.
     
     Args:
         frame: Video frame (BGR format)
         obstacle_position: (x, y) position of obstacle in annotation coordinates
         obstacle_id: ID of the obstacle
-        threat_score: Threat score value [0, 1] (determines node color)
+        threat_score: Threat score value [0, 1] (determines node color and size)
         scale: Scale factor for node size
         coord_transform: Optional (scale_x, scale_y, offset_x, offset_y) transformation
+        alpha: Transparency factor (0-1, lower = more transparent, default: 0.5)
     
     Returns:
-        Frame with obstacle node drawn
+        Frame with translucent obstacle node drawn
     """
     frame_copy = frame.copy()
     
-    # Transform coordinates if transformation is provided
+    # Transform coordinates if transformation is provided (with proper rounding for alignment)
     if coord_transform:
         scale_x, scale_y, offset_x, offset_y = coord_transform
         pixel_x, pixel_y = transform_coordinates(obstacle_position[0], obstacle_position[1], scale_x, scale_y, offset_x, offset_y)
     else:
         pixel_x, pixel_y = obstacle_position[0], obstacle_position[1]
     
-    x = int(pixel_x)
-    y = int(pixel_y)
+    # Round to nearest integer for precise pixel alignment
+    x = int(round(pixel_x))
+    y = int(round(pixel_y))
     
     # Determine node color based on threat score (same as edge colors)
     if threat_score >= 0.7:
         node_color = (0, 0, 255)  # Red
     elif threat_score >= 0.4:
-        ratio = (threat_score - 0.4) / 0.3
+        ratio = (threat_score - 0.4) / 0.4
         node_color = (0, int(255 * (1 - ratio)), 255)  # Yellow to Orange
     else:
         ratio = threat_score / 0.4
         node_color = (0, 255, int(255 * ratio))  # Green to Yellow
     
-    # Draw node circle (size based on threat score, larger for better visibility)
-    node_radius = int(max(8, int(8 + threat_score * 8)) * scale)
-    # Draw outline for better visibility
-    cv2.circle(frame_copy, (x, y), node_radius + 2, (0, 0, 0), 2)  # Black outline
-    cv2.circle(frame_copy, (x, y), node_radius, node_color, 3)  # Thicker border
-    inner_radius = max(3, node_radius - 3)
-    cv2.circle(frame_copy, (x, y), inner_radius, node_color, -1)  # Filled center
+    # Make nodes smaller: radius 4-8 pixels based on threat score
+    node_radius = int(max(4, int(4 + threat_score * 4)) * scale)
     
-    # Draw obstacle ID near the node (more prominent)
-    id_text = f"ID:{obstacle_id}"
+    # Create overlay for alpha blending
+    overlay = frame_copy.copy()
+    
+    # Draw translucent node circle on overlay
+    cv2.circle(overlay, (x, y), node_radius, node_color, -1)  # Filled circle
+    # Draw a thin outline for better visibility
+    cv2.circle(overlay, (x, y), node_radius, (0, 0, 0), 1)  # Thin black outline
+    
+    # Blend overlay with original frame using alpha
+    cv2.addWeighted(overlay, alpha, frame_copy, 1 - alpha, 0, frame_copy)
+    
+    # Draw obstacle ID near the node (smaller, more subtle)
+    id_text = f"{obstacle_id}"
     font = cv2.FONT_HERSHEY_SIMPLEX
-    font_scale = 0.6 * scale  # Larger font
-    thickness = 2  # Thicker text
+    font_scale = 0.4 * scale  # Smaller font
+    thickness = 1  # Thinner text
     (text_width, text_height), baseline = cv2.getTextSize(
         id_text, font, font_scale, thickness
     )
     
-    # Position text above or below the node
+    # Position text above the node
     text_x = x - text_width // 2
-    text_y = y - node_radius - 10
+    text_y = y - node_radius - 5
     
     # Ensure text stays within frame bounds
     frame_height, frame_width = frame.shape[:2]
@@ -512,33 +509,28 @@ def draw_obstacle_node(
     if text_x + text_width > frame_width:
         text_x = frame_width - text_width - 5
     if text_y - text_height < 0:
-        text_y = y + node_radius + text_height + 10
+        text_y = y + node_radius + text_height + 5
     
-    # Draw background for ID text (white with black border for contrast)
-    padding = 3
+    # Draw semi-transparent background for ID text
+    overlay_text = frame_copy.copy()
+    padding = 2
     cv2.rectangle(
-        frame_copy,
+        overlay_text,
         (text_x - padding, text_y - text_height - padding),
         (text_x + text_width + padding, text_y + baseline + padding),
         (255, 255, 255),  # White background
         -1
     )
-    cv2.rectangle(
-        frame_copy,
-        (text_x - padding, text_y - text_height - padding),
-        (text_x + text_width + padding, text_y + baseline + padding),
-        (0, 0, 0),  # Black border
-        1
-    )
+    cv2.addWeighted(overlay_text, 0.7, frame_copy, 0.3, 0, frame_copy)
     
-    # Draw ID text
+    # Draw ID text (opaque for readability)
     cv2.putText(
         frame_copy,
         id_text,
         (text_x, text_y),
         font,
         font_scale,
-        (0, 0, 0),  # Black text for contrast
+        (0, 0, 0),  # Black text
         thickness,
         cv2.LINE_AA
     )
@@ -588,6 +580,7 @@ def process_video_frame(
                 target_position,
                 position,
                 threat_score,
+                alpha=0.4,  # Semi-transparent edges
                 coord_transform=coord_transform
             )
     
@@ -607,7 +600,8 @@ def process_video_frame(
                 obstacle_id,
                 threat_score,
                 scale,
-                coord_transform=coord_transform
+                coord_transform=coord_transform,
+                alpha=0.5  # Semi-transparent nodes
             )
     elif not draw_graph:
         # Fallback: Draw simple threat score annotations if graph is disabled
@@ -682,7 +676,8 @@ def process_video_with_threat_scores(
     draw_target: bool = True,
     draw_graph: bool = True,
     draw_edges: bool = True,
-    draw_nodes: bool = True
+    draw_nodes: bool = True,
+    apply_coordinate_transform: bool = True
 ) -> Dict:
     """
     Process video and overlay threat scores on each frame with graph visualization.
@@ -750,10 +745,24 @@ def process_video_with_threat_scores(
     object_positions = build_object_position_history(annotation_path)
     
     # Calculate coordinate transformation to center annotations in video
-    print("Calculating coordinate transformation...")
-    coord_transform = calculate_coordinate_transform(annotation_path, width, height)
-    scale_x, scale_y, offset_x, offset_y = coord_transform
-    print(f"  Scale: ({scale_x:.2f}, {scale_y:.2f}), Offset: ({offset_x:.2f}, {offset_y:.2f})")
+    # SDD annotations are in world coordinates (small range 0-54), need transformation
+    # to map to video pixel coordinates (1416x1080)
+    coord_transform = None
+    if apply_coordinate_transform:
+        print("Calculating coordinate transformation to center objects in video...")
+        coord_transform = calculate_coordinate_transform(annotation_path, width, height)
+        scale_x, scale_y, offset_x, offset_y = coord_transform
+        print(f"  Transformation: scale=({scale_x:.2f}, {scale_y:.2f}), offset=({offset_x:.2f}, {offset_y:.2f})")
+        
+        # Verify transformation with target position
+        if target_id and target_id in target_positions:
+            test_frame = min(target_positions.keys())
+            test_pos = target_positions[test_frame]
+            transformed_pos = transform_coordinates(test_pos[0], test_pos[1], scale_x, scale_y, offset_x, offset_y)
+            print(f"  Example: Target at annotation ({test_pos[0]:.1f}, {test_pos[1]:.1f}) -> pixel ({transformed_pos[0]:.1f}, {transformed_pos[1]:.1f})")
+            print(f"  Video center: ({width//2}, {height//2})")
+    else:
+        print("Using annotation coordinates directly as pixel coordinates (no transformation)")
     
     # Determine frame range
     if end_frame is None:

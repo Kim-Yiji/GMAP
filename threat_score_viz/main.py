@@ -147,6 +147,11 @@ Examples:
         help='Do not draw nodes for obstacles'
     )
     parser.add_argument(
+        '--no-coord-transform',
+        action='store_true',
+        help='Do not apply coordinate transformation (use annotations as pixel coordinates directly)'
+    )
+    parser.add_argument(
         '--verify-alignment',
         action='store_true',
         help='Verify video-annotation alignment before processing'
@@ -277,7 +282,8 @@ Examples:
             draw_target=not args.no_target_marker,
             draw_graph=not args.no_graph,
             draw_edges=not args.no_edges,
-            draw_nodes=not args.no_nodes
+            draw_nodes=not args.no_nodes,
+            apply_coordinate_transform=not args.no_coord_transform
         )
         
         # Note about obstacles
