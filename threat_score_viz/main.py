@@ -149,7 +149,8 @@ Examples:
     parser.add_argument(
         '--no-coord-transform',
         action='store_true',
-        help='Do not apply coordinate transformation (use annotations as pixel coordinates directly)'
+        help='Do not apply coordinate transformation (use annotations as pixel coordinates directly). '
+             'Use this if nodes appear misaligned with people after transformation.'
     )
     parser.add_argument(
         '--verify-alignment',

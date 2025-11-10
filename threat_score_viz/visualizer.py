@@ -28,19 +28,21 @@ def calculate_coordinate_transform(
     annotation_path: str,
     video_width: int,
     video_height: int,
-    margin_ratio: float = 0.1
+    margin_ratio: float = 0.1,
+    preserve_position: bool = False
 ) -> Tuple[float, float, float, float]:
     """
     Calculate transformation parameters to map annotation coordinates to video pixel coordinates.
     
     The annotations are in a small coordinate space (e.g., 0-54), but need to be scaled
-    and centered in the video frame (e.g., 1416x1080).
+    to video pixel coordinates (e.g., 1416x1080).
     
     Args:
         annotation_path: Path to annotation file
         video_width: Video width in pixels
         video_height: Video height in pixels
         margin_ratio: Ratio of margins to leave on each side (default: 0.1 = 10%)
+        preserve_position: If True, preserve upper-left position instead of centering (default: False)
     
     Returns:
         Tuple of (scale_x, scale_y, offset_x, offset_y) transformation parameters
@@ -79,17 +81,22 @@ def calculate_coordinate_transform(
     # Use uniform scaling (maintain aspect ratio) to avoid distortion
     scale = min(scale_x, scale_y)
     
-    # Calculate center of annotation coordinates
-    ann_center_x = (min_x + max_x) / 2
-    ann_center_y = (min_y + max_y) / 2
-    
-    # Calculate center of video (with margins)
-    video_center_x = video_width / 2
-    video_center_y = video_height / 2
-    
-    # Calculate offsets to center the annotations
-    offset_x = video_center_x - (ann_center_x * scale)
-    offset_y = video_center_y - (ann_center_y * scale)
+    if preserve_position:
+        # Preserve upper-left position: map (min_x, min_y) to margin position
+        margin_pixels_x = video_width * margin_ratio
+        margin_pixels_y = video_height * margin_ratio
+        offset_x = margin_pixels_x - (min_x * scale)
+        offset_y = margin_pixels_y - (min_y * scale)
+    else:
+        # Center the annotations in the video
+        ann_center_x = (min_x + max_x) / 2
+        ann_center_y = (min_y + max_y) / 2
+        
+        video_center_x = video_width / 2
+        video_center_y = video_height / 2
+        
+        offset_x = video_center_x - (ann_center_x * scale)
+        offset_y = video_center_y - (ann_center_y * scale)
     
     return (scale, scale, offset_x, offset_y)
 
@@ -390,7 +397,7 @@ def draw_graph_edge(
     # Draw threat score text (smaller, optional - only for longer edges)
     distance = np.sqrt((target_x - obstacle_x)**2 + (target_y - obstacle_y)**2)
     if distance > 50:  # Only show score for longer edges to avoid clutter
-        score_text = f"{threat_score:.2f}"
+        score_text = f"threat_score : {threat_score:.2f}"
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 0.4  # Smaller font
         text_thickness = 1  # Thinner text
@@ -414,13 +421,14 @@ def draw_graph_edge(
         cv2.addWeighted(overlay_text, 0.7, frame_copy, 0.3, 0, frame_copy)
         
         # Draw score text (opaque for readability)
+        # Use blue color for score text to distinguish from ID text
         cv2.putText(
             frame_copy,
             score_text,
             (mid_x - text_width // 2, mid_y),
             font,
             font_scale,
-            (0, 0, 0),  # Black text
+            (255, 100, 0),  # Blue text (BGR format: B=255, G=100, R=0)
             text_thickness,
             cv2.LINE_AA
         )
@@ -490,7 +498,7 @@ def draw_obstacle_node(
     cv2.addWeighted(overlay, alpha, frame_copy, 1 - alpha, 0, frame_copy)
     
     # Draw obstacle ID near the node (smaller, more subtle)
-    id_text = f"{obstacle_id}"
+    id_text = f"id : {obstacle_id}"
     font = cv2.FONT_HERSHEY_SIMPLEX
     font_scale = 0.4 * scale  # Smaller font
     thickness = 1  # Thinner text
@@ -524,13 +532,14 @@ def draw_obstacle_node(
     cv2.addWeighted(overlay_text, 0.7, frame_copy, 0.3, 0, frame_copy)
     
     # Draw ID text (opaque for readability)
+    # Use dark purple/magenta color for ID text to distinguish from score text
     cv2.putText(
         frame_copy,
         id_text,
         (text_x, text_y),
         font,
         font_scale,
-        (0, 0, 0),  # Black text
+        (128, 0, 128),  # Dark purple/magenta text (BGR format)
         thickness,
         cv2.LINE_AA
     )
@@ -744,13 +753,40 @@ def process_video_with_threat_scores(
     target_positions = get_target_positions(annotation_path, target_id)
     object_positions = build_object_position_history(annotation_path)
     
-    # Calculate coordinate transformation to center annotations in video
+    # Calculate coordinate transformation to map annotations to video pixel coordinates
     # SDD annotations are in world coordinates (small range 0-54), need transformation
     # to map to video pixel coordinates (1416x1080)
+    # 
+    # IMPORTANT: By default, we preserve the upper-left position of annotations
+    # instead of centering them, as objects might actually be in a specific region
+    # of the video (not centered). This should reduce alignment gaps.
     coord_transform = None
     if apply_coordinate_transform:
-        print("Calculating coordinate transformation to center objects in video...")
-        coord_transform = calculate_coordinate_transform(annotation_path, width, height)
+        print("Calculating coordinate transformation...")
+        print("  NOTE: Transformation preserves relative positions (not centered)")
+        print("  If objects still appear misaligned, try --no-coord-transform")
+        print("  to use annotations as pixel coordinates directly.")
+        
+        # Try different approaches to find the best alignment
+        # Since SDD doesn't have homography, we need to approximate
+        # Option 1: Preserve position (keep objects in upper-left region)
+        # Option 2: Try centering (might work if objects are actually centered)
+        # For now, use preserve_position but we may need manual calibration
+        
+        # TODO: If alignment is still wrong, we need manual calibration:
+        # 1. Identify where objects actually appear in the video
+        # 2. Calculate scale and offset from reference points
+        # 3. Or use --no-coord-transform if annotations are already pixels
+        
+        coord_transform = calculate_coordinate_transform(
+            annotation_path, width, height, preserve_position=True
+        )
+        
+        # Alternative: Try centering if preserve_position doesn't work
+        # Uncomment below to try centering instead:
+        # coord_transform = calculate_coordinate_transform(
+        #     annotation_path, width, height, preserve_position=False
+        # )
         scale_x, scale_y, offset_x, offset_y = coord_transform
         print(f"  Transformation: scale=({scale_x:.2f}, {scale_y:.2f}), offset=({offset_x:.2f}, {offset_y:.2f})")
         
@@ -759,8 +795,10 @@ def process_video_with_threat_scores(
             test_frame = min(target_positions.keys())
             test_pos = target_positions[test_frame]
             transformed_pos = transform_coordinates(test_pos[0], test_pos[1], scale_x, scale_y, offset_x, offset_y)
-            print(f"  Example: Target at annotation ({test_pos[0]:.1f}, {test_pos[1]:.1f}) -> pixel ({transformed_pos[0]:.1f}, {transformed_pos[1]:.1f})")
-            print(f"  Video center: ({width//2}, {height//2})")
+            raw_pos = (int(test_pos[0]), int(test_pos[1]))
+            print(f"  Example: Target at annotation ({test_pos[0]:.1f}, {test_pos[1]:.1f})")
+            print(f"    -> Raw pixel (no transform): {raw_pos}")
+            print(f"    -> Transformed pixel: ({transformed_pos[0]:.1f}, {transformed_pos[1]:.1f})")
     else:
         print("Using annotation coordinates directly as pixel coordinates (no transformation)")
     
