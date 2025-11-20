@@ -7,14 +7,18 @@ dataloader_test.py의 ThreatTrajectoryDataset을 사용하여
 
 import os
 import sys
+import math
 import torch
 import numpy as np
 from datetime import datetime
 import time
+from pathlib import Path
 
-# DMRGCN 모듈 import
-sys.path.insert(0, '/raid/guest/OATMeal_Queens/cy_2nd_attempt/DMRGCN')
+# DMRGCN 모듈 import (청킹 버전은 modeling/DMRGCN 하위의 ThreatTrajectoryDataset 사용)
+sys.path.insert(0, '/raid/guest/OATMeal_Queens/cy_2nd_attempt/modeling/DMRGCN')
 from utils.dataloader_test import ThreatTrajectoryDataset
+
+CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", "200"))
 
 def log(message, level="INFO"):
     """로그 메시지 출력"""
@@ -27,7 +31,36 @@ def log_section(title):
     print(f"  {title}")
     print(f"{'='*80}")
 
-def preprocess_and_save(data_dir, output_path, obs_len=8, pred_len=12, skip=1, threshold=0.002, min_ped=0):
+def _save_chunk(dataset, split_dir, base_name, chunk_idx, seq_start_idx, seq_end_idx):
+    """주어진 시퀀스 구간을 잘라 별도 .pt 파일로 저장"""
+    ped_start = dataset.seq_start_end[seq_start_idx][0]
+    ped_end = dataset.seq_start_end[seq_end_idx - 1][1]
+
+    chunk_seq = dataset.seq_start_end[seq_start_idx:seq_end_idx]
+    seq_start_end = [(s - ped_start, e - ped_start) for (s, e) in chunk_seq]
+
+    cache = {
+        'obs_traj': dataset.obs_traj[ped_start:ped_end],
+        'pred_traj': dataset.pred_traj[ped_start:ped_end],
+        'seq_start_end': seq_start_end,
+        'V_obs': dataset.V_obs[seq_start_idx:seq_end_idx],
+        'A_obs': dataset.A_obs[seq_start_idx:seq_end_idx],
+        'V_pred': dataset.V_pred[seq_start_idx:seq_end_idx],
+        'ped_masks': dataset.ped_masks[seq_start_idx:seq_end_idx],
+    }
+
+    chunk_name = f"{base_name}_part{chunk_idx:03d}.pt"
+    chunk_path = os.path.join(split_dir, chunk_name)
+
+    torch.save(cache, chunk_path)
+    size_mb = os.path.getsize(chunk_path) / (1024 ** 2)
+    log(f"    └ 저장 완료: {chunk_name} ({size_mb:.2f} MB)")
+
+    return chunk_path, size_mb
+
+
+def preprocess_and_save(data_path, output_prefix, obs_len=8, pred_len=12, skip=1, threshold=0.002, min_ped=0,
+                        chunk_size=200):
     """
     데이터를 전처리하고 .pt 파일로 저장
     
@@ -40,17 +73,25 @@ def preprocess_and_save(data_dir, output_path, obs_len=8, pred_len=12, skip=1, t
         threshold: 비선형 궤적 임계값
         min_ped: 최소 보행자 수
     """
-    log(f"전처리 시작: {data_dir}")
-    log(f"출력 경로: {output_path}")
+    source = "directory" if os.path.isdir(data_path) else "file"
+    log(f"전처리 시작: {data_path} ({source})")
+    log(f"출력 prefix: {output_prefix}")
     log(f"설정: obs_len={obs_len}, pred_len={pred_len}, skip={skip}, threshold={threshold}, min_ped={min_ped}")
     
     # 입력 파일 확인
-    txt_files = [f for f in os.listdir(data_dir) if f.endswith('.txt')]
+    if os.path.isdir(data_path):
+        txt_files = [os.path.join(data_path, f) for f in os.listdir(data_path) if f.endswith('.txt')]
+        txt_files = sorted(txt_files)
+    elif data_path.endswith('.txt'):
+        txt_files = [data_path]
+    else:
+        txt_files = []
+
     log(f"입력 .txt 파일 수: {len(txt_files)}")
     
-    if len(txt_files) == 0:
+    if not txt_files:
         log("전처리할 .txt 파일이 없습니다!", "ERROR")
-        return False
+        return []
     
     start_time = time.time()
     
@@ -61,7 +102,7 @@ def preprocess_and_save(data_dir, output_path, obs_len=8, pred_len=12, skip=1, t
     # ThreatTrajectoryDataset으로 데이터 로드 및 전처리
     try:
         dataset = ThreatTrajectoryDataset(
-            data_dir=data_dir,
+            data_dir=txt_files[0] if len(txt_files) == 1 else data_path,
             obs_len=obs_len,
             pred_len=pred_len,
             skip=skip,
@@ -96,51 +137,22 @@ def preprocess_and_save(data_dir, output_path, obs_len=8, pred_len=12, skip=1, t
     
     # 데이터를 딕셔너리로 저장
     log(f"\n데이터 딕셔너리 구성 중...")
-    data_to_save = {
-        'obs_traj': dataset.obs_traj,
-        'pred_traj': dataset.pred_traj,
-        'obs_traj_rel': dataset.obs_traj_rel,
-        'pred_traj_rel': dataset.pred_traj_rel,
-        'loss_mask': dataset.loss_mask,
-        'non_linear_ped': dataset.non_linear_ped,
-        'seq_start_end': dataset.seq_start_end,
-        'V_obs': dataset.V_obs,
-        'A_obs': dataset.A_obs,
-        'V_pred': dataset.V_pred,
-        'A_pred': dataset.A_pred,
-        'ped_masks': dataset.ped_masks,  # 보행자 마스크 추가
-    }
-    
-    # 메모리 사용량 추정
-    total_size = 0
-    for key, value in data_to_save.items():
-        if isinstance(value, torch.Tensor):
-            size = value.element_size() * value.nelement() / (1024**2)  # MB
-            total_size += size
-            log(f"  → {key}: {value.shape} ({size:.2f} MB)")
-        elif isinstance(value, list):
-            list_size = sum(v.element_size() * v.nelement() for v in value if isinstance(v, torch.Tensor)) / (1024**2)
-            total_size += list_size
-            log(f"  → {key}: list with {len(value)} items ({list_size:.2f} MB)")
-    
-    log(f"  → 예상 총 크기: {total_size:.2f} MB")
-    
-    # .pt 파일로 저장
-    log(f"\n.pt 파일 저장 중: {output_path}")
-    save_start_time = time.time()
-    
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    torch.save(data_to_save, output_path)
-    
-    save_elapsed = time.time() - save_start_time
-    actual_size = os.path.getsize(output_path) / (1024**2)
-    
-    log(f"저장 완료! (소요 시간: {save_elapsed:.2f}초)", "SUCCESS")
-    log(f"  → 실제 파일 크기: {actual_size:.2f} MB")
-    if total_size > 0:
-        log(f"  → 압축률: {actual_size/total_size*100:.1f}%")
-    
-    return True
+    num_chunks = math.ceil(dataset.num_seq / chunk_size)
+    log(f"\n총 {dataset.num_seq}개 시퀀스를 {num_chunks}개 파일로 분할 저장합니다. (chunk_size={chunk_size})")
+
+    chunk_paths = []
+    split_dir = os.path.dirname(output_prefix)
+    os.makedirs(split_dir, exist_ok=True)
+
+    for chunk_idx in range(num_chunks):
+        seq_start_idx = chunk_idx * chunk_size
+        seq_end_idx = min(dataset.num_seq, (chunk_idx + 1) * chunk_size)
+        log(f"  > Chunk {chunk_idx+1}/{num_chunks}: seq[{seq_start_idx}:{seq_end_idx})")
+        chunk_path, size_mb = _save_chunk(dataset, split_dir, os.path.basename(output_prefix), chunk_idx,
+                                          seq_start_idx, seq_end_idx)
+        chunk_paths.append((chunk_path, size_mb))
+
+    return chunk_paths
 
 def main():
     """메인 함수: train, val, test 각각 전처리"""
@@ -161,28 +173,48 @@ def main():
         split_start_time = time.time()
         
         data_dir = os.path.join(base_dir, split)
-        output_path = os.path.join(data_dir, f'sdd_coupa_{split}_threat.pt')
+        output_prefix = os.path.join(data_dir, f'sdd_coupa_{split}_threat')
         
         # 디렉토리 존재 확인
         if not os.path.exists(data_dir):
             log(f"데이터 디렉토리가 존재하지 않습니다: {data_dir}", "ERROR")
             continue
         
-        log(f"데이터 디렉토리: {data_dir}")
-        log(f"출력 .pt 파일: {output_path}")
-        
-        # 전처리 및 저장
-        try:
-            success = preprocess_and_save(data_dir, output_path, min_ped=0)  # min_ped=0으로 변경하여 더 많은 시퀀스 추출
-            if not success:
-                log(f"전처리 실패: {split}", "ERROR")
-                continue
-        except Exception as e:
-            log(f"전처리 중 오류 발생: {str(e)}", "ERROR")
-            import traceback
-            traceback.print_exc()
+        txt_files = sorted(
+            f for f in os.listdir(data_dir)
+            if f.endswith('.txt')
+        )
+        if not txt_files:
+            log(f"{split} split에서 .txt를 찾을 수 없습니다.", "WARNING")
             continue
-        
+
+        log(f"{split} split 영상 수: {len(txt_files)}")
+
+        generated_chunks = []
+
+        for vid_idx, txt_fname in enumerate(txt_files, 1):
+            video_path = os.path.join(data_dir, txt_fname)
+            video_stem = Path(txt_fname).stem
+            video_prefix = os.path.join(data_dir, f'sdd_coupa_{split}_{video_stem}')
+
+            log_section(f"{split.upper()} :: {video_stem} ({vid_idx}/{len(txt_files)})")
+            log(f"입력 파일: {video_path}")
+            log(f"출력 파일 prefix: {video_prefix}_partXXX.pt")
+
+            try:
+                chunk_paths = preprocess_and_save(
+                    video_path,
+                    video_prefix,
+                    min_ped=0,
+                    chunk_size=CHUNK_SIZE
+                )
+                if chunk_paths:
+                    generated_chunks.extend(chunk_paths)
+            except Exception as e:
+                log(f"{video_stem} 전처리 중 오류: {str(e)}", "ERROR")
+                import traceback
+                traceback.print_exc()
+
         split_elapsed = time.time() - split_start_time
         log(f"\n{split.upper()} Split 완료! (총 소요 시간: {split_elapsed:.2f}초)", "SUCCESS")
     
@@ -194,14 +226,14 @@ def main():
     
     total_size = 0
     for split in splits:
-        output_path = os.path.join(base_dir, split, f'sdd_coupa_{split}_threat.pt')
-        if os.path.exists(output_path):
-            size_mb = os.path.getsize(output_path) / (1024**2)
-            total_size += size_mb
-            log(f"  ✓ {output_path}")
-            log(f"    크기: {size_mb:.2f} MB")
-        else:
-            log(f"  ✗ {output_path} (생성되지 않음)", "WARNING")
+        split_dir = os.path.join(base_dir, split)
+        for root, _, files in os.walk(split_dir):
+            for fname in sorted(f for f in files if f.endswith('.pt')):
+                path = os.path.join(root, fname)
+                size_mb = os.path.getsize(path) / (1024**2)
+                total_size += size_mb
+                log(f"  ✓ {path}")
+                log(f"    크기: {size_mb:.2f} MB")
     
     log(f"\n총 저장된 데이터 크기: {total_size:.2f} MB ({total_size/1024:.2f} GB)")
     log_section("모든 작업 완료!")
