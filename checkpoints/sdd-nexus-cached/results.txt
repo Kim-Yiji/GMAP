@@ -1,0 +1,4 @@
+Evaluating model: sdd-nexus-cached
+ADE: 0.5753254514304847, FDE: 0.8812659447323378
+Evaluating model: sdd-nexus-cached
+ADE: 0.5754237767608142, FDE: 0.8815217887270268

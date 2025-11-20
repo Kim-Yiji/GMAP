@@ -43,12 +43,25 @@ def poly_fit(traj, traj_len, threshold):
     Output:
     - int: 1 -> Non Linear 0-> Linear
     """
+    # 궤적이 너무 짧으면 선형으로 간주
+    if traj_len < 3:
+        return 0.0
+        
     t = np.linspace(0, traj_len - 1, traj_len)
-    res_x = np.polyfit(t, traj[0, -traj_len:], 2, full=True)[1]
-    res_y = np.polyfit(t, traj[1, -traj_len:], 2, full=True)[1]
-    if res_x + res_y >= threshold:
-        return 1.0
-    else:
+    try:
+        res_x = np.polyfit(t, traj[0, -traj_len:], 2, full=True)[1]
+        res_y = np.polyfit(t, traj[1, -traj_len:], 2, full=True)[1]
+        
+        # res가 빈 배열인 경우 처리
+        if len(res_x) == 0 or len(res_y) == 0:
+            return 0.0
+            
+        if res_x[0] + res_y[0] >= threshold:
+            return 1.0
+        else:
+            return 0.0
+    except:
+        # 오류 발생 시 선형으로 간주
         return 0.0
 
 
@@ -69,7 +82,7 @@ def read_file(_path, delim='\t'):
 class TrajectoryDataset(Dataset):
     """Dataloder for the Trajectory datasets"""
 
-    def __init__(self, data_dir, obs_len=8, pred_len=8, skip=1, threshold=0.002, min_ped=1, delim='\t'):
+    def __init__(self, data_dir, obs_len=8, pred_len=12, skip=1, threshold=0.002, min_ped=0, delim='\t'):
         """
         Args:
         - data_dir: Directory containing dataset files in the format
@@ -93,7 +106,8 @@ class TrajectoryDataset(Dataset):
         self.delim = delim
 
         all_files = sorted(os.listdir(self.data_dir))
-        all_files = [os.path.join(self.data_dir, _path) for _path in all_files]
+        # Only process plain text trajectory files
+        all_files = [os.path.join(self.data_dir, _path) for _path in all_files if _path.endswith('.txt')]
         num_peds_in_seq = []
         seq_list = []
         seq_list_rel = []
@@ -121,12 +135,25 @@ class TrajectoryDataset(Dataset):
                 for _, ped_id in enumerate(peds_in_curr_seq):
                     curr_ped_seq = curr_seq_data[curr_seq_data[:, 1] == ped_id, :]
                     curr_ped_seq = np.around(curr_ped_seq, decimals=4)
+                    
+                    ## 스탠포드 데이터로 추가된 부분
+                    # Limit sequence length to prevent memory issues
+                    max_seq_len = 100  # Maximum sequence length
+                    if len(curr_ped_seq) > max_seq_len:
+                        curr_ped_seq = curr_ped_seq[:max_seq_len]
+                    
                     pad_front = frames.index(curr_ped_seq[0, 0]) - idx
                     pad_end = frames.index(curr_ped_seq[-1, 0]) - idx + 1
                     if pad_end - pad_front != self.seq_len:
                         continue
                     curr_ped_seq = np.transpose(curr_ped_seq[:, 2:])
-
+                    
+                    ## 스탠포드 데이터로 추가된 부분
+                    # 20프레임 이상이면 20프레임만 사용
+                    if curr_ped_seq.shape[1] >= self.seq_len:
+                        curr_ped_seq = curr_ped_seq[:, :self.seq_len]
+                    else:
+                        continue
                     # Make coordinates relative
                     rel_curr_ped_seq = np.zeros(curr_ped_seq.shape)
                     rel_curr_ped_seq[:, 1:] = curr_ped_seq[:, 1:] - curr_ped_seq[:, :-1]
@@ -183,6 +210,52 @@ class TrajectoryDataset(Dataset):
             self.A_pred.append(a_.clone())
             pbar.update(1)
         pbar.close()
+
+    def __len__(self):
+        return self.num_seq
+
+    def __getitem__(self, index):
+        start, end = self.seq_start_end[index]
+
+        out = [
+            self.obs_traj[start:end, :], self.pred_traj[start:end, :],
+            self.obs_traj_rel[start:end, :], self.pred_traj_rel[start:end, :],
+            self.non_linear_ped[start:end], self.loss_mask[start:end, :],
+            self.V_obs[index], self.A_obs[index],
+            self.V_pred[index], self.A_pred[index]
+        ]
+        return out
+
+
+class CachedTrajectoryDataset(Dataset):
+    """Dataloader for preprocessed .pt cache files"""
+
+    def __init__(self, cache_file_path):
+        """
+        Args:
+        - cache_file_path: Path to the preprocessed .pt cache file
+        """
+        super(CachedTrajectoryDataset, self).__init__()
+        
+        print(f"Loading cached data from {cache_file_path}...")
+        cached_data = torch.load(cache_file_path, map_location='cpu')
+        
+        # Load all required tensors and lists
+        self.obs_traj = cached_data['obs_traj']
+        self.pred_traj = cached_data['pred_traj']
+        self.obs_traj_rel = cached_data['obs_traj_rel']
+        self.pred_traj_rel = cached_data['pred_traj_rel']
+        self.loss_mask = cached_data['loss_mask']
+        self.non_linear_ped = cached_data['non_linear_ped']
+        self.seq_start_end = cached_data['seq_start_end']
+        self.V_obs = cached_data['V_obs']
+        self.A_obs = cached_data['A_obs']
+        self.V_pred = cached_data['V_pred']
+        self.A_pred = cached_data['A_pred']
+        
+        self.num_seq = len(self.seq_start_end)
+        
+        print(f"Loaded {self.num_seq} sequences with {len(self.obs_traj)} total pedestrian trajectories")
 
     def __len__(self):
         return self.num_seq

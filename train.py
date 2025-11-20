@@ -5,7 +5,7 @@ import torch
 
 from tqdm import tqdm
 from model import *
-from utils import TrajectoryDataset, data_sampler
+from utils import TrajectoryDataset, CachedTrajectoryDataset, data_sampler
 
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
@@ -38,19 +38,47 @@ parser.add_argument('--lr_sh_rate', type=int, default=32, help='Number of steps 
 parser.add_argument('--use_lrschd', action="store_true", default=False, help='Use lr rate scheduler')
 parser.add_argument('--tag', default='tag', help='Personal tag for the model')
 parser.add_argument('--visualize', action="store_true", default=False, help='Visualize trajectories')
+parser.add_argument('--use_cache', action="store_true", default=False, help='Use preprocessed .pt cache files instead of raw text files')
+parser.add_argument('--train_cache', default=None, help='Path to train cache file (default: auto-detect in dataset_path/train/)')
+parser.add_argument('--val_cache', default=None, help='Path to val cache file (default: auto-detect in dataset_path/val/)')
 
 args = parser.parse_args()
 
 # Data preparation
 # Batch size set to 1 because vertices vary by humans in each scene sequence.
 # Use mini batch working like batch.
-dataset_path = './datasets/' + args.dataset + '/'
+dataset_path = './datasets_pedestrian/' + args.dataset + '/'
 checkpoint_dir = './checkpoints/' + args.tag + '/'
 
-train_dataset = TrajectoryDataset(dataset_path + 'train/', obs_len=args.obs_seq_len, pred_len=args.pred_seq_len, skip=1)
-train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=0, pin_memory=True)
+if args.use_cache:
+    # Use preprocessed .pt cache files
+    import glob
+    
+    # Auto-detect cache files if not specified
+    if args.train_cache is None:
+        train_cache_files = glob.glob(dataset_path + 'train/*.pt')
+        if train_cache_files:
+            args.train_cache = train_cache_files[0]
+            print(f"Auto-detected train cache: {args.train_cache}")
+        else:
+            raise ValueError(f"No .pt cache file found in {dataset_path}train/")
+    
+    if args.val_cache is None:
+        val_cache_files = glob.glob(dataset_path + 'val/*.pt')
+        if val_cache_files:
+            args.val_cache = val_cache_files[0]
+            print(f"Auto-detected val cache: {args.val_cache}")
+        else:
+            raise ValueError(f"No .pt cache file found in {dataset_path}val/")
+    
+    train_dataset = CachedTrajectoryDataset(args.train_cache)
+    val_dataset = CachedTrajectoryDataset(args.val_cache)
+else:
+    # Use raw text files (original behavior)
+    train_dataset = TrajectoryDataset(dataset_path + 'train/', obs_len=args.obs_seq_len, pred_len=args.pred_seq_len, skip=1)
+    val_dataset = TrajectoryDataset(dataset_path + 'val/', obs_len=args.obs_seq_len, pred_len=args.pred_seq_len, skip=1)
 
-val_dataset = TrajectoryDataset(dataset_path + 'val/', obs_len=args.obs_seq_len, pred_len=args.pred_seq_len, skip=1)
+train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=0, pin_memory=True)
 val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False, num_workers=0, pin_memory=True)
 
 # Model preparation
@@ -71,7 +99,11 @@ with open(checkpoint_dir + 'args.pkl', 'wb') as f:
 
 writer = SummaryWriter(checkpoint_dir)
 if args.visualize:
-    from utils import data_visualizer
+    try:
+        from utils.visualizer import data_visualizer
+    except ImportError:
+        print("Warning: Visualizer not available, disabling visualization")
+        args.visualize = False
 metrics = {'train_loss': [], 'val_loss': []}
 constant_metrics = {'min_val_epoch': -1, 'min_val_loss': 1e10}
 
@@ -84,7 +116,7 @@ def train(epoch):
 
     progressbar = tqdm(range(loader_len))
     progressbar.set_description('Train Epoch: {0} Loss: {1:.8f}'.format(epoch, 0))
-
+    skipped_batches = 0
     for batch_idx, batch in enumerate(train_loader):
         # Sum gradients till idx reach to batch_size
         if batch_idx % args.batch_size == 0:
@@ -101,22 +133,42 @@ def train(epoch):
         V_pred, _ = model(V_obs_, A_obs)
         V_pred = V_pred.permute(0, 2, 3, 1)
 
-        loss = multivariate_loss(V_pred, V_tr, training=True)
+        # 디버그: 텐서 차원 확인
+        #print(f"DEBUG: V_pred.shape = {V_pred.shape}")
+        #print(f"DEBUG: V_tr.shape = {V_tr.shape}")
+        try:
+            loss = multivariate_loss(V_pred, V_tr, training=True)
+        except ValueError as err:
+            skipped_batches += 1
+            progressbar.write(f"[Epoch {epoch}] Skipping train batch {batch_idx}: {err}")
+            continue
+
+        # Skip batches with extremely large loss to prevent gradient explosion
+        if loss.item() > 1000.0:
+            skipped_batches += 1
+            progressbar.write(f"[Epoch {epoch}] Skipping train batch {batch_idx}: Loss too large ({loss.item():.2e})")
+            optimizer.zero_grad()
+            continue
+        
         loss.backward()
         loss_batch += loss.item()
 
         if batch_idx % args.batch_size + 1 == args.batch_size or batch_idx + 1 == loader_len:
-            if args.clip_grad is not None:
-                torch.nn.utils.clip_grad_norm_(model.parameters(), args.clip_grad)
+            # Always clip gradients to prevent explosion
+            clip_value = args.clip_grad if args.clip_grad is not None else 1.0
+            torch.nn.utils.clip_grad_norm_(model.parameters(), clip_value)
             optimizer.step()
 
             iter_idx = epoch * loader_len + batch_idx
-            writer.add_scalar('Loss/Train_V', (loss_batch / batch_idx), iter_idx)
+            avg_train_loss = loss_batch / (batch_idx + 1)
+            writer.add_scalar('Loss/Train_V', avg_train_loss, iter_idx)
 
-        progressbar.set_description('Train Epoch: {0} Loss: {1:.8f}'.format(epoch, loss.item() / args.batch_size))
+        progressbar.set_description('Train Epoch: {0} Loss: {1:.6f}'.format(epoch, loss.item()))
         progressbar.update(1)
 
     progressbar.close()
+    if skipped_batches:
+        print(f"[Epoch {epoch}] Skipped {skipped_batches} training batches due to invalid loss.")
 
     metrics['train_loss'].append(loss_batch / loader_len)
 
@@ -129,6 +181,7 @@ def valid(epoch):
 
     progressbar = tqdm(range(loader_len))
     progressbar.set_description('Valid Epoch: {0} Loss: {1:.8f}'.format(epoch, 0))
+    skipped_batches = 0
 
     for batch_idx, batch in enumerate(val_loader):
         # sum gradients till idx reach to batch_size
@@ -142,7 +195,13 @@ def valid(epoch):
         V_pred, _ = model(V_obs_, A_obs)
         V_pred = V_pred.permute(0, 2, 3, 1)
 
-        loss = multivariate_loss(V_pred, V_tr)
+        try:
+            loss = multivariate_loss(V_pred, V_tr)
+        except ValueError as err:
+            skipped_batches += 1
+            progressbar.write(f"[Epoch {epoch}] Skipping valid batch {batch_idx}: {err}")
+            continue
+
         loss_batch += loss.item()
 
         if batch_idx % args.batch_size + 1 == args.batch_size or batch_idx + 1 == loader_len:
@@ -152,12 +211,15 @@ def valid(epoch):
                 writer.add_image('Valid_{0:04d}'.format(batch_idx), fig_img[:, :, :], epoch, dataformats='HWC')
 
             iter_idx = epoch * loader_len + batch_idx
-            writer.add_scalar('Loss/Valid_V', (loss_batch / batch_idx), iter_idx)
+            avg_val_loss = loss_batch / (batch_idx + 1)
+            writer.add_scalar('Loss/Valid_V', avg_val_loss, iter_idx)
 
-        progressbar.set_description('Valid Epoch: {0} Loss: {1:.8f}'.format(epoch, loss.item() / args.batch_size))
+        progressbar.set_description('Valid Epoch: {0} Loss: {1:.6f}'.format(epoch, loss.item()))
         progressbar.update(1)
 
     progressbar.close()
+    if skipped_batches:
+        print(f"[Epoch {epoch}] Skipped {skipped_batches} validation batches due to invalid loss.")
 
     metrics['val_loss'].append(loss_batch / loader_len)
 

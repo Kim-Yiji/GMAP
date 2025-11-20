@@ -1,0 +1,6 @@
+Evaluating model: sdd-coupa-cached
+ADE: 0.7666448294979443, FDE: 1.2294619640202027
+Evaluating model: sdd-coupa-cached
+ADE: 0.7660023990429552, FDE: 1.2289534079063669
+Evaluating model: sdd-coupa-cached
+ADE: 0.7656821457528947, FDE: 1.2280701138254095

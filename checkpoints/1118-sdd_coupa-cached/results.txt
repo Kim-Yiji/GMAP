@@ -1,0 +1,2 @@
+Evaluating model: 1118-sdd_coupa-cached
+ADE: 1.5245918399665566, FDE: 1.3311840533399584

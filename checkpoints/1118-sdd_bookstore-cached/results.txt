@@ -1,0 +1,2 @@
+Evaluating model: 1118-sdd_bookstore-cached
+ADE: 1.8458045190291348, FDE: 1.9542335462276061

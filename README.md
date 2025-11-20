@@ -89,6 +89,35 @@ python test.py --tag social-dmrgcn-zara1-experiment_tp4_de80
 python test.py --tag social-dmrgcn-zara2-experiment_tp4_de80
 ```
 
+#### Using Preprocessed Cache Files (Modified)
+To use preprocessed `.pt` cache files instead of raw text files:
+```bash
+python test.py --tag <experiment_tag> --use_cache \
+  --test_cache <path_to_test_cache_file> \
+  --n_samples 20
+
+# Example with SDD bookstore dataset
+python test.py --tag sdd-bookstore-cached --use_cache \
+  --test_cache /raid/guest/SDD_2beon/sdd_bookstore/test/preproc_cache_obs8_pred12_skip1.pt \
+  --n_samples 20
+```
+
+**test.py Modifications Summary:**
+- **Added `--use_cache` flag**: Enable use of preprocessed `.pt` cache files
+- **Added `--test_cache` argument**: Path to test cache file (auto-detected if not specified)
+- **Data loading logic** (lines 34-51): Conditional loading of `CachedTrajectoryDataset` or `TrajectoryDataset` based on `--use_cache` flag
+- **Dimension handling** (lines 89-108): 
+  - Fixed dimension mismatch issue: `generate_statistics_matrices` expects 4D tensor `(batch, num_peds, seq_len, 5)`
+  - Convert `V_pred` from `(seq_len, num_peds, 5)` to `(1, num_peds, seq_len, 5)` before calling `generate_statistics_matrices`
+  - Restore batch dimension after processing
+  - Adjust `V_pred_sample` dimension order: `(KSTEPS, num_peds, seq_len, 2)` → `(KSTEPS, seq_len, num_peds, 2)` to match original code
+- **Trajectory conversion** (lines 110-123):
+  - Use `V_obs_traj[-1, :, :]` to get last observation timestep coordinates
+  - Properly broadcast dimensions for adding relative trajectories to absolute coordinates
+- **Dataset path**: Changed from `./datasets/` to `./datasets_pedestrian/` to match training setup
+
+**Note**: All original test logic remains unchanged. Only cache file support and dimension handling fixes were added.
+
 
 ## 📖 Citation
 If you find this code useful for your research, please cite our trajectory prediction papers :)
