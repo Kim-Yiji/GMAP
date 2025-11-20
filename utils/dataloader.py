@@ -8,6 +8,8 @@ import numpy as np
 from tqdm import tqdm
 from torch.utils.data import Dataset
 
+from .threat_score import compute_threat_score_batch
+
 
 def anorm(p1, p2):
     NORM = math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
@@ -24,14 +26,37 @@ def seq_to_graph(seq, seq_rel):
     A_dist = torch.zeros((seq_len, num_nodes, num_nodes), dtype=torch.float)
     A_disp = torch.zeros((seq_len, num_nodes, num_nodes), dtype=torch.float)
 
+    # 기본 distance / relative displacement relation 그래프 생성
     for t in range(seq_len):
         for n in range(num_nodes):
             V[t, n, :] = seq_rel[n, :, t]
             for l in range(n + 1, num_nodes):
+                # distance relation (A_dist)
                 A_dist[t, n, l] = A_dist[t, l, n] = anorm(seq[n, :, t], seq[l, :, t])
+                # relative displacement relation (A_disp)
                 A_disp[t, n, l] = A_disp[t, l, n] = anorm(seq_rel[n, :, t], seq_rel[l, :, t])
 
-    return V, torch.stack([A_disp, A_dist], dim=0)
+    # ------------------------------------------------------------
+    # Threat relation 그래프 생성
+    # ------------------------------------------------------------
+    # seq: (num_nodes, 2, seq_len), seq_rel: (num_nodes, 2, seq_len)
+    # compute_threat_score_batch는 T_ij (pp/po 모두)를 [0, 1] 범위로 반환
+    # 여기서 threat score를 adjacency weight로 직접 사용한다.
+    threat_score, _ = compute_threat_score_batch(
+        obs_traj=seq,
+        obs_traj_rel=seq_rel,
+        obstacle_sizes=None,
+        weights=None,
+        tau=0.15,
+        beta=0.5,
+        pedestrian_mask=None,
+        object_labels=None,
+    )
+    # threat_score: (num_nodes, num_nodes, seq_len) → (seq_len, num_nodes, num_nodes)
+    A_threat = threat_score.permute(2, 0, 1).contiguous()
+
+    # relation 차원: [A_disp, A_dist, A_threat]
+    return V, torch.stack([A_disp, A_dist, A_threat], dim=0)
 
 
 def poly_fit(traj, traj_len, threshold):
@@ -43,12 +68,25 @@ def poly_fit(traj, traj_len, threshold):
     Output:
     - int: 1 -> Non Linear 0-> Linear
     """
+    # 궤적이 너무 짧으면 선형으로 간주
+    if traj_len < 3:
+        return 0.0
+        
     t = np.linspace(0, traj_len - 1, traj_len)
-    res_x = np.polyfit(t, traj[0, -traj_len:], 2, full=True)[1]
-    res_y = np.polyfit(t, traj[1, -traj_len:], 2, full=True)[1]
-    if res_x + res_y >= threshold:
-        return 1.0
-    else:
+    try:
+        res_x = np.polyfit(t, traj[0, -traj_len:], 2, full=True)[1]
+        res_y = np.polyfit(t, traj[1, -traj_len:], 2, full=True)[1]
+        
+        # res가 빈 배열인 경우 처리
+        if len(res_x) == 0 or len(res_y) == 0:
+            return 0.0
+            
+        if res_x[0] + res_y[0] >= threshold:
+            return 1.0
+        else:
+            return 0.0
+    except:
+        # 오류 발생 시 선형으로 간주
         return 0.0
 
 
@@ -69,7 +107,7 @@ def read_file(_path, delim='\t'):
 class TrajectoryDataset(Dataset):
     """Dataloder for the Trajectory datasets"""
 
-    def __init__(self, data_dir, obs_len=8, pred_len=8, skip=1, threshold=0.002, min_ped=1, delim='\t'):
+    def __init__(self, data_dir, obs_len=8, pred_len=12, skip=1, threshold=0.002, min_ped=0, delim='\t'):
         """
         Args:
         - data_dir: Directory containing dataset files in the format
@@ -93,7 +131,8 @@ class TrajectoryDataset(Dataset):
         self.delim = delim
 
         all_files = sorted(os.listdir(self.data_dir))
-        all_files = [os.path.join(self.data_dir, _path) for _path in all_files]
+        # Only process plain text trajectory files
+        all_files = [os.path.join(self.data_dir, _path) for _path in all_files if _path.endswith('.txt')]
         num_peds_in_seq = []
         seq_list = []
         seq_list_rel = []
@@ -121,12 +160,25 @@ class TrajectoryDataset(Dataset):
                 for _, ped_id in enumerate(peds_in_curr_seq):
                     curr_ped_seq = curr_seq_data[curr_seq_data[:, 1] == ped_id, :]
                     curr_ped_seq = np.around(curr_ped_seq, decimals=4)
+                    
+                    ## 스탠포드 데이터로 추가된 부분
+                    # Limit sequence length to prevent memory issues
+                    max_seq_len = 100  # Maximum sequence length
+                    if len(curr_ped_seq) > max_seq_len:
+                        curr_ped_seq = curr_ped_seq[:max_seq_len]
+                    
                     pad_front = frames.index(curr_ped_seq[0, 0]) - idx
                     pad_end = frames.index(curr_ped_seq[-1, 0]) - idx + 1
                     if pad_end - pad_front != self.seq_len:
                         continue
                     curr_ped_seq = np.transpose(curr_ped_seq[:, 2:])
-
+                    
+                    ## 스탠포드 데이터로 추가된 부분
+                    # 20프레임 이상이면 20프레임만 사용
+                    if curr_ped_seq.shape[1] >= self.seq_len:
+                        curr_ped_seq = curr_ped_seq[:, :self.seq_len]
+                    else:
+                        continue
                     # Make coordinates relative
                     rel_curr_ped_seq = np.zeros(curr_ped_seq.shape)
                     rel_curr_ped_seq[:, 1:] = curr_ped_seq[:, 1:] - curr_ped_seq[:, :-1]
@@ -183,6 +235,72 @@ class TrajectoryDataset(Dataset):
             self.A_pred.append(a_.clone())
             pbar.update(1)
         pbar.close()
+
+    def __len__(self):
+        return self.num_seq
+
+    def __getitem__(self, index):
+        start, end = self.seq_start_end[index]
+
+        out = [
+            self.obs_traj[start:end, :], self.pred_traj[start:end, :],
+            self.obs_traj_rel[start:end, :], self.pred_traj_rel[start:end, :],
+            self.non_linear_ped[start:end], self.loss_mask[start:end, :],
+            self.V_obs[index], self.A_obs[index],
+            self.V_pred[index], self.A_pred[index]
+        ]
+        return out
+
+
+class CachedTrajectoryDataset(Dataset):
+    """Dataloader for preprocessed .pt cache files"""
+
+    def __init__(self, cache_file_path):
+        """
+        Args:
+        - cache_file_path: Path to the preprocessed .pt cache file
+        """
+        super(CachedTrajectoryDataset, self).__init__()
+        
+        print(f"Loading cached data from {cache_file_path}...")
+        cached_data = torch.load(cache_file_path, map_location='cpu')
+        
+        # Load all required tensors and lists
+        self.obs_traj = cached_data['obs_traj']
+        self.pred_traj = cached_data['pred_traj']
+        self.obs_traj_rel = cached_data['obs_traj_rel']
+        self.pred_traj_rel = cached_data['pred_traj_rel']
+        self.loss_mask = cached_data['loss_mask']
+        self.non_linear_ped = cached_data['non_linear_ped']
+        self.seq_start_end = cached_data['seq_start_end']
+        self.V_obs = cached_data['V_obs']
+        self.A_obs = cached_data['A_obs']
+        self.V_pred = cached_data['V_pred']
+        self.A_pred = cached_data['A_pred']
+        
+        self.num_seq = len(self.seq_start_end)
+        
+        print(f"Loaded {self.num_seq} sequences with {len(self.obs_traj)} total pedestrian trajectories")
+
+        # ------------------------------------------------------------
+        # Threat relation을 포함하는 최신 그래프 구조로 재계산
+        # (기존 캐시의 A_obs/A_pred는 distance/disp 2개 relation만 포함할 수 있으므로)
+        # ------------------------------------------------------------
+        self.V_obs = []
+        self.A_obs = []
+        self.V_pred = []
+        self.A_pred = []
+
+        for ss in range(len(self.seq_start_end)):
+            start, end = self.seq_start_end[ss]
+            # 관찰 구간 그래프 (obs_len 프레임만 사용)
+            v_, a_ = seq_to_graph(self.obs_traj[start:end, :], self.obs_traj_rel[start:end, :])
+            self.V_obs.append(v_.clone())
+            self.A_obs.append(a_.clone())
+            # 예측 구간 그래프 (pred_len 프레임만 사용)
+            v_, a_ = seq_to_graph(self.pred_traj[start:end, :], self.pred_traj_rel[start:end, :])
+            self.V_pred.append(v_.clone())
+            self.A_pred.append(a_.clone())
 
     def __len__(self):
         return self.num_seq

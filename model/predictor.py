@@ -60,16 +60,21 @@ class social_dmrgcn(nn.Module):
         super().__init__()
         self.n_stgcn = n_stgcn
         self.n_tpcnn = n_tpcnn
-
-        # Disentangling Scale Set [A_disp, A_dist]
-        split = [[0, 1/4, 2/4, 3/4, 1],
-                 [0, 1/2, 1, 2, 4]]
+        # Disentangling Scale Set [A_disp, A_dist, A_threat]
+        # - A_disp : 상대 변위 기반
+        # - A_dist : 거리 기반
+        # - A_threat : Threat Score 기반 (T_ij \in [0, 1])
+        split = [
+            [0, 1/4, 2/4, 3/4, 1],      # A_disp
+            [0, 1/2, 1, 2, 4],          # A_dist
+            [0, 1/4, 2/4, 3/4, 1],      # A_threat (Threat Score in [0, 1])
+        ]
 
         # GCN Block
         self.st_dmrgcns = nn.ModuleList()
-        self.st_dmrgcns.append(st_dmrgcn(input_feat, output_feat, (kernel_size, seq_len), split=split, relation=2))
+        self.st_dmrgcns.append(st_dmrgcn(input_feat, output_feat, (kernel_size, seq_len), split=split, relation=3))
         for j in range(1, self.n_stgcn):
-            self.st_dmrgcns.append(st_dmrgcn(output_feat, output_feat, (kernel_size, seq_len), split=split, relation=2))
+            self.st_dmrgcns.append(st_dmrgcn(output_feat, output_feat, (kernel_size, seq_len), split=split, relation=3))
 
         # TPCNN Block
         self.tpcnns = nn.ModuleList()

@@ -5,7 +5,7 @@ import torch
 
 from tqdm import tqdm
 from model import *
-from utils import TrajectoryDataset, data_sampler
+from utils import TrajectoryDataset, CachedTrajectoryDataset, SDDTrajectoryDataset, data_sampler
 
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
@@ -27,7 +27,9 @@ parser.add_argument('--kernel_size', type=int, default=3)
 # Data specific parameters
 parser.add_argument('--obs_seq_len', type=int, default=8)
 parser.add_argument('--pred_seq_len', type=int, default=12)
-parser.add_argument('--dataset', default='eth', help='Dataset name(eth,hotel,univ,zara1,zara2)')
+parser.add_argument('--dataset', default='eth', help='Dataset name(eth,hotel,univ,zara1,zara2 or SDD scene name)')
+parser.add_argument('--dataset_type', default='ethucy', choices=['ethucy', 'sdd'],
+                    help='Data format type: ethucy (original) or sdd (Stanford Drone Dataset)')
 
 # Training specific parameters
 parser.add_argument('--batch_size', type=int, default=128, help='Mini batch size')
@@ -38,19 +40,80 @@ parser.add_argument('--lr_sh_rate', type=int, default=32, help='Number of steps 
 parser.add_argument('--use_lrschd', action="store_true", default=False, help='Use lr rate scheduler')
 parser.add_argument('--tag', default='tag', help='Personal tag for the model')
 parser.add_argument('--visualize', action="store_true", default=False, help='Visualize trajectories')
+parser.add_argument('--use_cache', action="store_true", default=False, help='Use preprocessed .pt cache files instead of raw text files')
+parser.add_argument('--train_cache', default=None, help='Path to train cache file (default: auto-detect in dataset_path/train/)')
+parser.add_argument('--val_cache', default=None, help='Path to val cache file (default: auto-detect in dataset_path/val/)')
 
 args = parser.parse_args()
 
 # Data preparation
 # Batch size set to 1 because vertices vary by humans in each scene sequence.
 # Use mini batch working like batch.
-dataset_path = './datasets/' + args.dataset + '/'
 checkpoint_dir = './checkpoints/' + args.tag + '/'
 
-train_dataset = TrajectoryDataset(dataset_path + 'train/', obs_len=args.obs_seq_len, pred_len=args.pred_seq_len, skip=1)
-train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=0, pin_memory=True)
+if args.dataset_type == 'sdd':
+    # SDD_datasets의 새로운 구조 사용
+    sdd_base = '/raid/guest/OATMeal_Queens/SDD_datasets'
+    scene_dir = os.path.join(sdd_base, f'sdd_{args.dataset}')
+    
+    # .pt 파일이 있으면 캐시 사용
+    train_pt = os.path.join(scene_dir, 'train.pt')
+    val_pt = os.path.join(scene_dir, 'val.pt')
+    
+    if os.path.exists(train_pt) and os.path.exists(val_pt):
+        print(f"Using preprocessed .pt files:")
+        print(f"  Train: {train_pt}")
+        print(f"  Val: {val_pt}")
+        train_dataset = CachedTrajectoryDataset(train_pt)
+        val_dataset = CachedTrajectoryDataset(val_pt)
+    else:
+        # .pt 파일이 없으면 CSV 파일에서 직접 로드
+        train_dir = os.path.join(scene_dir, 'train')
+        val_dir = os.path.join(scene_dir, 'val')
+        
+        if not os.path.isdir(train_dir):
+            raise FileNotFoundError(f"SDD train directory not found: {train_dir}")
+        if not os.path.isdir(val_dir):
+            raise FileNotFoundError(f"SDD val directory not found: {val_dir}")
+        
+        print(f"Using SDD CSV files (will preprocess on-the-fly):")
+        print(f"  Train: {train_dir}")
+        print(f"  Val: {val_dir}")
+        train_dataset = SDDTrajectoryDataset(train_dir, obs_len=args.obs_seq_len, pred_len=args.pred_seq_len)
+        val_dataset = SDDTrajectoryDataset(val_dir, obs_len=args.obs_seq_len, pred_len=args.pred_seq_len)
+else:
+    # ETH/UCY 형식 (기존 동작)
+    dataset_path = './datasets_pedestrian/' + args.dataset + '/'
 
-val_dataset = TrajectoryDataset(dataset_path + 'val/', obs_len=args.obs_seq_len, pred_len=args.pred_seq_len, skip=1)
+    if args.use_cache:
+        # Use preprocessed .pt cache files
+        import glob
+        
+        # Auto-detect cache files if not specified
+        if args.train_cache is None:
+            train_cache_files = glob.glob(dataset_path + 'train/*.pt')
+            if train_cache_files:
+                args.train_cache = train_cache_files[0]
+                print(f"Auto-detected train cache: {args.train_cache}")
+            else:
+                raise ValueError(f"No .pt cache file found in {dataset_path}train/")
+        
+        if args.val_cache is None:
+            val_cache_files = glob.glob(dataset_path + 'val/*.pt')
+            if val_cache_files:
+                args.val_cache = val_cache_files[0]
+                print(f"Auto-detected val cache: {args.val_cache}")
+            else:
+                raise ValueError(f"No .pt cache file found in {dataset_path}val/")
+        
+        train_dataset = CachedTrajectoryDataset(args.train_cache)
+        val_dataset = CachedTrajectoryDataset(args.val_cache)
+    else:
+        # Use raw text files (original behavior)
+        train_dataset = TrajectoryDataset(dataset_path + 'train/', obs_len=args.obs_seq_len, pred_len=args.pred_seq_len, skip=1)
+        val_dataset = TrajectoryDataset(dataset_path + 'val/', obs_len=args.obs_seq_len, pred_len=args.pred_seq_len, skip=1)
+
+train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=0, pin_memory=True)
 val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False, num_workers=0, pin_memory=True)
 
 # Model preparation
@@ -71,7 +134,11 @@ with open(checkpoint_dir + 'args.pkl', 'wb') as f:
 
 writer = SummaryWriter(checkpoint_dir)
 if args.visualize:
-    from utils import data_visualizer
+    try:
+        from utils.visualizer import data_visualizer
+    except ImportError:
+        print("Warning: Visualizer not available, disabling visualization")
+        args.visualize = False
 metrics = {'train_loss': [], 'val_loss': []}
 constant_metrics = {'min_val_epoch': -1, 'min_val_loss': 1e10}
 
@@ -101,6 +168,9 @@ def train(epoch):
         V_pred, _ = model(V_obs_, A_obs)
         V_pred = V_pred.permute(0, 2, 3, 1)
 
+        # 디버그: 텐서 차원 확인
+        #print(f"DEBUG: V_pred.shape = {V_pred.shape}")
+        #print(f"DEBUG: V_tr.shape = {V_tr.shape}")
         loss = multivariate_loss(V_pred, V_tr, training=True)
         loss.backward()
         loss_batch += loss.item()
@@ -111,7 +181,9 @@ def train(epoch):
             optimizer.step()
 
             iter_idx = epoch * loader_len + batch_idx
-            writer.add_scalar('Loss/Train_V', (loss_batch / batch_idx), iter_idx)
+            # batch_idx가 0일 때는 평균을 계산할 수 없으므로 로그만 스킵
+            if batch_idx > 0:
+                writer.add_scalar('Loss/Train_V', (loss_batch / batch_idx), iter_idx)
 
         progressbar.set_description('Train Epoch: {0} Loss: {1:.8f}'.format(epoch, loss.item() / args.batch_size))
         progressbar.update(1)
@@ -143,7 +215,11 @@ def valid(epoch):
         V_pred = V_pred.permute(0, 2, 3, 1)
 
         loss = multivariate_loss(V_pred, V_tr)
-        loss_batch += loss.item()
+        loss_value = loss.item()
+        # NaN 체크: NaN이면 0으로 대체
+        if torch.isnan(torch.tensor(loss_value)) or torch.isinf(torch.tensor(loss_value)):
+            loss_value = 0.0
+        loss_batch += loss_value
 
         if batch_idx % args.batch_size + 1 == args.batch_size or batch_idx + 1 == loader_len:
             # Visualize trajectories
@@ -152,9 +228,13 @@ def valid(epoch):
                 writer.add_image('Valid_{0:04d}'.format(batch_idx), fig_img[:, :, :], epoch, dataformats='HWC')
 
             iter_idx = epoch * loader_len + batch_idx
-            writer.add_scalar('Loss/Valid_V', (loss_batch / batch_idx), iter_idx)
+            if batch_idx > 0:
+                writer.add_scalar('Loss/Valid_V', (loss_batch / batch_idx), iter_idx)
 
-        progressbar.set_description('Valid Epoch: {0} Loss: {1:.8f}'.format(epoch, loss.item() / args.batch_size))
+        loss_display = loss.item()
+        if torch.isnan(torch.tensor(loss_display)) or torch.isinf(torch.tensor(loss_display)):
+            loss_display = 0.0
+        progressbar.set_description('Valid Epoch: {0} Loss: {1:.8f}'.format(epoch, loss_display / args.batch_size))
         progressbar.update(1)
 
     progressbar.close()

@@ -1,0 +1,4 @@
+Evaluating model: sdd-bookstore-cached
+ADE: 0.8825077906428425, FDE: 1.49646962821209
+Evaluating model: sdd-bookstore-cached
+ADE: 0.8824405925468121, FDE: 1.4966184899061814
