@@ -24,6 +24,62 @@ from .threat_score_computer import (
 from .video_utils import get_video_properties, load_video_frame
 
 
+def get_threat_score_color_continuous(threat_score: float, is_visible: bool = True) -> Tuple[int, int, int]:
+    """
+    Get color for threat score using continuous color interpolation.
+    
+    Uses smooth color gradient from green (low) → yellow → orange → red (high).
+    This eliminates abrupt color changes by interpolating between color stops.
+    
+    Args:
+        threat_score: Threat score in [0, 1] range
+        is_visible: Whether obstacle is in field of view (if False, returns grey)
+    
+    Returns:
+        BGR color tuple (B, G, R)
+    """
+    if not is_visible:
+        return (200, 200, 200)  # Bright grey for non-visible obstacles
+    
+    # Clamp threat score to [0, 1]
+    threat_score = max(0.0, min(1.0, threat_score))
+    
+    # Define color stops for smooth interpolation
+    # Format: (threat_score, (B, G, R))
+    color_stops = [
+        (0.0, (0, 150, 50)),      # Dark green (low threat)
+        (0.3, (0, 200, 50)),     # Bright green-yellow
+        (0.5, (0, 200, 200)),    # Yellow
+        (0.7, (0, 100, 255)),    # Orange
+        (1.0, (0, 0, 255)),      # Bright red (high threat)
+    ]
+    
+    # Find the two color stops to interpolate between
+    if threat_score <= color_stops[0][0]:
+        return color_stops[0][1]
+    if threat_score >= color_stops[-1][0]:
+        return color_stops[-1][1]
+    
+    # Find the interval
+    for i in range(len(color_stops) - 1):
+        score_low, color_low = color_stops[i]
+        score_high, color_high = color_stops[i + 1]
+        
+        if score_low <= threat_score <= score_high:
+            # Linear interpolation factor
+            t = (threat_score - score_low) / (score_high - score_low)
+            
+            # Interpolate each color channel
+            b = int(color_low[0] + (color_high[0] - color_low[0]) * t)
+            g = int(color_low[1] + (color_high[1] - color_low[1]) * t)
+            r = int(color_low[2] + (color_high[2] - color_low[2]) * t)
+            
+            return (b, g, r)
+    
+    # Fallback (shouldn't reach here)
+    return (0, 255, 0)  # Green
+
+
 def calculate_coordinate_transform(
     annotation_path: str,
     video_width: int,
@@ -173,19 +229,9 @@ def draw_threat_score_on_frame(
     # Prepare text
     score_text = f"ID:{obstacle_id} {threat_score:.2f}"
     
-    # Choose text color based on threat score (red = high threat, green = low threat)
-    # High threat (>= 0.7): Red
-    # Medium threat (0.4-0.7): Yellow/Orange
-    # Low threat (< 0.4): Green
-    if threat_score >= 0.7:
-        color = (0, 0, 255)  # Red in BGR
-        bg_color = (0, 0, 0)  # Black background
-    elif threat_score >= 0.4:
-        color = (0, 165, 255)  # Orange in BGR
-        bg_color = (0, 0, 0)  # Black background
-    else:
-        color = (0, 255, 0)  # Green in BGR
-        bg_color = (0, 0, 0)  # Black background
+    # Use continuous color interpolation for smooth transitions
+    color = get_threat_score_color_continuous(threat_score, is_visible=True)
+    bg_color = (0, 0, 0)  # Black background
     
     # Calculate text size
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -335,7 +381,8 @@ def draw_graph_edge(
     obstacle_position: Tuple[float, float],
     threat_score: float,
     alpha: float = 0.4,
-    coord_transform: Optional[Tuple[float, float, float, float]] = None
+    coord_transform: Optional[Tuple[float, float, float, float]] = None,
+    is_visible: bool = True
 ) -> np.ndarray:
     """
     Draw a translucent edge (line) between target and obstacle representing threat score.
@@ -371,18 +418,8 @@ def draw_graph_edge(
     # Make edges thinner: 1-3 pixels based on threat score
     thickness = max(1, int(1 + threat_score * 2))
     
-    # Determine line color based on threat score
-    # High threat (>= 0.7): Red
-    # Medium threat (0.4-0.7): Orange/Yellow
-    # Low threat (< 0.4): Green
-    if threat_score >= 0.7:
-        color = (0, 0, 255)  # Red in BGR
-    elif threat_score >= 0.4:
-        ratio = (threat_score - 0.4) / 0.3
-        color = (0, int(255 * (1 - ratio)), 255)  # Yellow to Orange
-    else:
-        ratio = threat_score / 0.4
-        color = (0, 255, int(255 * ratio))  # Green to Yellow
+    # Use continuous color interpolation for smooth transitions
+    color = get_threat_score_color_continuous(threat_score, is_visible)
     
     # Create overlay for alpha blending
     overlay = frame_copy.copy()
@@ -449,7 +486,8 @@ def draw_obstacle_node(
     threat_score: float,
     scale: float = 1.0,
     coord_transform: Optional[Tuple[float, float, float, float]] = None,
-    alpha: float = 0.5
+    alpha: float = 0.5,
+    is_visible: bool = True
 ) -> np.ndarray:
     """
     Draw a translucent node (circle) for an obstacle with its ID.
@@ -479,15 +517,8 @@ def draw_obstacle_node(
     x = int(round(pixel_x))
     y = int(round(pixel_y))
     
-    # Determine node color based on threat score (same as edge colors)
-    if threat_score >= 0.7:
-        node_color = (0, 0, 255)  # Red
-    elif threat_score >= 0.4:
-        ratio = (threat_score - 0.4) / 0.4
-        node_color = (0, int(255 * (1 - ratio)), 255)  # Yellow to Orange
-    else:
-        ratio = threat_score / 0.4
-        node_color = (0, 255, int(255 * ratio))  # Green to Yellow
+    # Use continuous color interpolation for smooth transitions (same as edge colors)
+    node_color = get_threat_score_color_continuous(threat_score, is_visible)
     
     # Make nodes smaller: radius 4-8 pixels based on threat score
     node_radius = int(max(4, int(4 + threat_score * 4)) * scale)
@@ -558,7 +589,7 @@ def process_video_frame(
     frame_id: int,
     target_id: int,
     target_position: Tuple[float, float],
-    threat_scores: List[Tuple[int, float, Tuple[float, float], Tuple[float, float, float, float]]],
+    threat_scores: List[Tuple[int, float, Tuple[float, float], Tuple[float, float, float, float], bool]],
     draw_target: bool = True,
     draw_graph: bool = True,
     draw_edges: bool = True,
@@ -589,14 +620,15 @@ def process_video_frame(
     
     # Step 1: Draw graph edges first (so nodes appear on top)
     if draw_graph and draw_edges:
-        for obstacle_id, threat_score, position, features in threat_scores:
+        for obstacle_id, threat_score, position, features, is_visible in threat_scores:
             annotated_frame = draw_graph_edge(
                 annotated_frame,
                 target_position,
                 position,
                 threat_score,
                 alpha=0.4,  # Semi-transparent edges
-                coord_transform=coord_transform
+                coord_transform=coord_transform,
+                is_visible=is_visible
             )
     
     # Step 2: Draw target node (most prominent)
@@ -608,7 +640,7 @@ def process_video_frame(
     
     # Step 3: Draw obstacle nodes
     if draw_graph and draw_nodes:
-        for obstacle_id, threat_score, position, features in threat_scores:
+        for obstacle_id, threat_score, position, features, is_visible in threat_scores:
             annotated_frame = draw_obstacle_node(
                 annotated_frame,
                 position,
@@ -616,11 +648,12 @@ def process_video_frame(
                 threat_score,
                 scale,
                 coord_transform=coord_transform,
-                alpha=0.5  # Semi-transparent nodes
+                alpha=0.5,  # Semi-transparent nodes
+                is_visible=is_visible
             )
     elif not draw_graph:
         # Fallback: Draw simple threat score annotations if graph is disabled
-        for obstacle_id, threat_score, position, features in threat_scores:
+        for obstacle_id, threat_score, position, features, is_visible in threat_scores:
             annotated_frame = draw_threat_score_on_frame(
                 annotated_frame,
                 obstacle_id,
@@ -638,7 +671,7 @@ def create_frame_metadata(
     frame_id: int,
     target_id: int,
     target_position: Tuple[float, float],
-    threat_scores: List[Tuple[int, float, Tuple[float, float], Tuple[float, float, float, float]]]
+    threat_scores: List[Tuple[int, float, Tuple[float, float], Tuple[float, float, float, float], bool]]
 ) -> Dict:
     """
     Create metadata dictionary for a single frame.
@@ -648,22 +681,24 @@ def create_frame_metadata(
         target_id: Target pedestrian ID
         target_position: (x, y) position of target
         threat_scores: List of (obstacle_id, threat_score, position, features) tuples
+            where features is (d_ij, v+_ij, size_j, TTC_ij)
     
     Returns:
         Dictionary with frame metadata
     """
     interactions = []
-    for obstacle_id, threat_score, position, features in threat_scores:
-        f1, f2, f3, f4 = features
+    for obstacle_id, threat_score, position, features, is_visible in threat_scores:
+        d_ij, v_plus_ij, size_j, ttc_ij = features
         interactions.append({
             "object_id": int(obstacle_id),
             "score": float(threat_score),
             "position": [float(position[0]), float(position[1])],
+            "is_visible": bool(is_visible),
             "features": {
-                "f1_distance": float(f1),
-                "f2_velocity_diff": float(f2),
-                "f3_heading_alignment": float(f3),
-                "f4_class_interaction": float(f4)
+                "d_ij_distance": float(d_ij),
+                "v_plus_ij_approach_velocity": float(v_plus_ij),
+                "size_j_obstacle_size": float(size_j),
+                "ttc_ij_time_to_collision": float(ttc_ij)
             }
         })
     
@@ -682,9 +717,13 @@ def process_video_with_threat_scores(
     output_metadata_path: str,
     target_id: Optional[int] = None,
     auto_select_target: bool = True,
-    weights: Tuple[float, float, float, float] = (1.0, 1.0, 1.0, 1.0),
-    max_distance: float = 100.0,
-    max_vel_diff: float = 10.0,
+    weights: Tuple[float, float, float, float] = (0.5, 0.25, 0.15, 0.1),
+    tau: float = 0.15,
+    beta: float = 0.5,
+    eps: float = 1e-6,
+    ttc_max: float = 20.0,
+    obstacle_sizes: Optional[Dict[int, float]] = None,
+    fov_angle: Optional[float] = None,
     start_frame: int = 0,
     end_frame: Optional[int] = None,
     scale: float = 1.0,
@@ -706,9 +745,16 @@ def process_video_with_threat_scores(
         output_metadata_path: Path to save metadata JSON file
         target_id: Target pedestrian ID (if None, will auto-select)
         auto_select_target: Whether to auto-select target if target_id is None
-        weights: Tuple of (w1, w2, w3, w4) weights for threat score computation
-        max_distance: Maximum distance for normalization
-        max_vel_diff: Maximum velocity difference for normalization
+        weights: Tuple of (w_d, w_v, w_size, w_ttc) weights for threat score computation
+            Default: (0.5, 0.25, 0.15, 0.1) - distance-weighted
+        tau: Temperature parameter for sigmoid (controls slope, default: 0.15)
+        beta: Midpoint parameter for sigmoid (controls center, default: 0.5)
+        eps: Small epsilon for numerical stability (default: 1e-6)
+        ttc_max: Maximum TTC value for capping (default: 20.0 frames)
+        obstacle_sizes: Optional dictionary mapping object_id to size value
+            If None, all obstacles are assumed to be human-sized (0.0)
+        fov_angle: Optional field of view angle in radians (None = no filtering)
+            e.g., np.pi/2 for 90 degrees, np.pi*100/180 for 100 degrees
         start_frame: Starting frame (default: 0)
         end_frame: Ending frame (if None, process all frames)
         scale: Scale factor for text size
@@ -716,6 +762,9 @@ def process_video_with_threat_scores(
         draw_graph: Whether to draw graph visualization (edges and nodes)
         draw_edges: Whether to draw edges between target and obstacles
         draw_nodes: Whether to draw nodes for obstacles
+        apply_coordinate_transform: Whether to apply coordinate transformation
+        offset_x: Optional manual X offset adjustment
+        offset_y: Optional manual Y offset adjustment
     
     Returns:
         Dictionary with processing statistics
@@ -896,9 +945,30 @@ def process_video_with_threat_scores(
     if not cap.isOpened():
         raise ValueError(f"Could not open video: {video_path}")
     
-    # Set up video writer
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
+    # Set up video writer with better codec compatibility
+    # Try H.264 first (better for web playback), fall back to mp4v
+    codec_options = ['avc1', 'H264', 'mp4v']  # H.264 variants, then fallback
+    fourcc = None
+    out = None
+    
+    for codec in codec_options:
+        try:
+            fourcc = cv2.VideoWriter_fourcc(*codec)
+            out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
+            if out.isOpened():
+                print(f"  Using video codec: {codec}")
+                break
+        except:
+            continue
+    
+    if out is None or not out.isOpened():
+        # Final fallback to mp4v
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
+        print(f"  Using video codec: mp4v (fallback)")
+    
+    if not out.isOpened():
+        raise ValueError(f"Could not initialize video writer for: {output_video_path}")
     
     # Process frames
     metadata_list = []
@@ -929,8 +999,12 @@ def process_video_with_threat_scores(
             frame_id, target_id, frame_data,
             target_positions, object_positions,
             weights=weights,
-            max_distance=max_distance,
-            max_vel_diff=max_vel_diff
+            tau=tau,
+            beta=beta,
+            eps=eps,
+            ttc_max=ttc_max,
+            obstacle_sizes=obstacle_sizes,
+            fov_angle=fov_angle
         )
         
         # Process frame with annotations
@@ -973,8 +1047,11 @@ def process_video_with_threat_scores(
         },
         "processing_settings": {
             "weights": [float(w) for w in weights],
-            "max_distance": float(max_distance),
-            "max_vel_diff": float(max_vel_diff),
+            "tau": float(tau),
+            "beta": float(beta),
+            "eps": float(eps),
+            "ttc_max": float(ttc_max),
+            "fov_angle": float(fov_angle) if fov_angle is not None else None,
             "start_frame": int(start_frame),
             "end_frame": int(end_frame)
         },

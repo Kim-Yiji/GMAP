@@ -1,0 +1,3438 @@
+{
+  "video_path": "sdd_bookstore/bookstore_vid/video0/video.mp4",
+  "annotation_path": "sdd_bookstore/test/bookstore_video0_test.txt",
+  "target_id": 212,
+  "video_properties": {
+    "frame_count": 13335,
+    "fps": 29.97,
+    "width": 1416,
+    "height": 1080
+  },
+  "processing_settings": {
+    "weights": [
+      0.5,
+      0.25,
+      0.15,
+      0.1
+    ],
+    "tau": 0.15,
+    "beta": 0.5,
+    "eps": 1e-06,
+    "ttc_max": 20.0,
+    "fov_angle": 1.7453292519943295,
+    "start_frame": 5000,
+    "end_frame": 5010
+  },
+  "frames": [
+    {
+      "frame_id": 5000,
+      "target_id": 212,
+      "target_position": [
+        20.674125925499997,
+        21.960260035999998
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.3735534347039743,
+          "position": [
+            14.857728381,
+            38.545631252
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.575693976858695,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.2848009688825367,
+          "position": [
+            5.7204173869999995,
+            36.050147157
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 20.54600491913037,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.45707895312273944,
+          "position": [
+            7.4288641905,
+            29.0819877225
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.038482758221182,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.41317483375033004,
+          "position": [
+            31.423903565499998,
+            9.636407813
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.353441623211488,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.12812274041625066,
+          "position": [
+            49.372193018,
+            28.832439313
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.509420578196035,
+            "v_plus_ij_approach_velocity": 0.022351940976777483,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.3029407160345927,
+          "position": [
+            52.328381869,
+            27.661481391499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 32.163579469347226,
+            "v_plus_ij_approach_velocity": 0.16814959026099044,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.5587259195408958,
+          "position": [
+            14.3778275935,
+            39.4862367955
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 18.622653786721163,
+            "v_plus_ij_approach_velocity": 0.09032793814754933,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7626202938942311,
+          "position": [
+            25.530721895,
+            32.134156731
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 11.273628447465153,
+            "v_plus_ij_approach_velocity": 0.08347953953311044,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.44826678472769044,
+          "position": [
+            23.399962398499998,
+            37.969750307
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 16.239888029625718,
+            "v_plus_ij_approach_velocity": 0.012888078903516611,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.703214680095628,
+          "position": [
+            24.551724288499997,
+            37.067536826499996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 15.596973459281138,
+            "v_plus_ij_approach_velocity": 0.11205614342660085,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.6970592839654074,
+          "position": [
+            15.951902176499999,
+            15.951902176499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 7.641973652364617,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.12791715939421677,
+          "position": [
+            49.372193018,
+            29.485104383999996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.668204146986362,
+            "v_plus_ij_approach_velocity": 0.02434376269497287,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.5862851610775942,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.68124360152833,
+            "v_plus_ij_approach_velocity": 0.08878092687270364,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.5749885668537362,
+          "position": [
+            13.3796339555,
+            38.353670937
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.943063675677575,
+            "v_plus_ij_approach_velocity": 0.08769082588065437,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.6794658856451413,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 8.245315633839516,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.5672996164290919,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.686251338546843,
+            "v_plus_ij_approach_velocity": 0.1221448721434044,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.46017269035718245,
+          "position": [
+            36.779596354,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.71784743988135,
+            "v_plus_ij_approach_velocity": 0.09286061550330821,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.11184334826871585,
+          "position": [
+            49.257016828999994,
+            26.951228225999998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.015365168733872,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.6660614213967798,
+          "position": [
+            38.3728669685,
+            28.2373623365
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 18.77890965413368,
+            "v_plus_ij_approach_velocity": 0.13831842106950235,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.45704134608729696,
+          "position": [
+            34.7640130465,
+            27.219972666999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 15.039597602436796,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5001,
+      "target_id": 212,
+      "target_position": [
+        20.674125925499997,
+        21.960260035999998
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.4403815007532614,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.552238616139725,
+            "v_plus_ij_approach_velocity": 0.023387056217109417,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.28054903692787675,
+          "position": [
+            5.566849135,
+            36.126931283
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 20.71048976353182,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.4588670347068881,
+          "position": [
+            7.4288641905,
+            29.0819877225
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.038482758221182,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.41433769544758203,
+          "position": [
+            31.3471194395,
+            9.559623686999998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 16.3611910449706,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.12008258461137725,
+          "position": [
+            49.372193018,
+            28.774851218499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.496062581813156,
+            "v_plus_ij_approach_velocity": 0.013304803195456216,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.16396445160942041,
+          "position": [
+            52.251597743,
+            27.661481391499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 32.088014138139116,
+            "v_plus_ij_approach_velocity": 0.0755624355186269,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.4043737577244153,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 18.599567761584304,
+            "v_plus_ij_approach_velocity": 0.023021104744103606,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7831372130712648,
+          "position": [
+            25.338761579999996,
+            32.134156731
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 11.19227410983865,
+            "v_plus_ij_approach_velocity": 0.08000383486025418,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.71542931372302,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.132491514630125,
+            "v_plus_ij_approach_velocity": 0.10728573868511855,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.4672722435022946,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.587473080609943,
+            "v_plus_ij_approach_velocity": 0.009455993278792275,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.6970592839654074,
+          "position": [
+            15.779137893,
+            15.951902176499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 7.7499207741843135,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.16490744697851922,
+          "position": [
+            49.333800954999994,
+            29.446712320999996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.62134265377124,
+            "v_plus_ij_approach_velocity": 0.046848799746723284,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.3712505275049741,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.68124360152833,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.46163623032547896,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.907994144842952,
+            "v_plus_ij_approach_velocity": 0.03506271408474458,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.682543247796525,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.245315633839516,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.2812195738118036,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.686251338546843,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.32125897540278053,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.689392036241838,
+            "v_plus_ij_approach_velocity": 0.028440089762011633,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.11029407880450126,
+          "position": [
+            49.333800954999994,
+            26.874444099999998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.077932832500615,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7328808328678731,
+          "position": [
+            38.2192987165,
+            28.2373623365
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 18.634245398110146,
+            "v_plus_ij_approach_velocity": 0.14459299608837853,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.49763664714322087,
+          "position": [
+            34.7640130465,
+            27.181580603999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 15.026214012729271,
+            "v_plus_ij_approach_velocity": 0.01334050311539108,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5002,
+      "target_id": 212,
+      "target_position": [
+        20.674125925499997,
+        21.960260035999998
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.37629133755235944,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.552238616139725,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.27541924362875236,
+          "position": [
+            5.413280883,
+            36.242107472
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 20.90130516490242,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.4588760655592215,
+          "position": [
+            7.4288641905,
+            29.177967879999997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.084172663755684,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.4155608893217328,
+          "position": [
+            31.3471194395,
+            9.559623686999998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 16.3611910449706,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.10406219457438132,
+          "position": [
+            49.372193018,
+            28.774851218499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.496062581813156,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.19280932032069056,
+          "position": [
+            52.174813617,
+            27.661481391499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 32.01245460725917,
+            "v_plus_ij_approach_velocity": 0.07555661466477125,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.34303662806656765,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 18.599567761584304,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7599390809549817,
+          "position": [
+            25.2043893595,
+            32.134156731
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 11.136941265085733,
+            "v_plus_ij_approach_velocity": 0.054659667131877615,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.4232426372205341,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.132491514630125,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.4416927931047948,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.587473080609943,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.6970592839654074,
+          "position": [
+            15.625569640999998,
+            15.951902176499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 7.84782038056299,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.1230470833728763,
+          "position": [
+            49.333800954999994,
+            29.389124226499998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.60684035754979,
+            "v_plus_ij_approach_velocity": 0.014449840422476276,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.3721241355219512,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.68124360152833,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.36484567376891053,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.907994144842952,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.6853571256897744,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.245315633839516,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.2813785779669247,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.686251338546843,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.25426191638992124,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.689392036241838,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.1080453344712041,
+          "position": [
+            49.448977144,
+            26.874444099999998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.19145881352425,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7366079916850747,
+          "position": [
+            38.0657304645,
+            28.3141464625
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 18.51593317015987,
+            "v_plus_ij_approach_velocity": 0.11789417009731003,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.46086192925643676,
+          "position": [
+            34.7640130465,
+            27.181580603999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 15.026214012729271,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5003,
+      "target_id": 212,
+      "target_position": [
+        20.7125179885,
+        22.037044161999997
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.506711630527652,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.492767489134835,
+            "v_plus_ij_approach_velocity": 0.05936156583095516,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.27361330207377627,
+          "position": [
+            5.298104693999999,
+            36.318891598
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 21.013693235574706,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.4685500354948291,
+          "position": [
+            7.4288641905,
+            29.177967879999997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.081387528056387,
+            "v_plus_ij_approach_velocity": 0.002541059993577842,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.4187807229379203,
+          "position": [
+            31.3087273765,
+            9.559623686999998
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.369657146815523,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.1030514477699153,
+          "position": [
+            49.448977144,
+            28.774851218499997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 29.51579456369658,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.15030861768242668,
+          "position": [
+            52.136421553999995,
+            27.661481391499997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 31.923283187078813,
+            "v_plus_ij_approach_velocity": 0.08911127223075177,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.46919180331992105,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 18.54055437472651,
+            "v_plus_ij_approach_velocity": 0.05890855475792332,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.8434859857557547,
+          "position": [
+            25.0508211075,
+            32.134156731
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 10.989656781873714,
+            "v_plus_ij_approach_velocity": 0.14632666721209198,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.6042953721582245,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 16.05046532414599,
+            "v_plus_ij_approach_velocity": 0.08200620288312022,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.6261374668333057,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 15.503609212108325,
+            "v_plus_ij_approach_velocity": 0.08385300742506632,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.6970592839654074,
+          "position": [
+            15.433609326,
+            15.951902176499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.055794787028304,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.15661796366543992,
+          "position": [
+            49.333800954999994,
+            29.389124226499998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.550480874653815,
+            "v_plus_ij_approach_velocity": 0.05628852848765712,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.49528434181570613,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.62492598765179,
+            "v_plus_ij_approach_velocity": 0.0561985157516973,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.48308715898359983,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.853630263349473,
+            "v_plus_ij_approach_velocity": 0.0542402531525929,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.8234362459499402,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 8.161587347712288,
+            "v_plus_ij_approach_velocity": 0.08370626259146381,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.4456768890615454,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.604863195332026,
+            "v_plus_ij_approach_velocity": 0.08137004347341409,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.4084278393958899,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.609394790773532,
+            "v_plus_ij_approach_velocity": 0.07997479335469015,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.10706427286114502,
+          "position": [
+            49.52576127,
+            26.836052036999998
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 29.210160303963015,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7438650058208764,
+          "position": [
+            37.9121622125,
+            28.352538525499998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 18.322478830321426,
+            "v_plus_ij_approach_velocity": 0.19342982027692496,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.6002912483832699,
+          "position": [
+            34.7640130465,
+            27.181580603999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 14.96364823724697,
+            "v_plus_ij_approach_velocity": 0.062450315632834125,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5004,
+      "target_id": 212,
+      "target_position": [
+        20.7509100515,
+        22.037044161999997
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.38192515295873836,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.505738807127297,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.2686830207758549,
+          "position": [
+            5.182928505,
+            36.434067787
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 21.204630123889753,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.4621299431826549,
+          "position": [
+            7.4288641905,
+            29.2739480375
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.160794294027413,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.5451374645960996,
+          "position": [
+            31.2703353135,
+            9.559623686999998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 16.32005911609247,
+            "v_plus_ij_approach_velocity": 0.04949276344690221,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.1430826034787599,
+          "position": [
+            49.448977144,
+            28.774851218499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.478417508004945,
+            "v_plus_ij_approach_velocity": 0.037375749974317383,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.12650706121090668,
+          "position": [
+            52.11722552249999,
+            27.661481391499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 31.86659756508183,
+            "v_plus_ij_approach_velocity": 0.05668400208361461,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.347804845602781,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 18.553786191480036,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7641221590333968,
+          "position": [
+            24.8972528555,
+            32.134156731
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 10.915303059436342,
+            "v_plus_ij_approach_velocity": 0.07291901960951162,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.4466292394743963,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.0442654491854,
+            "v_plus_ij_approach_velocity": 0.006155138591490013,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.4737098693916113,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.49424184505312,
+            "v_plus_ij_approach_velocity": 0.009322633611807777,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.6961586330840064,
+          "position": [
+            15.280041074,
+            15.951902176499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.182869933749817,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.1020695543124054,
+          "position": [
+            49.372193018,
+            29.389124226499998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.550480874653818,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.3774907990844162,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.639680286138866,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.3699323360981035,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.869433024649183,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.7156486476109158,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.152552544093028,
+            "v_plus_ij_approach_velocity": 0.008949410687644497,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.34504412829029907,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.577662280183514,
+            "v_plus_ij_approach_velocity": 0.02718307747889145,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.3166383065084337,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.580932985052943,
+            "v_plus_ij_approach_velocity": 0.028446423322392306,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.10502739652831895,
+          "position": [
+            49.679329521999996,
+            26.836052036999998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.323777547333755,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7491165967710119,
+          "position": [
+            37.758593960499994,
+            28.390930588499998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 18.15580305768154,
+            "v_plus_ij_approach_velocity": 0.16638544583394813,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.467762856671652,
+          "position": [
+            34.8407971725,
+            27.181580603999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 14.999705806634594,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5005,
+      "target_id": 212,
+      "target_position": [
+        20.7509100515,
+        22.037044161999997
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.3809334098393633,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.505738807127297,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.2634150067549762,
+          "position": [
+            5.067752316,
+            36.5300479445
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 21.35435775658291,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.46070372575123425,
+          "position": [
+            7.4288641905,
+            29.3123401005
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.17915797781095,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.42106769984975934,
+          "position": [
+            31.2703353135,
+            9.559623686999998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 16.32005911609247,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.10115703550330266,
+          "position": [
+            49.52576127,
+            28.774851218499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.553174221687794,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.23831086133084622,
+          "position": [
+            52.04044139649999,
+            27.661481391499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 31.791021781917024,
+            "v_plus_ij_approach_velocity": 0.07557288526879365,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.3467452874020402,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 18.553786191480036,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.6080803543057098,
+          "position": [
+            24.743684603499997,
+            32.2301368885
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 10.94720913996467,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.43057601797307155,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.0442654491854,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.44968564906871755,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.49424184505312,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.693061026728226,
+          "position": [
+            15.126472821999998,
+            15.951902176499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.286328929766215,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.1011915735215377,
+          "position": [
+            49.372193018,
+            29.389124226499998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.550480874653818,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.37648942611227676,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.639680286138866,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.36891509131920935,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.869433024649183,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.6970592839654074,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.152552544093028,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.28520865307260007,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.577662280183514,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.2572628401141276,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.580932985052943,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.1031440914382107,
+          "position": [
+            49.756113647999996,
+            26.836052036999998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.399529116275456,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7507671212553265,
+          "position": [
+            37.6434177715,
+            28.429322651499998
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 18.061507172923967,
+            "v_plus_ij_approach_velocity": 0.09413399407636175,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.4669968475310114,
+          "position": [
+            34.8407971725,
+            27.181580603999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 14.999705806634594,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5006,
+      "target_id": 212,
+      "target_position": [
+        20.7893021145,
+        22.1330243195
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.556624233837984,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.428580097183325,
+            "v_plus_ij_approach_velocity": 0.07702293214008978,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.2569534347122246,
+          "position": [
+            4.914184064,
+            36.626028102
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 21.495732873220913,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.4570076737022942,
+          "position": [
+            7.4288641905,
+            29.3507321635
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.185407733821194,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.4168400076242827,
+          "position": [
+            31.2319432505,
+            9.559623686999998
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.344392229771984,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.16238691577436073,
+          "position": [
+            49.52576127,
+            28.774851218499997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 29.49403243627428,
+            "v_plus_ij_approach_velocity": 0.0590199216363449,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.16226301649504274,
+          "position": [
+            52.0020493335,
+            27.661481391499997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 31.69857136456056,
+            "v_plus_ij_approach_velocity": 0.09234692534749628,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.5187901283984389,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 18.477115166763483,
+            "v_plus_ij_approach_velocity": 0.07654092193420374,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.8711439034505797,
+          "position": [
+            24.590116351499997,
+            32.2301368885
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 10.788784504995903,
+            "v_plus_ij_approach_velocity": 0.15745312130566,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.6589096265101582,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 15.943387584473482,
+            "v_plus_ij_approach_velocity": 0.10086187064329963,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.6793195041885348,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 15.391818089146389,
+            "v_plus_ij_approach_velocity": 0.10241739797699469,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.683087638081479,
+          "position": [
+            14.934512506999999,
+            15.951902176499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.513802458054505,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.23437580719689444,
+          "position": [
+            49.333800954999994,
+            29.3507321635
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 29.442889134333345,
+            "v_plus_ij_approach_velocity": 0.10738157195402796,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.5436858368518639,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.56604708387365,
+            "v_plus_ij_approach_velocity": 0.07348335524497183,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.5304733939723875,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.797992715279285,
+            "v_plus_ij_approach_velocity": 0.07128347803536103,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.85618788694809,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 8.050280997145583,
+            "v_plus_ij_approach_velocity": 0.10225745574149389,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.49074751806125455,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.48274130344791,
+            "v_plus_ij_approach_velocity": 0.09488005596611278,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.45066392970406516,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.48807744558441,
+            "v_plus_ij_approach_velocity": 0.09280750875137299,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.10127399701018423,
+          "position": [
+            49.871289837,
+            26.778463942499997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 29.45067264397503,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7529039763024645,
+          "position": [
+            37.4898495195,
+            28.525302809
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.882100209818102,
+            "v_plus_ij_approach_velocity": 0.17927660194519338,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.6227126987362102,
+          "position": [
+            34.8407971725,
+            27.181580603999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 14.930922072087938,
+            "v_plus_ij_approach_velocity": 0.06858431363558386,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5007,
+      "target_id": 212,
+      "target_position": [
+        20.8276941775,
+        22.1330243195
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.3786146041177909,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.441768166111206,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.25051814519532123,
+          "position": [
+            4.760615811999999,
+            36.702812228
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 21.68939203624184,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.4541683593730094,
+          "position": [
+            7.4288641905,
+            29.389124226499998
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.237441743314257,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.5303044746810507,
+          "position": [
+            31.1935511875,
+            9.559623686999998
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.295440927361174,
+            "v_plus_ij_approach_velocity": 0.04884392054549888,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.14628282777399285,
+          "position": [
+            49.52576127,
+            28.736459155499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.447994948364986,
+            "v_plus_ij_approach_velocity": 0.046023420011671035,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.1423251622550132,
+          "position": [
+            51.96365727049999,
+            27.661481391499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 31.622966896317692,
+            "v_plus_ij_approach_velocity": 0.07560162351310333,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.3444146234001382,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 18.4905518090946,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7418986757432481,
+          "position": [
+            24.436548099499998,
+            32.2301368885
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 10.722663328734729,
+            "v_plus_ij_approach_velocity": 0.06460677257233956,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.44354060295461134,
+          "position": [
+            23.323178272499998,
+            37.8737701495
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.937331023513952,
+            "v_plus_ij_approach_velocity": 0.006011469325567428,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.47035645760094413,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.382574285294531,
+            "v_plus_ij_approach_velocity": 0.009198670931861663,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.6799466504172212,
+          "position": [
+            14.8001402865,
+            15.990294239499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.60607568782927,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.10042569270139244,
+          "position": [
+            49.372193018,
+            29.369928194999996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.447600781023446,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.3739949245636184,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.581018471120046,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.3663168142067222,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.814010315961276,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.7138985870336546,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.041487728329209,
+            "v_plus_ij_approach_velocity": 0.008706428769795077,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.3389042948864984,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.455522108343157,
+            "v_plus_ij_approach_velocity": 0.027201275241405667,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.310389603051583,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.459592106824275,
+            "v_plus_ij_approach_velocity": 0.028469900607497555,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.09949882477338513,
+          "position": [
+            49.986466025999995,
+            26.740071879499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.52048209181174,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7566341516646431,
+          "position": [
+            37.3362812675,
+            28.525302809
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.70295658909661,
+            "v_plus_ij_approach_velocity": 0.17900927356641977,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.5500522664622889,
+          "position": [
+            34.8407971725,
+            27.181580603999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 14.894796947465995,
+            "v_plus_ij_approach_velocity": 0.03611945156335965,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5008,
+      "target_id": 212,
+      "target_position": [
+        20.8276941775,
+        22.1330243195
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.37769966415284334,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.441768166111206,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.2455724080872348,
+          "position": [
+            4.6838316859999996,
+            36.8371844485
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 21.836589047828276,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.6409478980336584,
+          "position": [
+            7.505648316499999,
+            29.427516289499998
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.188367885424086,
+            "v_plus_ij_approach_velocity": 0.048910522144117875,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.4165842745604006,
+          "position": [
+            31.1935511875,
+            9.559623686999998
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.295440927361174,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.0986755107363654,
+          "position": [
+            49.602545396,
+            28.736459155499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.522828697130446,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.19282359277678132,
+          "position": [
+            51.886873144499994,
+            27.699873454499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 31.554118707325436,
+            "v_plus_ij_approach_velocity": 0.06880651745934196,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.3434387478955988,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 18.4905518090946,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.7742291590833746,
+          "position": [
+            24.2829798475,
+            32.2301368885
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 10.671957706642448,
+            "v_plus_ij_approach_velocity": 0.04972116132461012,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.5763942809047345,
+          "position": [
+            23.323178272499998,
+            37.8353780865
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.899413658761668,
+            "v_plus_ij_approach_velocity": 0.03791622320754331,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.4483360133792968,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.382574285294531,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.6757000993389789,
+          "position": [
+            14.608179971499998,
+            15.990294239499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.741595380385244,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.09962810020288736,
+          "position": [
+            49.372193018,
+            29.369928194999996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.447600781023446,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.373070964951521,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.581018471120046,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.3653783896802113,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.814010315961276,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.6970592839654074,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.041487728329209,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.28361974859350797,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.455522108343157,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.2556082499065356,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.459592106824275,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.09735351644123755,
+          "position": [
+            50.101642215,
+            26.701679816499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.628308199296807,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7587098677838898,
+          "position": [
+            37.1827130155,
+            28.621282966499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.595003309511057,
+            "v_plus_ij_approach_velocity": 0.10735249246389234,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.4629457070044309,
+          "position": [
+            34.9175812985,
+            27.181580603999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 14.967058483225285,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5009,
+      "target_id": 212,
+      "target_position": [
+        20.8660862405,
+        22.2098084455
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.5455532499986467,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.383021413564233,
+            "v_plus_ij_approach_velocity": 0.05863403655971721,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.23970847623787853,
+          "position": [
+            4.530263434,
+            36.9139685745
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 21.978886046946027,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.45137409708635784,
+          "position": [
+            7.505648316499999,
+            29.485104383999996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.212864047042949,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.4133550468565452,
+          "position": [
+            31.1551591245,
+            9.559623686999998
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.306201128296244,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.17086923819225946,
+          "position": [
+            49.602545396,
+            28.736459155499997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 29.468309321813205,
+            "v_plus_ij_approach_velocity": 0.054444761279098225,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.1769077446435291,
+          "position": [
+            51.8484810815,
+            27.738265517499997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 31.471775095799252,
+            "v_plus_ij_approach_velocity": 0.08233424683648087,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.5072710839041613,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 18.43222896239823,
+            "v_plus_ij_approach_velocity": 0.05821520061355874,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.8294654353572716,
+          "position": [
+            24.1294115955,
+            32.268528951499995
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 10.574835724038966,
+            "v_plus_ij_approach_velocity": 0.09575599329653833,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.692330417556036,
+          "position": [
+            23.2463941465,
+            37.8353780865
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 15.805830959905494,
+            "v_plus_ij_approach_velocity": 0.09325358545724896,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.6838422825954386,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 15.298839691907077,
+            "v_plus_ij_approach_velocity": 0.0837228788447124,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.6671209130053414,
+          "position": [
+            14.454611719499999,
+            15.990294239499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 8.932489154321319,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.19975784960585077,
+          "position": [
+            49.372193018,
+            29.3123401005
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.37761187572108,
+            "v_plus_ij_approach_velocity": 0.06973988001025046,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.5312090215441393,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.52547214680727,
+            "v_plus_ij_approach_velocity": 0.05542408882677695,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.5171342502798676,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.76043765054425,
+            "v_plus_ij_approach_velocity": 0.05344598416604495,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.859218781837625,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 7.958022727449609,
+            "v_plus_ij_approach_velocity": 0.08343964828711126,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.5060684485192779,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.374152750354288,
+            "v_plus_ij_approach_velocity": 0.08135097826043153,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.46635558665210913,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.379631250936733,
+            "v_plus_ij_approach_velocity": 0.079938026356545,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.09600850212700901,
+          "position": [
+            50.178426341,
+            26.701679816499997
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 29.654513831472432,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7602543784491156,
+          "position": [
+            37.067536826499996,
+            28.698067092499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.452349451032944,
+            "v_plus_ij_approach_velocity": 0.14256122425098255,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.6725771587545203,
+          "position": [
+            34.9175812985,
+            27.143188540999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 14.892372293616416,
+            "v_plus_ij_approach_velocity": 0.07437859500029242,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "frame_id": 5010,
+      "target_id": 212,
+      "target_position": [
+        20.9044783035,
+        22.2098084455
+      ],
+      "interactions": [
+        {
+          "object_id": 5,
+          "score": 0.37526353766759485,
+          "position": [
+            14.819336318,
+            38.507239188999996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.396413475853972,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 12,
+          "score": 0.23322629310506535,
+          "position": [
+            4.415087245,
+            37.048340794999994
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 22.18292270570534,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 13,
+          "score": 0.44786544726658967,
+          "position": [
+            7.505648316499999,
+            29.56188851
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.28338072205717,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 19,
+          "score": 0.48292679596980775,
+          "position": [
+            31.1551591245,
+            9.559623686999998
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 16.282003307891905,
+            "v_plus_ij_approach_velocity": 0.02417053677365573,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 22,
+          "score": 0.09697973264923285,
+          "position": [
+            49.679329521999996,
+            28.736459155499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.50574913702674,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 23,
+          "score": 0.16587085809181532,
+          "position": [
+            51.810089018499994,
+            27.738265517499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 31.396187846043812,
+            "v_plus_ij_approach_velocity": 0.07558434301960305,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 31,
+          "score": 0.340987382647807,
+          "position": [
+            14.3394355305,
+            39.447844732499995
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 18.44585811620723,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 64,
+          "score": 0.6653117005233078,
+          "position": [
+            23.9758433435,
+            32.3069210145
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 10.553907591029589,
+            "v_plus_ij_approach_velocity": 0.019133311317746763,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 65,
+          "score": 0.446173732710444,
+          "position": [
+            23.2463941465,
+            37.8353780865
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.800094823178604,
+            "v_plus_ij_approach_velocity": 0.005690533879753762,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 73,
+          "score": 0.473993072388985,
+          "position": [
+            24.513332225499997,
+            37.067536826499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 15.289732478820797,
+            "v_plus_ij_approach_velocity": 0.009061724151250944,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 75,
+          "score": 0.662366222478115,
+          "position": [
+            14.3010434675,
+            15.990294239499999
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 9.071257277353242,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 84,
+          "score": 0.09846931570257579,
+          "position": [
+            49.410585080999994,
+            29.3507321635
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.386917415008437,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 90,
+          "score": 0.3704687458309515,
+          "position": [
+            13.955514900499999,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.540646228104634,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 125,
+          "score": 0.36267815993099484,
+          "position": [
+            13.3796339555,
+            38.315278874
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 17.776654921129442,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 175,
+          "score": 0.7174996535524811,
+          "position": [
+            22.65131717,
+            29.965005171499996
+          ],
+          "is_visible": false,
+          "features": {
+            "d_ij_distance": 7.949498241051197,
+            "v_plus_ij_approach_velocity": 0.008436348728382047,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 176,
+          "score": 0.35189184630231896,
+          "position": [
+            35.32069796,
+            36.568440007499994
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 20.34693317229207,
+            "v_plus_ij_approach_velocity": 0.027201563075182268,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 177,
+          "score": 0.3233160783231118,
+          "position": [
+            36.741204290999995,
+            36.5300479445
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 21.3511392977489,
+            "v_plus_ij_approach_velocity": 0.02847644544258548,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 188,
+          "score": 0.09398841568883808,
+          "position": [
+            50.312798561499996,
+            26.701679816499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 29.749390057792823,
+            "v_plus_ij_approach_velocity": 0.0,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 191,
+          "score": 0.7630125214009157,
+          "position": [
+            36.9523606375,
+            28.698067092499997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 17.309882370376744,
+            "v_plus_ij_approach_velocity": 0.14237214576220203,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        },
+        {
+          "object_id": 229,
+          "score": 0.5684101230220246,
+          "position": [
+            34.9175812985,
+            27.143188540999997
+          ],
+          "is_visible": true,
+          "features": {
+            "d_ij_distance": 14.856153429308458,
+            "v_plus_ij_approach_velocity": 0.03621340472526104,
+            "size_j_obstacle_size": 0.0,
+            "ttc_ij_time_to_collision": 20.0
+          }
+        }
+      ]
+    }
+  ]
+}

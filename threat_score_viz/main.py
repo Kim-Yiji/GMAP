@@ -104,21 +104,39 @@ Examples:
         '--weights',
         type=float,
         nargs=4,
-        default=[1.0, 1.0, 1.0, 1.0],
-        metavar=('W1', 'W2', 'W3', 'W4'),
-        help='Weights for threat score features (default: 1.0 1.0 1.0 1.0)'
+        default=[0.5, 0.25, 0.15, 0.1],
+        metavar=('W_D', 'W_V', 'W_SIZE', 'W_TTC'),
+        help='Weights for threat score features [distance, approach_velocity, obstacle_size, TTC] (default: 0.5 0.25 0.15 0.1)'
     )
     parser.add_argument(
-        '--max-distance',
+        '--tau',
         type=float,
-        default=100.0,
-        help='Maximum distance for normalization (default: 100.0)'
+        default=0.15,
+        help='Temperature parameter for sigmoid (controls slope, default: 0.15)'
     )
     parser.add_argument(
-        '--max-vel-diff',
+        '--beta',
         type=float,
-        default=10.0,
-        help='Maximum velocity difference for normalization (default: 10.0)'
+        default=0.5,
+        help='Midpoint parameter for sigmoid (controls center, default: 0.5)'
+    )
+    parser.add_argument(
+        '--eps',
+        type=float,
+        default=1e-6,
+        help='Small epsilon for numerical stability (default: 1e-6)'
+    )
+    parser.add_argument(
+        '--ttc-max',
+        type=float,
+        default=20.0,
+        help='Maximum TTC value for capping (default: 20.0 frames)'
+    )
+    parser.add_argument(
+        '--fov-angle',
+        type=float,
+        default=None,
+        help='Field of view angle in degrees (e.g., 90, 100, or 110). Obstacles outside FOV will be shown in grey. If not specified, no FOV filtering is applied.'
     )
     parser.add_argument(
         '--scale',
@@ -285,9 +303,21 @@ Examples:
         print(f"  Output metadata: {args.output_metadata}")
     print(f"  Target ID: {args.target_id if args.target_id else 'Auto-select'}")
     print(f"  Frame range: {args.start_frame} to {args.end_frame if args.end_frame else 'end'}")
-    print(f"  Weights: {args.weights}")
+    print(f"  Weights: {args.weights} [distance, approach_velocity, obstacle_size, TTC]")
+    print(f"  Tau: {args.tau}, Beta: {args.beta}")
+    if args.fov_angle is not None:
+        import numpy as np
+        fov_rad = np.pi * args.fov_angle / 180.0
+        print(f"  FOV angle: {args.fov_angle} degrees ({fov_rad:.3f} radians)")
+    else:
+        print(f"  FOV angle: None (no filtering)")
     
     try:
+        import numpy as np
+        fov_angle_rad = None
+        if args.fov_angle is not None:
+            fov_angle_rad = np.pi * args.fov_angle / 180.0
+        
         stats = process_video_with_threat_scores(
             video_path=args.video,
             annotation_path=args.annotations,
@@ -296,8 +326,11 @@ Examples:
             target_id=args.target_id,
             auto_select_target=args.target_id is None,
             weights=tuple(args.weights),
-            max_distance=args.max_distance,
-            max_vel_diff=args.max_vel_diff,
+            tau=args.tau,
+            beta=args.beta,
+            eps=args.eps,
+            ttc_max=args.ttc_max,
+            fov_angle=fov_angle_rad,
             start_frame=args.start_frame,
             end_frame=args.end_frame,
             scale=args.scale,
